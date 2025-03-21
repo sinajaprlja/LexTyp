@@ -1,7 +1,10 @@
 
 
 # Networkx
-MIN_LANGUAGE_COUNT = 40
+MIN_LANGUAGE_COUNT: int = 40
 
 # Seperators
-SEPERATOR = ";;"
+SEPERATOR: str = ";;"
+
+# the name is program
+WALK_MULTIPLIER: int = 16
