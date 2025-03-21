@@ -2,4 +2,4 @@ __pycache__/*
 lib/*
 kaikki.org-dictionary-English.jsonl
 temp_network.html
-.gitignore
+component_graphs/*
