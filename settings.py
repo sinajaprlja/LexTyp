@@ -8,3 +8,6 @@ SEPERATOR: str = ";;"
 
 # the name is program
 WALK_MULTIPLIER: int = 16
+
+# Prints more stuff when True
+DEBUG: bool = False
