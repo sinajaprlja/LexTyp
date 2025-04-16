@@ -6,4 +6,4 @@ component_graphs/*
 filtered_graph.html
 graph.html
 graph.pkl
-networks/*
+resources/graph_visualization/component_graphs/*
