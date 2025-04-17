@@ -20,7 +20,7 @@ Relevant data is extracted and preprocessed in: [load_and_preprocess.ipynb](http
 The colexification graph is built in: [create_graph.ipynb](https://github.com/sinajaprlja/LexTyp/blob/main/create_graph.ipynb) <br>
 3) **Graph Visualization** <br>
 To visualize the connected components of the graph (depth = 2), use: [graph_visualization.ipynb](https://github.com/sinajaprlja/LexTyp/blob/main/graph_visualization.ipynb).<br>
-4) **Dimensionality Reduction and Analysis**
-The final step — creating the distance matrix and applying MDS — is carried out in: [graph_analysis.ipynb](https://github.com/sinajaprlja/LexTyp/blob/main/graph_analysis.ipynb).
+4) **Dimensionality Reduction and Analysis**<br>
+Creating the distance matrix and applying MDS is carried out in: [graph_analysis.ipynb](https://github.com/sinajaprlja/LexTyp/blob/main/graph_analysis.ipynb).
 
 Each notebook saves its output but must be run at least once in the order listed above.
