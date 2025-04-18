@@ -1,5 +1,3 @@
-
-
 # Minimum number of tanslation required to keep a concept
 # default=40
 MIN_LANGUAGE_COUNT: int = 40
@@ -19,3 +17,7 @@ WEIGHT_THRESHOLD: int = 2
 # Number of random walks per start node
 # default=10
 RANDOM_WALK_COUNT: int = 10
+
+# Percentage of smoothing
+# default=0.1
+SMOOTHING_FACTOR: float = 0.1

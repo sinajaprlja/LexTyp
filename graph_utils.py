@@ -1,73 +1,12 @@
-from collections import defaultdict
 import json
 import random
+from typing import Any
+
 import networkx as nx
-from networkx import NetworkXError
-from pyvis.network import Network
-
-from edge import Edge
-import settings
 
 
 
-def create_graph(focus_concept: str, graph: nx.Graph, edge_map: dict) -> None:
-    """
-    Creates an interactive network and saves it as a HTML file.
-    
-    Args:
-        focus_concept (str): The concept for which the network should be created.
-        For Example: "free;;(social) unconstrained.;;not imprisoned or enslaved."
-    """
-    ## Validate input TODO
-    try:
-        # Get all neighbors of the focus concept
-        neighbors = list(graph.neighbors(focus_concept))
-    except NetworkXError:
-        print(f"Invalid focus_concept={focus_concept}. Dataset does not contain this concept.")
-        return
-
-    # Create a pyvis network
-    net = Network(notebook=False, height="750px", width="100%", bgcolor="#222222", font_color="white")
-
-    # Create a subgraph containing the focus concept and its neighbors
-    local_subgraph = graph.subgraph([focus_concept] + neighbors)
-
-    # Map edges to the languages that connect them
-    edge_to_languages = defaultdict(tuple)
-
-    subgraph_maximum = 0
-    for pair in local_subgraph.edges():
-        pair = tuple(sorted(list(pair)))
-        edge = edge_map[pair]
-        edge_to_languages[pair] = edge.value
-
-        if edge.weight > subgraph_maximum:
-            subgraph_maximum = edge.weight
-
-
-    # Add nodes to the pyvis network
-    for node in local_subgraph.nodes:
-        net.add_node(node, title=node, label=node.split(settings.SEPERATOR)[0])
-
-    # Add edges with language information
-    for pair, languages in edge_to_languages.items():
-        edge: Edge = edge_map[pair]
-        value = edge.weight
-        width = edge.normalized(subgraph_maximum)
-        net.add_edge(*pair, value=value, languages=', '.join(languages), width=width)
-
-    # Save graph to a temporary file
-    temp_file = "resources/temp_network.html"
-    net.save_graph(temp_file)
-
-    # Add dynamic legend to the HTML file
-    add_dynamic_legend_to_component_graph(temp_file)
-
-    print(f"Saved html Network '{focus_concept}'.")
-
-
-
-def save_results_to_file(results, filename):
+def save_results_to_file(results: Any, filename: str) -> None:
     """
     Saves results to a JSON file.
     """
@@ -76,9 +15,9 @@ def save_results_to_file(results, filename):
         
 
 
-def random_walk_in_component(component_graph, start_node, walk_length):
+def random_walk_in_component(component_graph: nx.Graph, start_node: str, walk_length: int) -> str:
     """
-    Performs a random walk in a component. Ganz oft aufrufen auf dem gleichen (für alle im graphen) Knoten udn dann wahrscheinlichkeitsverteilung über output (5% dieser Knoten, 10% anmderer usw.)
+    Performs a random walk in a component graph.
     """
     current_node = start_node 
 
@@ -91,7 +30,7 @@ def random_walk_in_component(component_graph, start_node, walk_length):
 
 
 
-def find_longest_path_approx(component_graph, max_depth=None) -> int:
+def find_longest_path_approx(component_graph: nx.Graph, max_depth: int = None) -> int:
     """
     Get the longest path. 
     :return: Number of nodes of the longest path.
@@ -111,8 +50,8 @@ def add_dynamic_legend_to_component_graph(html_file: str) -> None:
     """
     Adds a dynamic legend to the component graph HTML file that updates on click.
     
-    Args:
-        html_file (str): The path to the HTML file.
+    
+    :params: html_file (str): The path to the HTML file.
     """
     
     js_code = """
@@ -199,7 +138,6 @@ def add_dynamic_legend_to_component_graph(html_file: str) -> None:
     </style>
     """
 
-    # Create the initial legend HTML
     legend_html = """
     <div id="language-legend">
         <h3>Languages:</h3>
@@ -207,7 +145,6 @@ def add_dynamic_legend_to_component_graph(html_file: str) -> None:
     </div>
     """
 
-    # Read the HTML file
     with open(html_file, "r", encoding="utf-8") as f:
         html_content = f.read()
 
