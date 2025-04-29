@@ -15,3 +15,12 @@ To visualize the connected components of the graph (depth = 2), use: [graph_visu
 Creating the distance matrix and applying MDS is carried out in: [graph_analysis.ipynb](https://github.com/sinajaprlja/LexTyp/blob/main/graph_analysis.ipynb).
 
 Each notebook saves its output but must be run at least once in the order listed above.
+
+
+# Requirements
+## Requirements
+
+- **Python**: 3.11
+- **Dependencies**:  
+  Install all required libraries with:  
+  ```pip install -r requirements.txt```
