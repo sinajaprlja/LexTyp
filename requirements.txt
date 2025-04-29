@@ -1,0 +1,9 @@
+pandas==2.2.3
+networkx==3.3
+pyvis==0.3.2
+matplotlib==3.9.2
+seaborn==0.13.2
+numpy==1.26.1
+scikit-learn
+kneed==0.8.5
+tqdm==4.66.4
