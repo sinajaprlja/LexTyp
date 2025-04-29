@@ -1,16 +1,7 @@
 # Abstract
 
-Colexification - where a word represents multiple related or unrelated meanings
-or concepts - reveals fundamental patterns in how languages encode semantic relationships. Analyzing these patterns computationally is challenging due to the high
-dimensionality and sparsity of colexification networks. This thesis explores how
-dimensionality reduction can effectively capture cross-linguistic colexification patterns,
-bridging linguistic theory with computational methods.
-Using multilingual lexical data from the English Wiktionary, a colexification graph
-where nodes represent concepts (English words paired with glosses) and edges reflect
-shared translations across languages is constructed. After data cleaning and frequencybased filtering to ensure robustness, Multidimensional Scaling (MDS) is applied to
-project the graph into a lower-dimensional space. The analysis identifies an optimal
-four-dimensional space, validated by stress metrics, which preserves the underlying
-semantic relationships while reducing complexity.
+Colexification - where a word represents multiple related or unrelated meanings or concepts -reveals fundamental patterns in how languages encode semantic relationships. This thesis explores how dimensionality reduction can effectively capture cross-linguistic colexification patterns, bridging linguistic theory with computational methods.
+Using multilingual lexical data from the English Wiktionary, an undirected polysemy network where nodes represent concepts (English words paired with glosses) and edges reflect shared translations across languages is constructed. After data cleaning and frequency-based filtering to ensure robustness, a similarity matrix is computed capturing structural similarity by estimating the probability of reaching each node from every other node, including the starting node, through multiple random walks. This similarity matrix is further transformed into a distance matrix suitable for Multidimensional Scaling (MDS). MDS is then applied to project the polysemy network into a lower-dimensional space. The analysis identifies an optimal four-to-six-dimensional space, validated by stress metrics, which preserves the underlying semantic relationships while reducing complexity.
 
 # Project Workflow
 
