@@ -1,0 +1,239 @@
+<html>
+    <head>
+        <meta charset="utf-8">
+        
+            <script src="lib/bindings/utils.js"></script>
+            <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/vis-network/9.1.2/dist/dist/vis-network.min.css" integrity="sha512-WgxfT5LWjfszlPHXRmBWHkV2eceiWTOBvrKCNbdgDYTHrT2AeLCGbF4sZlZw3UMN3WtL0tGUoIAKsu8mllg/XA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/vis-network/9.1.2/dist/vis-network.min.js" integrity="sha512-LnvoEWDFrqGHlHmDD2101OrLcbsfkrzoSpvtSQtxK3RMnRV0eOkhhBN2dXHKRrUU8p2DGRTk35n4O8nWSVe1mQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+            
+        
+<center>
+<h1></h1>
+</center>
+
+<!-- <link rel="stylesheet" href="../node_modules/vis/dist/vis.min.css" type="text/css" />
+<script type="text/javascript" src="../node_modules/vis/dist/vis.js"> </script>-->
+        <link
+          href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/css/bootstrap.min.css"
+          rel="stylesheet"
+          integrity="sha384-eOJMYsd53ii+scO/bJGFsiCZc+5NDVN2yr8+0RDqr0Ql0h+rP48ckxlpbzKgwra6"
+          crossorigin="anonymous"
+        />
+        <script
+          src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.bundle.min.js"
+          integrity="sha384-JEW9xMcG8R+pH31jmWH6WWP0WintQrMb4s7ZOdauHnUtxwoG2vI5DkLtS3qm9Ekf"
+          crossorigin="anonymous"
+        ></script>
+
+
+        <center>
+          <h1></h1>
+        </center>
+        <style type="text/css">
+
+             #mynetwork {
+                 width: 100%;
+                 height: 100vh;
+                 background-color: #222222;
+                 border: 1px solid lightgray;
+                 position: relative;
+                 float: left;
+             }
+
+             
+
+             
+
+             
+        </style>
+    </head>
+
+
+    <body>
+        <div class="card" style="width: 100%">
+            
+            
+            <div class="container"><div id="mynetwork" class="card-body"></div>
+    <div id="language-legend">
+        <h3>Languages:</h3>
+        <p>Click on an edge to see languages.</p>
+    </div>
+    </div>
+        </div>
+
+        
+        
+
+        <script type="text/javascript">
+
+              // initialize global variables.
+              var edges;
+              var nodes;
+              var allNodes;
+              var allEdges;
+              var nodeColors;
+              var originalNodes;
+              var network;
+              var container;
+              var options, data;
+              var filter = {
+                  item : '',
+                  property : '',
+                  value : []
+              };
+
+              
+
+              
+
+              // This method is responsible for drawing the graph, returns the drawn network
+              function drawGraph() {
+                  var container = document.getElementById('mynetwork');
+
+                  
+
+                  // parsing and collecting nodes and edges from the python
+                  nodes = new vis.DataSet([{"color": "#97c2fc", "font": {"color": "white"}, "id": "keyboard;;(computing, etc.) a set of keys laid out in a grid-like pattern, used for typing on a typewriter, computer etc.", "label": "keyboard", "shape": "dot", "title": "keyboard;;(computing, etc.) a set of keys laid out in a grid-like pattern, used for typing on a typewriter, computer etc."}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "keyboard;;(music) a component of many instruments, including the piano, organ, and harpsichord, consisting of usually black and white keys that cause different tones to be produced when struck.", "label": "keyboard", "shape": "dot", "title": "keyboard;;(music) a component of many instruments, including the piano, organ, and harpsichord, consisting of usually black and white keys that cause different tones to be produced when struck."}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "keyboard;;(music) an electronic device containing a keyboard (preceding sense), especially one that is capable of producing musical sounds when the keys are played.", "label": "keyboard", "shape": "dot", "title": "keyboard;;(music) an electronic device containing a keyboard (preceding sense), especially one that is capable of producing musical sounds when the keys are played."}]);
+                  edges = new vis.DataSet([{"from": "keyboard;;(computing, etc.) a set of keys laid out in a grid-like pattern, used for typing on a typewriter, computer etc.", "languages": "ukrainian;;\u043a\u043b\u0430\u0432\u0456\u0430\u0442\u0443\u0301\u0440\u0430;;noun, asturian;;tecl\u00e1u;;noun, georgian;;\u10d9\u10da\u10d0\u10d5\u10d8\u10d0\u10e2\u10e3\u10e0\u10d0;;noun, french;;clavier;;noun, dutch;;klavier;;noun, irish;;m\u00e9archl\u00e1r;;noun, turkish;;klavye;;noun, galician;;teclado;;noun, german;;tastatur;;noun, norwegian bokm\u00e5l;;tastatur;;noun, czech;;kl\u00e1vesnice;;noun, persian;;\u0635\u064e\u0641\u062d\u0650\u0647\u06a9\u0650\u0644\u06cc\u062f;;noun, chinese cantonese;;\u9375\u76e4 /\u952e\u76d8;;noun, portuguese;;teclado;;noun, irish;;luibheanchl\u00e1r;;noun, armenian;;\u057d\u057f\u0565\u0572\u0576\u0561\u0577\u0561\u0580;;noun, slovak;;kl\u00e1vesnica;;noun, spanish;;teclado;;noun, scottish gaelic;;meur-chl\u00e0r;;noun, japanese;;\u9375\u76e4;;noun, belarusian;;\u043a\u043b\u0430\u0432\u0456\u044f\u0442\u0443\u0301\u0440\u0430;;noun, tagalog;;teklado;;noun, breton;;klavier;;noun, bulgarian;;\u043a\u043b\u0430\u0432\u0438\u0430\u0442\u0443\u0301\u0440\u0430;;noun, hakka chinese;;\u9375\u76e4 /\u952e\u76d8;;noun, chinese mandarin;;\u9375\u76e4 /\u952e\u76d8;;noun, irish;;eochairchl\u00e1r;;noun, latin;;cl\u0101viat\u016bra;;noun, faroese;;knappabor\u00f0;;noun, italian;;tastiera;;noun, catalan;;teclat;;noun, chinese;;\u9375\u76e4 /\u952e\u76d8;;noun, russian;;\u043a\u043b\u0430\u0432\u0438\u0430\u0442\u0443\u0301\u0440\u0430;;noun", "to": "keyboard;;(music) a component of many instruments, including the piano, organ, and harpsichord, consisting of usually black and white keys that cause different tones to be produced when struck.", "value": 33, "width": 1.0}, {"from": "keyboard;;(computing, etc.) a set of keys laid out in a grid-like pattern, used for typing on a typewriter, computer etc.", "languages": "georgian;;\u10d9\u10da\u10d0\u10d5\u10d8\u10d0\u10e2\u10e3\u10e0\u10d0;;noun, turkmen;;klawiatura;;noun, irish;;m\u00e9archl\u00e1r;;noun, turkish;;klavye;;noun, galician;;teclado;;noun, azerbaijani;;klaviatura;;noun, persian;;\u06a9\u06cc\u0628\u0648\u0631\u062f;;noun, polish;;klawiatura;;noun, portuguese;;teclado;;noun, japanese;;\u30ad\u30fc\u30dc\u30fc\u30c9;;noun, irish;;luibheanchl\u00e1r;;noun, spanish;;teclado;;noun, tagalog;;teklado;;noun, chinese mandarin;;\u9375\u76e4 /\u952e\u76d8;;noun, irish;;eochairchl\u00e1r;;noun, javanese;;kibor;;noun, italian;;tastiera;;noun, catalan;;teclat;;noun, russian;;\u043a\u043b\u0430\u0432\u0438\u0430\u0442\u0443\u0301\u0440\u0430;;noun", "to": "keyboard;;(music) an electronic device containing a keyboard (preceding sense), especially one that is capable of producing musical sounds when the keys are played.", "value": 19, "width": 0.5757575757575758}, {"from": "keyboard;;(music) a component of many instruments, including the piano, organ, and harpsichord, consisting of usually black and white keys that cause different tones to be produced when struck.", "languages": "spanish;;teclado;;noun, finnish;;koskettimisto;;noun, tagalog;;teklado;;noun, italian;;tastiera;;noun, georgian;;\u10d9\u10da\u10d0\u10d5\u10d8\u10d0\u10e2\u10e3\u10e0\u10d0;;noun, slovene;;klaviatura;;noun, portuguese;;teclado;;noun, catalan;;teclat;;noun, dutch;;keyboard;;noun, irish;;m\u00e9archl\u00e1r;;noun, chinese mandarin;;\u9375\u76e4 /\u952e\u76d8;;noun, irish;;eochairchl\u00e1r;;noun, turkish;;klavye;;noun, russian;;\u043a\u043b\u0430\u0432\u0438\u0430\u0442\u0443\u0301\u0440\u0430;;noun, galician;;teclado;;noun, irish;;luibheanchl\u00e1r;;noun, finnish;;koskettimet;;noun, welsh;;allweddell;;noun", "to": "keyboard;;(music) an electronic device containing a keyboard (preceding sense), especially one that is capable of producing musical sounds when the keys are played.", "value": 18, "width": 0.5454545454545454}]);
+
+                  nodeColors = {};
+                  allNodes = nodes.get({ returnType: "Object" });
+                  for (nodeId in allNodes) {
+                    nodeColors[nodeId] = allNodes[nodeId].color;
+                  }
+                  allEdges = edges.get({ returnType: "Object" });
+                  // adding nodes and edges to the graph
+                  data = {nodes: nodes, edges: edges};
+
+                  var options = {
+    "configure": {
+        "enabled": false
+    },
+    "edges": {
+        "color": {
+            "inherit": true
+        },
+        "smooth": {
+            "enabled": true,
+            "type": "dynamic"
+        }
+    },
+    "interaction": {
+        "dragNodes": true,
+        "hideEdgesOnDrag": false,
+        "hideNodesOnDrag": false
+    },
+    "physics": {
+        "enabled": true,
+        "stabilization": {
+            "enabled": true,
+            "fit": true,
+            "iterations": 1000,
+            "onlyDynamicEdges": false,
+            "updateInterval": 50
+        }
+    }
+};
+
+                  
+
+
+                  
+
+                  network = new vis.Network(container, data, options);
+
+                  
+
+                  
+
+                  
+
+
+                  
+
+                  return network;
+
+              }
+              drawGraph();
+        </script>
+    
+    <script>
+        // Function to update the legend
+        function updateLegend(content) {
+            const legend = document.getElementById('language-legend');
+            legend.innerHTML = content;
+        }
+
+        // Add event listeners to edges using vis.js API
+        network.on("hoverEdge", function (params) {
+            const edgeId = params.edge;
+            const edge = edges.get(edgeId);
+            if (edge && edge.languages) {
+                const languagesList = edge.languages.split(', ').map(lang => `<li>${lang}</li>`).join('');
+                const numLanguages = edge.languages.split(', ').length;
+                const nodePair = `${edge.from} - ${edge.to}`;
+                updateLegend(`<h3>Languages (${numLanguages}) for ${nodePair}:</h3><ul>${languagesList}</ul>`);
+            }
+        });
+
+        network.on("blurEdge", function () {
+            updateLegend('<h3>Languages:</h3><p>Hover over an edge to see languages.</p>');
+        });
+
+        network.on("click", function (params) {
+            if (params.edges && params.edges.length > 0) {
+                const edgeId = params.edges[0];
+                const edge = edges.get(edgeId);
+                if (edge && edge.languages) {
+                    const languagesList = edge.languages.split(', ').sort().map(lang => `<li>${lang.replaceAll(";;", " - ")}</li>`).join('');
+                    const numLanguages = edge.languages.split(', ').length;
+                    const title1 = edge.from.replaceAll(";;", "&#10;");
+                    const title2 = edge.to.replaceAll(";;", "&#10;");
+                    updateLegend(`<h2><div title="${title1}";>${edge.from.split(";;")[0]}</div><div title="${title2}";>${edge.to.split(";;")[0]}</div></h2><br><h3>Languages (${numLanguages})<br></h3><ul>${languagesList}</ul>`);
+                }
+            }
+        });
+    </script>
+    <style>
+        .container {
+            display: flex;
+            width: 100%;
+            margin-top: 48px;
+        }
+        #mynetwork {
+            flex: 3;
+            height: 750px;
+            width: 90%
+            background-color: #222222;
+            border: 1px solid lightgray;
+        }
+        #language-legend h2 {
+            display: flex; 
+            flex-direction: column;
+            font-weight: bold;
+        }
+        #language-legend h3 {
+             border-bottom: 1px solid black; 
+             padding-bottom: 8px
+        }
+        #language-legend {
+            flex: 1;
+            margin-left: 20px;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            background-color: #f9f9f9;
+            overflow-y: auto;
+            max-height: 750px;
+        }
+        #language-legend ul {
+            list-style-type: none;
+            padding: 0;
+        }
+        #language-legend li {
+            margin: 5px 0;
+            font-size: 1.2em;
+        }
+    </style>
+    </body>
+</html>

@@ -1,0 +1,239 @@
+<html>
+    <head>
+        <meta charset="utf-8">
+        
+            <script src="lib/bindings/utils.js"></script>
+            <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/vis-network/9.1.2/dist/dist/vis-network.min.css" integrity="sha512-WgxfT5LWjfszlPHXRmBWHkV2eceiWTOBvrKCNbdgDYTHrT2AeLCGbF4sZlZw3UMN3WtL0tGUoIAKsu8mllg/XA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/vis-network/9.1.2/dist/vis-network.min.js" integrity="sha512-LnvoEWDFrqGHlHmDD2101OrLcbsfkrzoSpvtSQtxK3RMnRV0eOkhhBN2dXHKRrUU8p2DGRTk35n4O8nWSVe1mQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+            
+        
+<center>
+<h1></h1>
+</center>
+
+<!-- <link rel="stylesheet" href="../node_modules/vis/dist/vis.min.css" type="text/css" />
+<script type="text/javascript" src="../node_modules/vis/dist/vis.js"> </script>-->
+        <link
+          href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/css/bootstrap.min.css"
+          rel="stylesheet"
+          integrity="sha384-eOJMYsd53ii+scO/bJGFsiCZc+5NDVN2yr8+0RDqr0Ql0h+rP48ckxlpbzKgwra6"
+          crossorigin="anonymous"
+        />
+        <script
+          src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.bundle.min.js"
+          integrity="sha384-JEW9xMcG8R+pH31jmWH6WWP0WintQrMb4s7ZOdauHnUtxwoG2vI5DkLtS3qm9Ekf"
+          crossorigin="anonymous"
+        ></script>
+
+
+        <center>
+          <h1></h1>
+        </center>
+        <style type="text/css">
+
+             #mynetwork {
+                 width: 100%;
+                 height: 100vh;
+                 background-color: #222222;
+                 border: 1px solid lightgray;
+                 position: relative;
+                 float: left;
+             }
+
+             
+
+             
+
+             
+        </style>
+    </head>
+
+
+    <body>
+        <div class="card" style="width: 100%">
+            
+            
+            <div class="container"><div id="mynetwork" class="card-body"></div>
+    <div id="language-legend">
+        <h3>Languages:</h3>
+        <p>Click on an edge to see languages.</p>
+    </div>
+    </div>
+        </div>
+
+        
+        
+
+        <script type="text/javascript">
+
+              // initialize global variables.
+              var edges;
+              var nodes;
+              var allNodes;
+              var allEdges;
+              var nodeColors;
+              var originalNodes;
+              var network;
+              var container;
+              var options, data;
+              var filter = {
+                  item : '',
+                  property : '',
+                  value : []
+              };
+
+              
+
+              
+
+              // This method is responsible for drawing the graph, returns the drawn network
+              function drawGraph() {
+                  var container = document.getElementById('mynetwork');
+
+                  
+
+                  // parsing and collecting nodes and edges from the python
+                  nodes = new vis.DataSet([{"color": "#97c2fc", "font": {"color": "white"}, "id": "basilica;;(architecture) a christian church building having a nave with a semicircular apse, side aisles, a narthex and a clerestory.", "label": "basilica", "shape": "dot", "title": "basilica;;(architecture) a christian church building having a nave with a semicircular apse, side aisles, a narthex and a clerestory."}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "chapel;;(especially christianity) a place of worship, smaller than or subordinate to a church.", "label": "chapel", "shape": "dot", "title": "chapel;;(especially christianity) a place of worship, smaller than or subordinate to a church."}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "church;;(countable, christianity) a christian house of worship; a building where christian religious services take place.", "label": "church", "shape": "dot", "title": "church;;(countable, christianity) a christian house of worship; a building where christian religious services take place."}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "church;;(informal) any religious group or place of worship; a temple.", "label": "church", "shape": "dot", "title": "church;;(informal) any religious group or place of worship; a temple."}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "mass;;(roman catholicism) the principal liturgical service of the church, encompassing both a scripture service (liturgy of the word) and a eucharistic service (liturgy of the eucharist), which includes the consecration and oblation (offering) of the host and wine.", "label": "mass", "shape": "dot", "title": "mass;;(roman catholicism) the principal liturgical service of the church, encompassing both a scripture service (liturgy of the word) and a eucharistic service (liturgy of the eucharist), which includes the consecration and oblation (offering) of the host and wine."}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "church;;(uncountable, countable, as bare noun) christian worship held at a church; service.", "label": "church", "shape": "dot", "title": "church;;(uncountable, countable, as bare noun) christian worship held at a church; service."}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "heresy;;(religion) a doctrine held by a member of a religion at variance or conflict with established religious beliefs.", "label": "heresy", "shape": "dot", "title": "heresy;;(religion) a doctrine held by a member of a religion at variance or conflict with established religious beliefs."}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "mosque;;(islam) a place of worship for muslims, often having at least one minaret; a masjid.", "label": "mosque", "shape": "dot", "title": "mosque;;(islam) a place of worship for muslims, often having at least one minaret; a masjid."}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "cult;;(chiefly derogatory) a group, sect or movement following an unorthodox religious or philosophical system of beliefs, especially one in which members remove and exclude themselves from greater society, including family members not part of the cult, and show extreme devotion to a charismatic leader.", "label": "cult", "shape": "dot", "title": "cult;;(chiefly derogatory) a group, sect or movement following an unorthodox religious or philosophical system of beliefs, especially one in which members remove and exclude themselves from greater society, including family members not part of the cult, and show extreme devotion to a charismatic leader."}]);
+                  edges = new vis.DataSet([{"from": "basilica;;(architecture) a christian church building having a nave with a semicircular apse, side aisles, a narthex and a clerestory.", "languages": "finnish;;kirkko;;noun, japanese;;\u8056\u5802;;noun", "to": "church;;(countable, christianity) a christian house of worship; a building where christian religious services take place.", "value": 2, "width": 0.03389830508474576}, {"from": "chapel;;(especially christianity) a place of worship, smaller than or subordinate to a church.", "languages": "korean;;\uc608\ubc30\ub2f9;;noun, uyghur;;\u0626\u0649\u0628\u0627\u062f\u06d5\u062a\u062e\u0627\u0646\u0627;;noun, thai;;\u0e42\u0e1a\u0e2a\u0e16\u0e4c;;noun, korean;;\ub840\ubc30\ub2f9;;noun, arabic;;\u0643\u064e\u0646\u0650\u064a\u0633\u064e\u0629;;noun, irish;;teach pobail;;noun", "to": "church;;(countable, christianity) a christian house of worship; a building where christian religious services take place.", "value": 6, "width": 0.1016949152542373}, {"from": "church;;(countable, christianity) a christian house of worship; a building where christian religious services take place.", "languages": "turkish;;kilise;;noun, icelandic;;kirkja;;noun, korean;;\uad50\ud68c;;noun, german;;kirche;;noun, finnish;;kirkko;;noun, japanese;;\u6559\u4f1a;;noun", "to": "church;;(uncountable, countable, as bare noun) christian worship held at a church; service.", "value": 6, "width": 0.1016949152542373}, {"from": "church;;(countable, christianity) a christian house of worship; a building where christian religious services take place.", "languages": "ukrainian;;\u0446\u0435\u0301\u0440\u043a\u0432\u0430;;noun, dutch;;kerk;;noun, haitian creole;;legliz;;noun, arabic;;\u0643\u064e\u0646\u064e\u0627\u0626\u0650\u0633;;noun, scottish gaelic;;eaglais;;noun, romanian;;biseric\u0103;;noun, polish;;ko\u015bci\u00f3\u0142;;noun, cornish;;eglos;;noun, walloon;;eglijhe;;noun, afrikaans;;kerk;;noun, norwegian bokm\u00e5l;;kirke;;noun, louisiana creole french;;l\u00e9gliz;;noun, italian;;chiesa;;noun, scots;;kirk;;noun, ancient greek;;\u1f10\u03ba\u03ba\u03bb\u03b7\u03c3\u03af\u03b1;;noun, church slavic;;\u0446\u0440\u044c\u043a\ua651;;noun, turkish;;kilise;;noun, indonesian;;gereja;;noun, portuguese;;igreja;;noun, swahili;;kanisa;;noun, french;;\u00e9glise;;noun, yakut;;\u0442\u0430\u04a5\u0430\u0440\u0430 \u0434\u044c\u0438\u044d\u0442\u044d;;noun, lower sorbian;;cerkwja;;noun, chinese cantonese;;\u6559\u6703 /\u6559\u4f1a;;noun, assyrian neo-aramaic;;\u0725\u0739\u0715\u072c\u0735\u0710;;noun, georgian;;\u10d4\u10d9\u10da\u10d4\u10e1\u10d8\u10d0;;noun, estonian;;kirik;;noun, armenian;;\u0565\u056f\u0565\u0572\u0565\u0581\u056b;;noun, korean;;\uad50\ud68c;;noun, norwegian nynorsk;;kyrkje;;noun, arabic;;\u0643\u0646\u0627\u064a\u0633;;noun, lithuanian;;ba\u017eny\u010dia;;noun, greek;;\u03b5\u03ba\u03ba\u03bb\u03b7\u03c3\u03af\u03b1;;noun, spanish;;iglesia;;noun, faroese;;kirkja;;noun, latvian;;bazn\u012bca;;noun, danish;;kirke;;noun, yakut;;\u0441\u0438\u044d\u0440\u043a\u044d\u043f;;noun, udmurt;;\u0447\u0435\u0440\u043a;;noun, slovene;;cerkev;;noun, russian;;\u0446\u0435\u0301\u0440\u043a\u043e\u0432\u044c;;noun, chinese mandarin;;\u6559\u6703 /\u6559\u4f1a;;noun, catalan;;esgl\u00e9sia;;noun, galician;;igrexa;;noun, arabic;;\u0643\u0646\u064a\u0633\u0629;;noun, tagalog;;simbahan;;noun, irish;;eaglais;;noun, hebrew;;\u05db\u05e0\u05e1\u05d9\u05d9\u05d4 \\ \u05db\u05b0\u05bc\u05e0\u05b5\u05e1\u05b4\u05d9\u05b8\u05bc\u05d4;;noun, macedonian;;\u0446\u0440\u043a\u0432\u0430;;noun, maltese;;knisja;;noun, swedish;;kyrka;;noun, middle english;;chirche;;noun, finnish;;kirkko;;noun, german;;kirche;;noun, cherokee;;\uaba7\uab76\uab83\uabbb\uab9d\uaba7\uab72;;noun, arabic;;\u0643\u064e\u0646\u0650\u064a\u0633\u064e\u0629;;noun, basque;;eliza;;noun, chinese;;\u6559\u6703 /\u6559\u4f1a;;noun, japanese;;\u6559\u4f1a;;noun", "to": "church;;(informal) any religious group or place of worship; a temple.", "value": 59, "width": 1.0}, {"from": "church;;(countable, christianity) a christian house of worship; a building where christian religious services take place.", "languages": "sinhalese;;\u0db4\u0dbd\u0dca\u0dbd\u0dd2\u0dba;;noun, chinese;;\u0441\u044b;;noun", "to": "mosque;;(islam) a place of worship for muslims, often having at least one minaret; a masjid.", "value": 2, "width": 0.03389830508474576}, {"from": "church;;(informal) any religious group or place of worship; a temple.", "languages": "turkish;;kilise;;noun, korean;;\uad50\ud68c;;noun, german;;kirche;;noun, finnish;;kirkko;;noun, japanese;;\u6559\u4f1a;;noun", "to": "church;;(uncountable, countable, as bare noun) christian worship held at a church; service.", "value": 5, "width": 0.0847457627118644}, {"from": "mass;;(roman catholicism) the principal liturgical service of the church, encompassing both a scripture service (liturgy of the word) and a eucharistic service (liturgy of the eucharist), which includes the consecration and oblation (offering) of the host and wine.", "languages": "serbo-croatian;;\u043c\u0438\u0441\u0430;;noun, esperanto;;meso;;noun, finnish;;messu;;noun, italian;;messa;;noun, spanish;;misa;;noun, polish;;msza;;noun, hungarian;;mise;;noun, indonesian;;misa;;noun, serbo-croatian;;misa;;noun, czech;;m\u0161e;;noun, slovak;;om\u0161a;;noun, tagalog;;misa;;noun, slovene;;ma\u0161a;;noun, greek;;\u03bb\u03b5\u03b9\u03c4\u03bf\u03c5\u03c1\u03b3\u03af\u03b1;;noun, russian;;\u043c\u0435\u0301\u0441\u0441\u0430;;noun, german;;messe;;noun, maltese;;quddiesa;;noun, portuguese;;missa;;noun", "to": "church;;(uncountable, countable, as bare noun) christian worship held at a church; service.", "value": 18, "width": 0.3050847457627119}, {"from": "church;;(uncountable, countable, as bare noun) christian worship held at a church; service.", "languages": "portuguese;;culto;;noun, french;;culte;;noun", "to": "cult;;(chiefly derogatory) a group, sect or movement following an unorthodox religious or philosophical system of beliefs, especially one in which members remove and exclude themselves from greater society, including family members not part of the cult, and show extreme devotion to a charismatic leader.", "value": 2, "width": 0.03389830508474576}, {"from": "heresy;;(religion) a doctrine held by a member of a religion at variance or conflict with established religious beliefs.", "languages": "greek;;\u03b1\u03af\u03c1\u03b5\u03c3\u03b7;;noun, chinese mandarin;;\u90aa\u6559;;noun, chinese mandarin;;\u7570\u6559 /\u5f02\u6559;;noun", "to": "cult;;(chiefly derogatory) a group, sect or movement following an unorthodox religious or philosophical system of beliefs, especially one in which members remove and exclude themselves from greater society, including family members not part of the cult, and show extreme devotion to a charismatic leader.", "value": 3, "width": 0.05084745762711865}]);
+
+                  nodeColors = {};
+                  allNodes = nodes.get({ returnType: "Object" });
+                  for (nodeId in allNodes) {
+                    nodeColors[nodeId] = allNodes[nodeId].color;
+                  }
+                  allEdges = edges.get({ returnType: "Object" });
+                  // adding nodes and edges to the graph
+                  data = {nodes: nodes, edges: edges};
+
+                  var options = {
+    "configure": {
+        "enabled": false
+    },
+    "edges": {
+        "color": {
+            "inherit": true
+        },
+        "smooth": {
+            "enabled": true,
+            "type": "dynamic"
+        }
+    },
+    "interaction": {
+        "dragNodes": true,
+        "hideEdgesOnDrag": false,
+        "hideNodesOnDrag": false
+    },
+    "physics": {
+        "enabled": true,
+        "stabilization": {
+            "enabled": true,
+            "fit": true,
+            "iterations": 1000,
+            "onlyDynamicEdges": false,
+            "updateInterval": 50
+        }
+    }
+};
+
+                  
+
+
+                  
+
+                  network = new vis.Network(container, data, options);
+
+                  
+
+                  
+
+                  
+
+
+                  
+
+                  return network;
+
+              }
+              drawGraph();
+        </script>
+    
+    <script>
+        // Function to update the legend
+        function updateLegend(content) {
+            const legend = document.getElementById('language-legend');
+            legend.innerHTML = content;
+        }
+
+        // Add event listeners to edges using vis.js API
+        network.on("hoverEdge", function (params) {
+            const edgeId = params.edge;
+            const edge = edges.get(edgeId);
+            if (edge && edge.languages) {
+                const languagesList = edge.languages.split(', ').map(lang => `<li>${lang}</li>`).join('');
+                const numLanguages = edge.languages.split(', ').length;
+                const nodePair = `${edge.from} - ${edge.to}`;
+                updateLegend(`<h3>Languages (${numLanguages}) for ${nodePair}:</h3><ul>${languagesList}</ul>`);
+            }
+        });
+
+        network.on("blurEdge", function () {
+            updateLegend('<h3>Languages:</h3><p>Hover over an edge to see languages.</p>');
+        });
+
+        network.on("click", function (params) {
+            if (params.edges && params.edges.length > 0) {
+                const edgeId = params.edges[0];
+                const edge = edges.get(edgeId);
+                if (edge && edge.languages) {
+                    const languagesList = edge.languages.split(', ').sort().map(lang => `<li>${lang.replaceAll(";;", " - ")}</li>`).join('');
+                    const numLanguages = edge.languages.split(', ').length;
+                    const title1 = edge.from.replaceAll(";;", "&#10;");
+                    const title2 = edge.to.replaceAll(";;", "&#10;");
+                    updateLegend(`<h2><div title="${title1}";>${edge.from.split(";;")[0]}</div><div title="${title2}";>${edge.to.split(";;")[0]}</div></h2><br><h3>Languages (${numLanguages})<br></h3><ul>${languagesList}</ul>`);
+                }
+            }
+        });
+    </script>
+    <style>
+        .container {
+            display: flex;
+            width: 100%;
+            margin-top: 48px;
+        }
+        #mynetwork {
+            flex: 3;
+            height: 750px;
+            width: 90%
+            background-color: #222222;
+            border: 1px solid lightgray;
+        }
+        #language-legend h2 {
+            display: flex; 
+            flex-direction: column;
+            font-weight: bold;
+        }
+        #language-legend h3 {
+             border-bottom: 1px solid black; 
+             padding-bottom: 8px
+        }
+        #language-legend {
+            flex: 1;
+            margin-left: 20px;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            background-color: #f9f9f9;
+            overflow-y: auto;
+            max-height: 750px;
+        }
+        #language-legend ul {
+            list-style-type: none;
+            padding: 0;
+        }
+        #language-legend li {
+            margin: 5px 0;
+            font-size: 1.2em;
+        }
+    </style>
+    </body>
+</html>

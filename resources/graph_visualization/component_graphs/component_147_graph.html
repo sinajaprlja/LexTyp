@@ -1,0 +1,239 @@
+<html>
+    <head>
+        <meta charset="utf-8">
+        
+            <script src="lib/bindings/utils.js"></script>
+            <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/vis-network/9.1.2/dist/dist/vis-network.min.css" integrity="sha512-WgxfT5LWjfszlPHXRmBWHkV2eceiWTOBvrKCNbdgDYTHrT2AeLCGbF4sZlZw3UMN3WtL0tGUoIAKsu8mllg/XA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/vis-network/9.1.2/dist/vis-network.min.js" integrity="sha512-LnvoEWDFrqGHlHmDD2101OrLcbsfkrzoSpvtSQtxK3RMnRV0eOkhhBN2dXHKRrUU8p2DGRTk35n4O8nWSVe1mQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+            
+        
+<center>
+<h1></h1>
+</center>
+
+<!-- <link rel="stylesheet" href="../node_modules/vis/dist/vis.min.css" type="text/css" />
+<script type="text/javascript" src="../node_modules/vis/dist/vis.js"> </script>-->
+        <link
+          href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/css/bootstrap.min.css"
+          rel="stylesheet"
+          integrity="sha384-eOJMYsd53ii+scO/bJGFsiCZc+5NDVN2yr8+0RDqr0Ql0h+rP48ckxlpbzKgwra6"
+          crossorigin="anonymous"
+        />
+        <script
+          src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.bundle.min.js"
+          integrity="sha384-JEW9xMcG8R+pH31jmWH6WWP0WintQrMb4s7ZOdauHnUtxwoG2vI5DkLtS3qm9Ekf"
+          crossorigin="anonymous"
+        ></script>
+
+
+        <center>
+          <h1></h1>
+        </center>
+        <style type="text/css">
+
+             #mynetwork {
+                 width: 100%;
+                 height: 100vh;
+                 background-color: #222222;
+                 border: 1px solid lightgray;
+                 position: relative;
+                 float: left;
+             }
+
+             
+
+             
+
+             
+        </style>
+    </head>
+
+
+    <body>
+        <div class="card" style="width: 100%">
+            
+            
+            <div class="container"><div id="mynetwork" class="card-body"></div>
+    <div id="language-legend">
+        <h3>Languages:</h3>
+        <p>Click on an edge to see languages.</p>
+    </div>
+    </div>
+        </div>
+
+        
+        
+
+        <script type="text/javascript">
+
+              // initialize global variables.
+              var edges;
+              var nodes;
+              var allNodes;
+              var allEdges;
+              var nodeColors;
+              var originalNodes;
+              var network;
+              var container;
+              var options, data;
+              var filter = {
+                  item : '',
+                  property : '',
+                  value : []
+              };
+
+              
+
+              
+
+              // This method is responsible for drawing the graph, returns the drawn network
+              function drawGraph() {
+                  var container = document.getElementById('mynetwork');
+
+                  
+
+                  // parsing and collecting nodes and edges from the python
+                  nodes = new vis.DataSet([{"color": "#97c2fc", "font": {"color": "white"}, "id": "past tense;;(grammar) a grammatical form (often a verb form) that refers to an event, transaction, occurrence, or object that happened (or had happened), or existed, at some time before now (the applicable reference time).", "label": "past tense", "shape": "dot", "title": "past tense;;(grammar) a grammatical form (often a verb form) that refers to an event, transaction, occurrence, or object that happened (or had happened), or existed, at some time before now (the applicable reference time)."}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "past;;(grammar) the past tense.", "label": "past", "shape": "dot", "title": "past;;(grammar) the past tense."}]);
+                  edges = new vis.DataSet([{"from": "past tense;;(grammar) a grammatical form (often a verb form) that refers to an event, transaction, occurrence, or object that happened (or had happened), or existed, at some time before now (the applicable reference time).", "languages": "norwegian bokm\u00e5l;;datid;;noun, russian;;\u043f\u0440\u043e\u0448\u0435\u0301\u0434\u0448\u0435\u0435 \u0432\u0440\u0435\u0301\u043c\u044f;;noun, latin;;tempus praeteritum;;noun, vietnamese;;th\u1eddi qu\u00e1 kh\u1ee9;;noun, kyrgyz;;\u04e9\u0442\u043a\u04e9\u043d \u0447\u0430\u043a;;noun, swedish;;preteritum;;noun, faroese;;t\u00e1t\u00ed\u00f0;;noun, thai;;\u0e2d\u0e14\u0e35\u0e15\u0e01\u0e32\u0e25;;noun, tagalog;;pangnagdaan;;noun, french;;pass\u00e9;;noun, slovene;;pretekli \u010das;;noun, portuguese;;passado;;noun, italian;;passato;;noun, chuvash;;\u0438\u0440\u0442\u043d\u04d7 \u0432\u04d1\u0445\u04d1\u0442;;noun, serbo-croatian;;pro\u0161lo vrijeme;;noun, spanish;;pret\u00e9rito;;noun, german;;vergangenheit;;noun, serbo-croatian;;pro\u0161lo vreme;;noun, norwegian nynorsk;;preteritum;;noun, swedish;;imperfekt;;noun, slovak;;pr\u00e9teritum;;noun, tagalog;;naganap;;noun, arabic;;\u0627\u0644\u0652\u0641\u0650\u0639\u0652\u0644 \u0627\u0644\u0652\u0645\u064e\u0627\u0636\u0650\u064a;;noun, czech;;minul\u00fd \u010das;;noun, tatar;;\u04af\u0442\u043a\u04d9\u043d \u0437\u0430\u043c\u0430\u043d;;noun, finnish;;imperfekti;;noun, spanish;;tiempo pasado;;noun, georgian;;\u10dc\u10d0\u10db\u10e7\u10dd;;noun, turkmen;;\u00f6ten zaman;;noun, bengali;;\u0985\u09a4\u09c0\u09a4 \u0995\u09be\u09b2;;noun, carpathian rusyn;;\u043c\u0438\u043d\u0443\u043b\u044b\u0439 \u0447\u0430\u0441;;noun, swedish;;f\u00f6rfluten tid;;noun, tibetan;;\u0f60\u0f51\u0f66\u0f0b\u0f54;;noun, tajik;;\u043c\u043e\u0437\u0438;;noun, hungarian;;m\u00falt id\u0151;;noun, japanese;;\u904e\u53bb\u5f62;;noun, chinese mandarin;;\u904e\u53bb\u6642 /\u8fc7\u53bb\u65f6;;noun, albanian;;koha e shkuar;;noun, slovak;;minul\u00fd \u010das;;noun, crimean tatar;;ke\u00e7ken zaman;;noun, estonian;;minevik;;noun, greek;;\u03b1\u03cc\u03c1\u03b9\u03c3\u03c4\u03bf\u03c2;;noun, korean;;\uacfc\uac70\ud615;;noun, macedonian;;\u043c\u0438\u043d\u0430\u0442\u043e \u0432\u0440\u0435\u043c\u0435;;noun, latin;;praeteritum;;noun, tajik;;\u0433\u0443\u0437\u0430\u0448\u0442\u0430;;noun, german;;pr\u00e4teritum;;noun, iranian persian;;\u0632\u064e\u0645\u0627\u0646\u0650 \u06af\u064f\u0630\u064e\u0634\u0652\u062a\u0650\u0647;;noun, kazakh;;\u04e9\u0442\u043a\u0435\u043d \u0448\u0430\u049b;;noun, slovene;;preteklik;;noun, lithuanian;;b\u016btasis laikas;;noun, danish;;pr\u00e6teritum;;noun, latvian;;pag\u0101tnes laiks;;noun, latvian;;pag\u0101tne;;noun, hindi;;\u092d\u0942\u0924\u0915\u093e\u0932;;noun, armenian;;\u0561\u0576\u0581\u0575\u0561\u056c;;noun, dutch;;verleden tijd;;noun, malay;;masa lampau;;noun, belarusian;;\u043c\u0456\u043d\u0443\u0301\u043b\u044b \u0447\u0430\u0441;;noun, telugu;;\u0c2d\u0c42\u0c24\u0c15\u0c3e\u0c32\u0c2e\u0c41;;noun, serbo-croatian;;\u043f\u0440\u043e\u0448\u043b\u043e \u0432\u0440\u0435\u043c\u0435;;noun, japanese;;\u904e\u53bb\u6642\u5236;;noun, portuguese;;pret\u00e9rito;;noun, armenian;;\u0561\u0576\u0581\u0575\u0561\u056c \u056a\u0561\u0574\u0561\u0576\u0561\u056f;;noun, norwegian bokm\u00e5l;;preteritum;;noun, uyghur;;\u0626\u06c6\u062a\u0643\u06d5\u0646 \u0632\u0627\u0645\u0627\u0646;;noun, azerbaijani;;ke\u00e7mi\u015f zaman;;noun, danish;;datid;;noun, turkish;;ge\u00e7mi\u015f zaman;;noun, vietnamese;;th\u00ec qu\u00e1 kh\u1ee9;;noun, swedish;;d\u00e5tid;;noun, serbo-croatian;;\u043f\u0440\u043e\u0448\u043b\u043e \u0432\u0440\u0438\u0458\u0435\u043c\u0435;;noun, chinese mandarin;;\u904e\u53bb\u5f0f /\u8fc7\u53bb\u5f0f;;noun, yakut;;\u0430\u0430\u0441\u043f\u044b\u0442 \u043a\u044d\u043c;;noun, mongolian;;\u04e9\u043d\u0433\u04e9\u0440\u0441\u04e9\u043d \u0446\u0430\u0433;;noun, polish;;czas przesz\u0142y;;noun, arabic;;\u0627\u0644\u0652\u0645\u064e\u0627\u0636\u0650\u064a;;noun, albanian;;koh\u00eb e shkuar;;noun, afrikaans;;verlede tyd;;noun, bashkir;;\u04af\u0442\u043a\u04d9\u043d \u0437\u0430\u043c\u0430\u043d;;noun, bulgarian;;\u043c\u0438\u0301\u043d\u0430\u043b\u043e \u0432\u0440\u0435\u0301\u043c\u0435;;noun, arabic;;\u0641\u0650\u0639\u0652\u0644 \u0645\u064e\u0627\u0636\u064d;;noun, urdu;;\u0645\u0627\u0636\u06cc;;noun, hindi;;\u092e\u093e\u091c\u093c\u0940;;noun, indonesian;;kala lampau;;noun, icelandic;;\u00fe\u00e1t\u00ed\u00f0;;noun, iranian persian;;\u06af\u064f\u0630\u064e\u0634\u0652\u062a\u0650\u0647;;noun, chinese mandarin;;\u904e\u53bb\u6642\u614b /\u8fc7\u53bb\u65f6\u6001;;noun, buryat;;\u04af\u043d\u0433\u044d\u0440\u04bb\u044d\u043d \u0441\u0430\u0433;;noun, tajik;;\u0437\u0430\u043c\u043e\u043d\u0438 \u0433\u0443\u0437\u0430\u0448\u0442\u0430;;noun, khmer;;\u17a2\u178f\u17b8\u178f\u1780\u17b6\u179b;;noun, uzbek;;o\u02bbtgan zamon;;noun, arabic;;\u0645\u064e\u0627\u0636\u064d;;noun, ukrainian;;\u043c\u0438\u043d\u0443\u0301\u043b\u0438\u0439 \u0447\u0430\u0441;;noun, iranian persian;;\u0645\u0627\u0636\u06cc;;noun, norwegian nynorsk;;datid;;noun, hindi;;\u092d\u0942\u0924 \u0915\u093e\u0932;;noun", "to": "past;;(grammar) the past tense.", "value": 97, "width": 1.0}]);
+
+                  nodeColors = {};
+                  allNodes = nodes.get({ returnType: "Object" });
+                  for (nodeId in allNodes) {
+                    nodeColors[nodeId] = allNodes[nodeId].color;
+                  }
+                  allEdges = edges.get({ returnType: "Object" });
+                  // adding nodes and edges to the graph
+                  data = {nodes: nodes, edges: edges};
+
+                  var options = {
+    "configure": {
+        "enabled": false
+    },
+    "edges": {
+        "color": {
+            "inherit": true
+        },
+        "smooth": {
+            "enabled": true,
+            "type": "dynamic"
+        }
+    },
+    "interaction": {
+        "dragNodes": true,
+        "hideEdgesOnDrag": false,
+        "hideNodesOnDrag": false
+    },
+    "physics": {
+        "enabled": true,
+        "stabilization": {
+            "enabled": true,
+            "fit": true,
+            "iterations": 1000,
+            "onlyDynamicEdges": false,
+            "updateInterval": 50
+        }
+    }
+};
+
+                  
+
+
+                  
+
+                  network = new vis.Network(container, data, options);
+
+                  
+
+                  
+
+                  
+
+
+                  
+
+                  return network;
+
+              }
+              drawGraph();
+        </script>
+    
+    <script>
+        // Function to update the legend
+        function updateLegend(content) {
+            const legend = document.getElementById('language-legend');
+            legend.innerHTML = content;
+        }
+
+        // Add event listeners to edges using vis.js API
+        network.on("hoverEdge", function (params) {
+            const edgeId = params.edge;
+            const edge = edges.get(edgeId);
+            if (edge && edge.languages) {
+                const languagesList = edge.languages.split(', ').map(lang => `<li>${lang}</li>`).join('');
+                const numLanguages = edge.languages.split(', ').length;
+                const nodePair = `${edge.from} - ${edge.to}`;
+                updateLegend(`<h3>Languages (${numLanguages}) for ${nodePair}:</h3><ul>${languagesList}</ul>`);
+            }
+        });
+
+        network.on("blurEdge", function () {
+            updateLegend('<h3>Languages:</h3><p>Hover over an edge to see languages.</p>');
+        });
+
+        network.on("click", function (params) {
+            if (params.edges && params.edges.length > 0) {
+                const edgeId = params.edges[0];
+                const edge = edges.get(edgeId);
+                if (edge && edge.languages) {
+                    const languagesList = edge.languages.split(', ').sort().map(lang => `<li>${lang.replaceAll(";;", " - ")}</li>`).join('');
+                    const numLanguages = edge.languages.split(', ').length;
+                    const title1 = edge.from.replaceAll(";;", "&#10;");
+                    const title2 = edge.to.replaceAll(";;", "&#10;");
+                    updateLegend(`<h2><div title="${title1}";>${edge.from.split(";;")[0]}</div><div title="${title2}";>${edge.to.split(";;")[0]}</div></h2><br><h3>Languages (${numLanguages})<br></h3><ul>${languagesList}</ul>`);
+                }
+            }
+        });
+    </script>
+    <style>
+        .container {
+            display: flex;
+            width: 100%;
+            margin-top: 48px;
+        }
+        #mynetwork {
+            flex: 3;
+            height: 750px;
+            width: 90%
+            background-color: #222222;
+            border: 1px solid lightgray;
+        }
+        #language-legend h2 {
+            display: flex; 
+            flex-direction: column;
+            font-weight: bold;
+        }
+        #language-legend h3 {
+             border-bottom: 1px solid black; 
+             padding-bottom: 8px
+        }
+        #language-legend {
+            flex: 1;
+            margin-left: 20px;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            background-color: #f9f9f9;
+            overflow-y: auto;
+            max-height: 750px;
+        }
+        #language-legend ul {
+            list-style-type: none;
+            padding: 0;
+        }
+        #language-legend li {
+            margin: 5px 0;
+            font-size: 1.2em;
+        }
+    </style>
+    </body>
+</html>

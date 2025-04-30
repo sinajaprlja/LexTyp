@@ -1,0 +1,239 @@
+<html>
+    <head>
+        <meta charset="utf-8">
+        
+            <script src="lib/bindings/utils.js"></script>
+            <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/vis-network/9.1.2/dist/dist/vis-network.min.css" integrity="sha512-WgxfT5LWjfszlPHXRmBWHkV2eceiWTOBvrKCNbdgDYTHrT2AeLCGbF4sZlZw3UMN3WtL0tGUoIAKsu8mllg/XA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/vis-network/9.1.2/dist/vis-network.min.js" integrity="sha512-LnvoEWDFrqGHlHmDD2101OrLcbsfkrzoSpvtSQtxK3RMnRV0eOkhhBN2dXHKRrUU8p2DGRTk35n4O8nWSVe1mQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+            
+        
+<center>
+<h1></h1>
+</center>
+
+<!-- <link rel="stylesheet" href="../node_modules/vis/dist/vis.min.css" type="text/css" />
+<script type="text/javascript" src="../node_modules/vis/dist/vis.js"> </script>-->
+        <link
+          href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/css/bootstrap.min.css"
+          rel="stylesheet"
+          integrity="sha384-eOJMYsd53ii+scO/bJGFsiCZc+5NDVN2yr8+0RDqr0Ql0h+rP48ckxlpbzKgwra6"
+          crossorigin="anonymous"
+        />
+        <script
+          src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.bundle.min.js"
+          integrity="sha384-JEW9xMcG8R+pH31jmWH6WWP0WintQrMb4s7ZOdauHnUtxwoG2vI5DkLtS3qm9Ekf"
+          crossorigin="anonymous"
+        ></script>
+
+
+        <center>
+          <h1></h1>
+        </center>
+        <style type="text/css">
+
+             #mynetwork {
+                 width: 100%;
+                 height: 100vh;
+                 background-color: #222222;
+                 border: 1px solid lightgray;
+                 position: relative;
+                 float: left;
+             }
+
+             
+
+             
+
+             
+        </style>
+    </head>
+
+
+    <body>
+        <div class="card" style="width: 100%">
+            
+            
+            <div class="container"><div id="mynetwork" class="card-body"></div>
+    <div id="language-legend">
+        <h3>Languages:</h3>
+        <p>Click on an edge to see languages.</p>
+    </div>
+    </div>
+        </div>
+
+        
+        
+
+        <script type="text/javascript">
+
+              // initialize global variables.
+              var edges;
+              var nodes;
+              var allNodes;
+              var allEdges;
+              var nodeColors;
+              var originalNodes;
+              var network;
+              var container;
+              var options, data;
+              var filter = {
+                  item : '',
+                  property : '',
+                  value : []
+              };
+
+              
+
+              
+
+              // This method is responsible for drawing the graph, returns the drawn network
+              function drawGraph() {
+                  var container = document.getElementById('mynetwork');
+
+                  
+
+                  // parsing and collecting nodes and edges from the python
+                  nodes = new vis.DataSet([{"color": "#97c2fc", "font": {"color": "white"}, "id": "email;;(countable, informal) an email address.", "label": "email", "shape": "dot", "title": "email;;(countable, informal) an email address."}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "mail;;the (physical) material conveyed by the postal service.;;(chiefly us, uncountable) the letters, parcels, etc. delivered to a particular address or person.", "label": "mail", "shape": "dot", "title": "mail;;the (physical) material conveyed by the postal service.;;(chiefly us, uncountable) the letters, parcels, etc. delivered to a particular address or person."}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "post office;;(countable) a place (building, office, shop, or counter) concerned with the business of delivering letters, post or mail and selling stamps, etc.", "label": "post office", "shape": "dot", "title": "post office;;(countable) a place (building, office, shop, or counter) concerned with the business of delivering letters, post or mail and selling stamps, etc."}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "email;;(uncountable) a system for transferring messages from one computer to another, usually through a network.", "label": "email", "shape": "dot", "title": "email;;(uncountable) a system for transferring messages from one computer to another, usually through a network."}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "post;;(uk, australia, new zealand) an organisation for delivering letters, parcels etc., or the service provided by such an organisation.", "label": "post", "shape": "dot", "title": "post;;(uk, australia, new zealand) an organisation for delivering letters, parcels etc., or the service provided by such an organisation."}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "email;;(countable) a message sent through an email system.", "label": "email", "shape": "dot", "title": "email;;(countable) a message sent through an email system."}]);
+                  edges = new vis.DataSet([{"from": "email;;(countable, informal) an email address.", "languages": "polish;;e-mail;;noun, ido;;e-posto;;noun, welsh;;e-bost;;noun, portuguese;;e-mail;;noun, polish;;mejl;;noun, georgian;;\u10d4\u10da\u10e4\u10dd\u10e1\u10e2\u10d0;;noun", "to": "email;;(uncountable) a system for transferring messages from one computer to another, usually through a network.", "value": 6, "width": 0.16666666666666666}, {"from": "email;;(countable, informal) an email address.", "languages": "polish;;e-mail;;noun, ido;;e-posto;;noun, portuguese;;e-mail;;noun, welsh;;e-bost;;noun, polish;;mail;;noun, walloon;;emile;;noun, polish;;mejl;;noun", "to": "email;;(countable) a message sent through an email system.", "value": 7, "width": 0.19444444444444445}, {"from": "mail;;the (physical) material conveyed by the postal service.;;(chiefly us, uncountable) the letters, parcels, etc. delivered to a particular address or person.", "languages": "galician;;correo;;noun, spanish;;correo;;noun", "to": "email;;(uncountable) a system for transferring messages from one computer to another, usually through a network.", "value": 2, "width": 0.05555555555555555}, {"from": "mail;;the (physical) material conveyed by the postal service.;;(chiefly us, uncountable) the letters, parcels, etc. delivered to a particular address or person.", "languages": "catalan;;correu;;noun, galician;;correo;;noun, spanish;;correo;;noun", "to": "email;;(countable) a message sent through an email system.", "value": 3, "width": 0.08333333333333333}, {"from": "mail;;the (physical) material conveyed by the postal service.;;(chiefly us, uncountable) the letters, parcels, etc. delivered to a particular address or person.", "languages": "bulgarian;;\u043f\u043e\u0301\u0449\u0430;;noun, swedish;;post;;noun, spanish;;correo;;noun, ingrian;;posti;;noun, ukrainian;;\u043f\u043e\u0301\u0448\u0442\u0430;;noun, vietnamese;;b\u01b0u \u0111i\u1ec7n;;noun, latvian;;pasts;;noun, slovak;;po\u0161ta;;noun, armenian;;\u0583\u0578\u057d\u057f;;noun, russian;;\u043f\u043e\u0301\u0447\u0442\u0430;;noun, czech;;po\u0161ta;;noun, lithuanian;;pa\u0161tas;;noun, japanese;;\u90f5\u4fbf;;noun, plautdietsch;;post;;noun, catalan;;correu;;noun, korean;;\uc6b0\ud3b8;;noun, greek;;\u03c4\u03b1\u03c7\u03c5\u03b4\u03c1\u03bf\u03bc\u03b5\u03af\u03bf;;noun, finnish;;posti;;noun, italian;;posta;;noun, danish;;post;;noun, yiddish;;\u05e4\u05bc\u05d0\u05b8\u05e1\u05d8;;noun, french;;courrier;;noun, german;;post;;noun, belarusian;;\u043f\u043e\u0301\u0448\u0442\u0430;;noun, chinese mandarin;;\u90f5\u4ef6 /\u90ae\u4ef6;;noun, georgian;;\u10e4\u10dd\u10e1\u10e2\u10d0;;noun", "to": "post;;(uk, australia, new zealand) an organisation for delivering letters, parcels etc., or the service provided by such an organisation.", "value": 26, "width": 0.7222222222222222}, {"from": "mail;;the (physical) material conveyed by the postal service.;;(chiefly us, uncountable) the letters, parcels, etc. delivered to a particular address or person.", "languages": "russian;;\u043f\u043e\u0301\u0447\u0442\u0430;;noun, bulgarian;;\u043f\u043e\u0301\u0449\u0430;;noun, czech;;po\u0161ta;;noun, lithuanian;;pa\u0161tas;;noun, greek;;\u03c4\u03b1\u03c7\u03c5\u03b4\u03c1\u03bf\u03bc\u03b5\u03af\u03bf;;noun, finnish;;posti;;noun, german;;post;;noun, italian;;posta;;noun, belarusian;;\u043f\u043e\u0301\u0448\u0442\u0430;;noun, ukrainian;;\u043f\u043e\u0301\u0448\u0442\u0430;;noun, vietnamese;;b\u01b0u \u0111i\u1ec7n;;noun, armenian;;\u0583\u0578\u057d\u057f;;noun, slovak;;po\u0161ta;;noun, georgian;;\u10e4\u10dd\u10e1\u10e2\u10d0;;noun", "to": "post office;;(countable) a place (building, office, shop, or counter) concerned with the business of delivering letters, post or mail and selling stamps, etc.", "value": 14, "width": 0.3888888888888889}, {"from": "post office;;(countable) a place (building, office, shop, or counter) concerned with the business of delivering letters, post or mail and selling stamps, etc.", "languages": "bulgarian;;\u043f\u043e\u0301\u0449\u0430;;noun, khmer;;\u1794\u17d2\u179a\u17c3\u179f\u178e\u17b8\u1799\u17cd;;noun, arabic;;\u0628\u0648\u0633\u0637\u0629;;noun, ukrainian;;\u043f\u043e\u0301\u0448\u0442\u0430;;noun, slovene;;po\u0161ta;;noun, vietnamese;;b\u01b0u \u0111i\u1ec7n;;noun, kyrgyz;;\u043f\u043e\u0447\u0442\u0430;;noun, armenian;;\u0583\u0578\u057d\u057f;;noun, slovak;;po\u0161ta;;noun, russian;;\u043f\u043e\u0301\u0447\u0442\u0430;;noun, kazakh;;\u043f\u043e\u0448\u0442\u0430;;noun, turkmen;;po\u00e7ta;;noun, czech;;po\u0161ta;;noun, lithuanian;;pa\u0161tas;;noun, m\u00f2cheno;;post;;noun, lao;;\u0ec4\u0e9b\u0eaa\u0eb0\u0e99\u0eb5;;noun, macedonian;;\u043f\u043e\u0448\u0442\u0430;;noun, amharic;;\u1356\u1235\u1273;;noun, hungarian;;posta;;noun, arabic;;\u0628\u064e\u0631\u0650\u064a\u062f;;noun, thai;;\u0e44\u0e1b\u0e23\u0e29\u0e13\u0e35\u0e22\u0e4c;;noun, albanian;;post\u00eb;;noun, portuguese;;correio;;noun, tajik;;\u043f\u043e\u0447\u0442\u0430;;noun, greek;;\u03c4\u03b1\u03c7\u03c5\u03b4\u03c1\u03bf\u03bc\u03b5\u03af\u03bf;;noun, finnish;;posti;;noun, italian;;posta;;noun, polish;;poczta;;noun, serbo-croatian;;\u043f\u043e\u030f\u0448\u0442\u0430;;noun, uyghur;;\u067e\u0648\u0686\u062a\u0627;;noun, serbo-croatian;;p\u020d\u0161ta;;noun, german;;post;;noun, uzbek;;pochta;;noun, belarusian;;\u043f\u043e\u0301\u0448\u0442\u0430;;noun, arabic;;\u0628\u0631\u064a\u062f;;noun, georgian;;\u10e4\u10dd\u10e1\u10e2\u10d0;;noun", "to": "post;;(uk, australia, new zealand) an organisation for delivering letters, parcels etc., or the service provided by such an organisation.", "value": 36, "width": 1.0}, {"from": "email;;(uncountable) a system for transferring messages from one computer to another, usually through a network.", "languages": "romanian;;e-mail;;noun, greek;;\u03b7\u03bb\u03b5\u03ba\u03c4\u03c1\u03bf\u03bd\u03b9\u03ba\u03cc \u03c4\u03b1\u03c7\u03c5\u03b4\u03c1\u03bf\u03bc\u03b5\u03af\u03bf;;noun, serbo-croatian;;e-mail;;noun, chinese mandarin;;\u96fb\u5b50\u90f5\u4ef6 /\u7535\u5b50\u90ae\u4ef6;;noun, dutch;;e-mail;;noun, assyrian neo-aramaic;;\u0710\u071d\u073c\u0721\u0732\u071d\u0720;;noun, italian;;mail;;noun, chinese cantonese;;\u96fb\u5b50\u90f5\u4ef6 /\u7535\u5b50\u90ae\u4ef6;;noun, scottish gaelic;;post-dealain;;noun, turkish;;e-posta;;noun, chinese cantonese;;\u96fb\u90f5 /\u7535\u90ae;;noun, indonesian;;surel;;noun, chinese mandarin;;\u96fb\u90f5 /\u7535\u90ae;;noun, finnish;;meili;;noun, norman;;e-mail;;noun, urdu;;\u0628\u064e\u0631\u0652\u0642\u06cc \u0688\u0627\u06a9;;noun, faroese;;teldupostur;;noun, italian;;e-mail;;noun, ukrainian;;\u0456\u043c\u0435\u0301\u0439\u043b;;noun, slovak;;e-mail;;noun, russian;;\u043c\u0435\u0439\u043b;;noun, vietnamese;;\u0111i\u1ec7n th\u01b0;;noun, welsh;;e-bost;;noun, arabic;;\u0625\u0650\u064a\u0645\u064e\u064a\u0652\u0644;;noun, thai;;\u0e2d\u0e35\u0e40\u0e21\u0e25;;noun, japanese;;\u96fb\u5b50\u30e1\u30fc\u30eb;;noun, polish;;mejl;;noun, spanish;;correo electr\u00f3nico;;noun, iranian persian;;\u0627\u06cc\u0645\u0650\u06cc\u0644;;noun, tamil;;\u0bae\u0bbf\u0ba9\u0bcd\u0ba9\u0b9e\u0bcd\u0b9a\u0bb2\u0bcd;;noun, galician;;correo electr\u00f3nico;;noun, thai;;\u0e44\u0e1b\u0e23\u0e29\u0e13\u0e35\u0e22\u0e4c\u0e2d\u0e34\u0e40\u0e25\u0e47\u0e01\u0e17\u0e23\u0e2d\u0e19\u0e34\u0e01\u0e2a\u0e4c;;noun, hungarian;;e-mail;;noun, malay;;e-mel;;noun, japanese;;\u30e1\u30fc\u30eb;;noun, afrikaans;;e-pos;;noun, swedish;;mejl;;noun, belarusian;;\u0456\u043c\u044d\u0301\u0439\u043b;;noun, bulgarian;;\u0438\u043c\u0435\u0301\u0439\u043b;;noun, khmer;;\u17a2\u17ca\u17b8\u1798\u17c2\u179b;;noun, urdu;;\u0627\u06cc \u0645\u06cc\u0644;;noun, galician;;correo;;noun, vietnamese;;th\u01a1 \u0111i\u1ec7n t\u1eed;;noun, assamese;;\u0987\u09ae\u09c7\u0987\u09b2;;noun, armenian;;\u0574\u0565\u0575\u056c;;noun, japanese;;\u30a4\u30fc\u30e1\u30fc\u30eb;;noun, irish;;r\u00edomhphost;;noun, hindi;;\u0908\u092e\u0947\u0932;;noun, finnish;;s-posti;;noun, russian;;\u0438\u043c\u0435\u0301\u0439\u043b;;noun, ukrainian;;\u043c\u0435\u0439\u043b;;noun, portuguese;;e-mail;;noun, finnish;;s\u00e4p\u00f6;;noun, norwegian bokm\u00e5l;;e-post;;noun, japanese;;e\u30e1\u30fc\u30eb;;noun, czech;;e-mail;;noun, korean;;\uc804\uc790\uba54\uc77c;;noun, polish;;e-mail;;noun, mongolian;;\u0438-\u043c\u044d\u0439\u043b;;noun, serbo-croatian;;e-po\u0161ta;;noun, kannada;;\u0cae\u0cbf\u0c82\u0c9a\u0cc6;;noun, french;;courriel;;noun, finnish;;sposti;;noun, korean;;\uc804\uc790\uc6b0\ud3b8;;noun, dutch;;mail;;noun, hindi;;\u0908-\u092a\u0924\u094d\u0930;;noun, burmese;;\u1021\u102e\u1019\u1031\u1038\u101c\u103a;;noun, lithuanian;;elektroninis pa\u0161tas;;noun, swedish;;e-post;;noun, belarusian;;\u043c\u044d\u0439\u043b;;noun, portuguese;;correio eletr\u00f4nico;;noun, korean;;\uc774\uba54\uc77c;;noun, spanish;;correo;;noun, turkish;;elektronik posta;;noun, uzbek;;email;;noun, finnish;;s\u00e4hk\u00f6posti;;noun, georgian;;\u10d8\u10db\u10d4\u10d8\u10da\u10d8;;noun, ido;;e-posto;;noun, lao;;\u0ead\u0eb5\u0ec1\u0ea1\u0ea5;;noun, danish;;e-mail;;noun, german;;e-mail;;noun, burmese;;\u1021\u102e\u1038\u1019\u1031\u1038\u101c\u103a;;noun, french;;courrier \u00e9lectronique;;noun, french;;email;;noun, hungarian;;\u00edm\u00e9l;;noun, slovene;;elektronska po\u0161ta;;noun, finnish;;s\u00e4po;;noun, estonian;;e-kiri;;noun, bengali;;\u0987-\u09ae\u09c7\u0987\u09b2;;noun, catalan;;correu electr\u00f2nic;;noun, latvian;;e-pasts;;noun, icelandic;;t\u00f6lvup\u00f3stur;;noun, vietnamese;;th\u01b0 \u0111i\u1ec7n t\u1eed;;noun, bengali;;\u0987\u09ae\u09c7\u0987\u09b2;;noun, portuguese;;correio eletr\u00f3nico;;noun", "to": "email;;(countable) a message sent through an email system.", "value": 95, "width": 2.638888888888889}, {"from": "post;;(uk, australia, new zealand) an organisation for delivering letters, parcels etc., or the service provided by such an organisation.", "languages": "catalan;;correu;;noun, spanish;;correo;;noun", "to": "email;;(countable) a message sent through an email system.", "value": 2, "width": 0.05555555555555555}]);
+
+                  nodeColors = {};
+                  allNodes = nodes.get({ returnType: "Object" });
+                  for (nodeId in allNodes) {
+                    nodeColors[nodeId] = allNodes[nodeId].color;
+                  }
+                  allEdges = edges.get({ returnType: "Object" });
+                  // adding nodes and edges to the graph
+                  data = {nodes: nodes, edges: edges};
+
+                  var options = {
+    "configure": {
+        "enabled": false
+    },
+    "edges": {
+        "color": {
+            "inherit": true
+        },
+        "smooth": {
+            "enabled": true,
+            "type": "dynamic"
+        }
+    },
+    "interaction": {
+        "dragNodes": true,
+        "hideEdgesOnDrag": false,
+        "hideNodesOnDrag": false
+    },
+    "physics": {
+        "enabled": true,
+        "stabilization": {
+            "enabled": true,
+            "fit": true,
+            "iterations": 1000,
+            "onlyDynamicEdges": false,
+            "updateInterval": 50
+        }
+    }
+};
+
+                  
+
+
+                  
+
+                  network = new vis.Network(container, data, options);
+
+                  
+
+                  
+
+                  
+
+
+                  
+
+                  return network;
+
+              }
+              drawGraph();
+        </script>
+    
+    <script>
+        // Function to update the legend
+        function updateLegend(content) {
+            const legend = document.getElementById('language-legend');
+            legend.innerHTML = content;
+        }
+
+        // Add event listeners to edges using vis.js API
+        network.on("hoverEdge", function (params) {
+            const edgeId = params.edge;
+            const edge = edges.get(edgeId);
+            if (edge && edge.languages) {
+                const languagesList = edge.languages.split(', ').map(lang => `<li>${lang}</li>`).join('');
+                const numLanguages = edge.languages.split(', ').length;
+                const nodePair = `${edge.from} - ${edge.to}`;
+                updateLegend(`<h3>Languages (${numLanguages}) for ${nodePair}:</h3><ul>${languagesList}</ul>`);
+            }
+        });
+
+        network.on("blurEdge", function () {
+            updateLegend('<h3>Languages:</h3><p>Hover over an edge to see languages.</p>');
+        });
+
+        network.on("click", function (params) {
+            if (params.edges && params.edges.length > 0) {
+                const edgeId = params.edges[0];
+                const edge = edges.get(edgeId);
+                if (edge && edge.languages) {
+                    const languagesList = edge.languages.split(', ').sort().map(lang => `<li>${lang.replaceAll(";;", " - ")}</li>`).join('');
+                    const numLanguages = edge.languages.split(', ').length;
+                    const title1 = edge.from.replaceAll(";;", "&#10;");
+                    const title2 = edge.to.replaceAll(";;", "&#10;");
+                    updateLegend(`<h2><div title="${title1}";>${edge.from.split(";;")[0]}</div><div title="${title2}";>${edge.to.split(";;")[0]}</div></h2><br><h3>Languages (${numLanguages})<br></h3><ul>${languagesList}</ul>`);
+                }
+            }
+        });
+    </script>
+    <style>
+        .container {
+            display: flex;
+            width: 100%;
+            margin-top: 48px;
+        }
+        #mynetwork {
+            flex: 3;
+            height: 750px;
+            width: 90%
+            background-color: #222222;
+            border: 1px solid lightgray;
+        }
+        #language-legend h2 {
+            display: flex; 
+            flex-direction: column;
+            font-weight: bold;
+        }
+        #language-legend h3 {
+             border-bottom: 1px solid black; 
+             padding-bottom: 8px
+        }
+        #language-legend {
+            flex: 1;
+            margin-left: 20px;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            background-color: #f9f9f9;
+            overflow-y: auto;
+            max-height: 750px;
+        }
+        #language-legend ul {
+            list-style-type: none;
+            padding: 0;
+        }
+        #language-legend li {
+            margin: 5px 0;
+            font-size: 1.2em;
+        }
+    </style>
+    </body>
+</html>

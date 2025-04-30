@@ -1,0 +1,239 @@
+<html>
+    <head>
+        <meta charset="utf-8">
+        
+            <script src="lib/bindings/utils.js"></script>
+            <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/vis-network/9.1.2/dist/dist/vis-network.min.css" integrity="sha512-WgxfT5LWjfszlPHXRmBWHkV2eceiWTOBvrKCNbdgDYTHrT2AeLCGbF4sZlZw3UMN3WtL0tGUoIAKsu8mllg/XA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/vis-network/9.1.2/dist/vis-network.min.js" integrity="sha512-LnvoEWDFrqGHlHmDD2101OrLcbsfkrzoSpvtSQtxK3RMnRV0eOkhhBN2dXHKRrUU8p2DGRTk35n4O8nWSVe1mQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+            
+        
+<center>
+<h1></h1>
+</center>
+
+<!-- <link rel="stylesheet" href="../node_modules/vis/dist/vis.min.css" type="text/css" />
+<script type="text/javascript" src="../node_modules/vis/dist/vis.js"> </script>-->
+        <link
+          href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/css/bootstrap.min.css"
+          rel="stylesheet"
+          integrity="sha384-eOJMYsd53ii+scO/bJGFsiCZc+5NDVN2yr8+0RDqr0Ql0h+rP48ckxlpbzKgwra6"
+          crossorigin="anonymous"
+        />
+        <script
+          src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.bundle.min.js"
+          integrity="sha384-JEW9xMcG8R+pH31jmWH6WWP0WintQrMb4s7ZOdauHnUtxwoG2vI5DkLtS3qm9Ekf"
+          crossorigin="anonymous"
+        ></script>
+
+
+        <center>
+          <h1></h1>
+        </center>
+        <style type="text/css">
+
+             #mynetwork {
+                 width: 100%;
+                 height: 100vh;
+                 background-color: #222222;
+                 border: 1px solid lightgray;
+                 position: relative;
+                 float: left;
+             }
+
+             
+
+             
+
+             
+        </style>
+    </head>
+
+
+    <body>
+        <div class="card" style="width: 100%">
+            
+            
+            <div class="container"><div id="mynetwork" class="card-body"></div>
+    <div id="language-legend">
+        <h3>Languages:</h3>
+        <p>Click on an edge to see languages.</p>
+    </div>
+    </div>
+        </div>
+
+        
+        
+
+        <script type="text/javascript">
+
+              // initialize global variables.
+              var edges;
+              var nodes;
+              var allNodes;
+              var allEdges;
+              var nodeColors;
+              var originalNodes;
+              var network;
+              var container;
+              var options, data;
+              var filter = {
+                  item : '',
+                  property : '',
+                  value : []
+              };
+
+              
+
+              
+
+              // This method is responsible for drawing the graph, returns the drawn network
+              function drawGraph() {
+                  var container = document.getElementById('mynetwork');
+
+                  
+
+                  // parsing and collecting nodes and edges from the python
+                  nodes = new vis.DataSet([{"color": "#97c2fc", "font": {"color": "white"}, "id": "you;;(indefinite personal pronoun) anyone, one; an unspecified individual or group of individuals (as subject or object).", "label": "you", "shape": "dot", "title": "you;;(indefinite personal pronoun) anyone, one; an unspecified individual or group of individuals (as subject or object)."}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "himself;;(reflexive pronoun) him; the male object of a verb or preposition that also appears as the subject", "label": "himself", "shape": "dot", "title": "himself;;(reflexive pronoun) him; the male object of a verb or preposition that also appears as the subject"}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "yourself;;(reflexive pronoun) your own self (singular).", "label": "yourself", "shape": "dot", "title": "yourself;;(reflexive pronoun) your own self (singular)."}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "one;;(indefinite personal pronoun) any person (applying to people in general).", "label": "one", "shape": "dot", "title": "one;;(indefinite personal pronoun) any person (applying to people in general)."}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "they;;(the third-person singular nominative, occasionally proscribed) a single person, previously mentioned, but typically not if previously named and identified as male or female, especially if of unknown, irrelevant or (since 21st century) non-binary gender. now increasingly used for an unnamed person even if the gender of the person is identified.", "label": "they", "shape": "dot", "title": "they;;(the third-person singular nominative, occasionally proscribed) a single person, previously mentioned, but typically not if previously named and identified as male or female, especially if of unknown, irrelevant or (since 21st century) non-binary gender. now increasingly used for an unnamed person even if the gender of the person is identified."}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "me;;the first-person singular, as the object (of a verb, preposition, etc).;;(archaic, proscribed) myself; as a reflexive direct object of a verb.", "label": "me", "shape": "dot", "title": "me;;the first-person singular, as the object (of a verb, preposition, etc).;;(archaic, proscribed) myself; as a reflexive direct object of a verb."}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "thou;;(archaic, dialectal, literary, religion, or humorous) nominative singular of ye (\u201cyou\u201d).", "label": "thou", "shape": "dot", "title": "thou;;(archaic, dialectal, literary, religion, or humorous) nominative singular of ye (\u201cyou\u201d)."}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "you;;(indefinite personal pronoun) a dummy pronoun used in certain constructions, usually with verbs of receiving (such as get or find) or sensing (such as see or hear), typically stating the existence or typicality of something.", "label": "you", "shape": "dot", "title": "you;;(indefinite personal pronoun) a dummy pronoun used in certain constructions, usually with verbs of receiving (such as get or find) or sensing (such as see or hear), typically stating the existence or typicality of something."}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "each other;;(reciprocal pronoun) to one another; one to the other; signifies that a verb applies to two or more entities both as subjects and as direct objects:", "label": "each other", "shape": "dot", "title": "each other;;(reciprocal pronoun) to one another; one to the other; signifies that a verb applies to two or more entities both as subjects and as direct objects:"}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "you;;(subject pronoun) the person spoken to or written to, as a subject. (originally as a mark of respect.)", "label": "you", "shape": "dot", "title": "you;;(subject pronoun) the person spoken to or written to, as a subject. (originally as a mark of respect.)"}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "myself;;(reflexive pronoun) me, as direct or indirect object the speaker as the object of a verb or preposition, when the speaker is also the subject.", "label": "myself", "shape": "dot", "title": "myself;;(reflexive pronoun) me, as direct or indirect object the speaker as the object of a verb or preposition, when the speaker is also the subject."}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "me;;the first-person singular, as the object (of a verb, preposition, etc).;;(colloquial, proscribed) myself; as a reflexive indirect object of a verb; the ethical dative.", "label": "me", "shape": "dot", "title": "me;;the first-person singular, as the object (of a verb, preposition, etc).;;(colloquial, proscribed) myself; as a reflexive indirect object of a verb; the ethical dative."}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "one another;;(reciprocal pronoun) used of a reciprocal relationship among a group of two or more people or things; compare each other.", "label": "one another", "shape": "dot", "title": "one another;;(reciprocal pronoun) used of a reciprocal relationship among a group of two or more people or things; compare each other."}]);
+                  edges = new vis.DataSet([{"from": "you;;(indefinite personal pronoun) anyone, one; an unspecified individual or group of individuals (as subject or object).", "languages": "arabic;;\u0627\u064e\u0644\u0652\u0645\u064e\u0631\u0652\u0621;;pron, swedish;;man;;pron, spanish;;uno;;pron, dutch;;je;;pron, spanish;;se;;pron, slovak;;\u010dlovek;;pron, esperanto;;oni;;pron, danish;;man;;pron, norwegian bokm\u00e5l;;man;;pron, french;;on;;pron, dutch;;men;;pron, swedish;;en;;pron, norwegian nynorsk;;ein;;pron, scottish gaelic;;duine;;pron, russian;;\u0442\u044b;;pron, danish;;en;;pron, catalan;;un;;pron, norwegian bokm\u00e5l;;en;;pron, catalan;;hom;;pron, hungarian;;az ember;;pron, german;;man;;pron, m\u00f2cheno;;men;;pron", "to": "one;;(indefinite personal pronoun) any person (applying to people in general).", "value": 22, "width": 0.2894736842105263}, {"from": "you;;(indefinite personal pronoun) anyone, one; an unspecified individual or group of individuals (as subject or object).", "languages": "russian;;\u0442\u044b;;pron, catalan;;tu;;pron, faroese;;t\u00fa;;pron", "to": "thou;;(archaic, dialectal, literary, religion, or humorous) nominative singular of ye (\u201cyou\u201d).", "value": 3, "width": 0.039473684210526314}, {"from": "you;;(indefinite personal pronoun) anyone, one; an unspecified individual or group of individuals (as subject or object).", "languages": "portuguese;;se;;pron, spanish;;se;;pron", "to": "yourself;;(reflexive pronoun) your own self (singular).", "value": 2, "width": 0.02631578947368421}, {"from": "you;;(indefinite personal pronoun) anyone, one; an unspecified individual or group of individuals (as subject or object).", "languages": "russian;;\u0442\u044b;;pron, khmer;;\u179b\u17c4\u1780;;pron, portuguese;;voc\u00ea;;pron, dutch;;ge;;pron, norwegian nynorsk;;du;;pron, norwegian bokm\u00e5l;;du;;pron, khmer;;\u17a2\u17d2\u1793\u1780;;pron, catalan;;tu;;pron, dutch;;u;;pron, latin;;v\u014ds;;pron, khmer;;\u179b\u17c4\u1780\u179f\u17d2\u179a\u17b8;;pron, afrikaans;;jy;;pron, faroese;;t\u00fa;;pron, ewe;;w\u00f2;;pron, dutch;;je;;pron", "to": "you;;(subject pronoun) the person spoken to or written to, as a subject. (originally as a mark of respect.)", "value": 15, "width": 0.19736842105263158}, {"from": "you;;(indefinite personal pronoun) anyone, one; an unspecified individual or group of individuals (as subject or object).", "languages": "latin;;vobis;;pron, czech;;v\u00e1s;;pron, czech;;v\u00e1m;;pron, dutch;;u;;pron, latin;;v\u014ds;;pron, czech;;v\u00e1mi;;pron, dutch;;je;;pron", "to": "you;;(indefinite personal pronoun) a dummy pronoun used in certain constructions, usually with verbs of receiving (such as get or find) or sensing (such as see or hear), typically stating the existence or typicality of something.", "value": 7, "width": 0.09210526315789473}, {"from": "you;;(indefinite personal pronoun) anyone, one; an unspecified individual or group of individuals (as subject or object).", "languages": "thai;;\u0e40\u0e02\u0e32;;pron, portuguese;;se;;pron, spanish;;se;;pron", "to": "they;;(the third-person singular nominative, occasionally proscribed) a single person, previously mentioned, but typically not if previously named and identified as male or female, especially if of unknown, irrelevant or (since 21st century) non-binary gender. now increasingly used for an unnamed person even if the gender of the person is identified.", "value": 3, "width": 0.039473684210526314}, {"from": "you;;(indefinite personal pronoun) anyone, one; an unspecified individual or group of individuals (as subject or object).", "languages": "catalan;;es;;pron, french;;se;;pron, portuguese;;se;;pron", "to": "himself;;(reflexive pronoun) him; the male object of a verb or preposition that also appears as the subject", "value": 3, "width": 0.039473684210526314}, {"from": "himself;;(reflexive pronoun) him; the male object of a verb or preposition that also appears as the subject", "languages": "belarusian;;\u0441\u044f\u0431\u0435\u0301;;pron, russian;;\u0441\u0435\u0431\u044f\u0301;;pron, lower sorbian;;se;;pron, czech;;se;;pron, german;;sich;;pron, portuguese;;se;;pron, czech;;sebe;;pron, belarusian;;\u0441\u0430\u0431\u043e\u0301\u0439;;pron, belarusian;;-\u0446\u0446\u0430;;pron, belarusian;;\u0441\u0430\u0431\u0435\u0301;;pron", "to": "yourself;;(reflexive pronoun) your own self (singular).", "value": 10, "width": 0.13157894736842105}, {"from": "himself;;(reflexive pronoun) him; the male object of a verb or preposition that also appears as the subject", "languages": "belarusian;;\u0441\u044f\u0431\u0435\u0301;;pron, russian;;\u0441\u0435\u0431\u044f\u0301;;pron, russian;;\u0441\u043e\u0431\u043e\u0301\u0439;;pron, lower sorbian;;se;;pron, czech;;se;;pron, czech;;sebe;;pron, belarusian;;\u0441\u0430\u0431\u043e\u0301\u0439;;pron, slovak;;seba;;pron, belarusian;;-\u0446\u0446\u0430;;pron, slovak;;sa;;pron, belarusian;;\u0441\u0430\u0431\u0435\u0301;;pron", "to": "myself;;(reflexive pronoun) me, as direct or indirect object the speaker as the object of a verb or preposition, when the speaker is also the subject.", "value": 11, "width": 0.14473684210526316}, {"from": "himself;;(reflexive pronoun) him; the male object of a verb or preposition that also appears as the subject", "languages": "lower sorbian;;se;;pron, portuguese;;se;;pron", "to": "each other;;(reciprocal pronoun) to one another; one to the other; signifies that a verb applies to two or more entities both as subjects and as direct objects:", "value": 2, "width": 0.02631578947368421}, {"from": "himself;;(reflexive pronoun) him; the male object of a verb or preposition that also appears as the subject", "languages": "lower sorbian;;se;;pron, portuguese;;se;;pron", "to": "one another;;(reciprocal pronoun) used of a reciprocal relationship among a group of two or more people or things; compare each other.", "value": 2, "width": 0.02631578947368421}, {"from": "yourself;;(reflexive pronoun) your own self (singular).", "languages": "french;;vous;;pron, esperanto;;vi;;pron", "to": "you;;(subject pronoun) the person spoken to or written to, as a subject. (originally as a mark of respect.)", "value": 2, "width": 0.02631578947368421}, {"from": "yourself;;(reflexive pronoun) your own self (singular).", "languages": "french;;vous;;pron, esperanto;;vin;;pron", "to": "you;;(indefinite personal pronoun) a dummy pronoun used in certain constructions, usually with verbs of receiving (such as get or find) or sensing (such as see or hear), typically stating the existence or typicality of something.", "value": 2, "width": 0.02631578947368421}, {"from": "yourself;;(reflexive pronoun) your own self (singular).", "languages": "portuguese;;se;;pron, spanish;;se;;pron", "to": "they;;(the third-person singular nominative, occasionally proscribed) a single person, previously mentioned, but typically not if previously named and identified as male or female, especially if of unknown, irrelevant or (since 21st century) non-binary gender. now increasingly used for an unnamed person even if the gender of the person is identified.", "value": 2, "width": 0.02631578947368421}, {"from": "yourself;;(reflexive pronoun) your own self (singular).", "languages": "polish;;si\u0119;;pron, belarusian;;\u0441\u044f\u0431\u0435\u0301;;pron, russian;;-\u0441\u044f;;pron, russian;;\u0441\u0435\u0431\u044f\u0301;;pron, lower sorbian;;se;;pron, czech;;se;;pron, czech;;sebe;;pron, belarusian;;\u0441\u0430\u0431\u043e\u0301\u0439;;pron, polish;;siebie;;pron, belarusian;;-\u0446\u0446\u0430;;pron, belarusian;;\u0441\u0430\u0431\u0435\u0301;;pron", "to": "myself;;(reflexive pronoun) me, as direct or indirect object the speaker as the object of a verb or preposition, when the speaker is also the subject.", "value": 11, "width": 0.14473684210526316}, {"from": "yourself;;(reflexive pronoun) your own self (singular).", "languages": "lower sorbian;;se;;pron, portuguese;;se;;pron", "to": "each other;;(reciprocal pronoun) to one another; one to the other; signifies that a verb applies to two or more entities both as subjects and as direct objects:", "value": 2, "width": 0.02631578947368421}, {"from": "yourself;;(reflexive pronoun) your own self (singular).", "languages": "lower sorbian;;se;;pron, portuguese;;se;;pron", "to": "one another;;(reciprocal pronoun) used of a reciprocal relationship among a group of two or more people or things; compare each other.", "value": 2, "width": 0.02631578947368421}, {"from": "one;;(indefinite personal pronoun) any person (applying to people in general).", "languages": "russian;;\u0442\u044b;;pron, japanese;;\u81ea\u5206;;pron, dutch;;je;;pron", "to": "you;;(subject pronoun) the person spoken to or written to, as a subject. (originally as a mark of respect.)", "value": 3, "width": 0.039473684210526314}, {"from": "one;;(indefinite personal pronoun) any person (applying to people in general).", "languages": "dutch;;ze;;pron, occitan;;eles;;pron, spanish;;se;;pron", "to": "they;;(the third-person singular nominative, occasionally proscribed) a single person, previously mentioned, but typically not if previously named and identified as male or female, especially if of unknown, irrelevant or (since 21st century) non-binary gender. now increasingly used for an unnamed person even if the gender of the person is identified.", "value": 3, "width": 0.039473684210526314}, {"from": "one;;(indefinite personal pronoun) any person (applying to people in general).", "languages": "vietnamese;;m\u00ecnh;;pron, chinese mandarin;;\u81ea\u5df1;;pron, japanese;;\u81ea\u5206;;pron", "to": "myself;;(reflexive pronoun) me, as direct or indirect object the speaker as the object of a verb or preposition, when the speaker is also the subject.", "value": 3, "width": 0.039473684210526314}, {"from": "they;;(the third-person singular nominative, occasionally proscribed) a single person, previously mentioned, but typically not if previously named and identified as male or female, especially if of unknown, irrelevant or (since 21st century) non-binary gender. now increasingly used for an unnamed person even if the gender of the person is identified.", "languages": "german;;sie;;pron, danish;;de;;pron, norwegian bokm\u00e5l;;de;;pron", "to": "you;;(subject pronoun) the person spoken to or written to, as a subject. (originally as a mark of respect.)", "value": 3, "width": 0.039473684210526314}, {"from": "they;;(the third-person singular nominative, occasionally proscribed) a single person, previously mentioned, but typically not if previously named and identified as male or female, especially if of unknown, irrelevant or (since 21st century) non-binary gender. now increasingly used for an unnamed person even if the gender of the person is identified.", "languages": "italian;;loro;;pron, german;;sie;;pron", "to": "you;;(indefinite personal pronoun) a dummy pronoun used in certain constructions, usually with verbs of receiving (such as get or find) or sensing (such as see or hear), typically stating the existence or typicality of something.", "value": 2, "width": 0.02631578947368421}, {"from": "me;;the first-person singular, as the object (of a verb, preposition, etc).;;(archaic, proscribed) myself; as a reflexive direct object of a verb.", "languages": "catalan;;em;;pron, dutch;;me;;pron, swedish;;mig;;pron, spanish;;me;;pron, german;;mich;;pron, armenian;;\u056b\u0576\u0571;;pron, french;;me;;pron, romani;;man;;pron, portuguese;;mim;;pron, portuguese;;me;;pron, esperanto;;min;;pron, hindi;;\u092e\u0948\u0902;;pron, macedonian;;\u043c\u0435;;pron, italian;;mi;;pron", "to": "myself;;(reflexive pronoun) me, as direct or indirect object the speaker as the object of a verb or preposition, when the speaker is also the subject.", "value": 14, "width": 0.18421052631578946}, {"from": "me;;the first-person singular, as the object (of a verb, preposition, etc).;;(archaic, proscribed) myself; as a reflexive direct object of a verb.", "languages": "irish;;mise;;pron, norwegian;;meg;;pron, spanish;;me;;pron, french;;me;;pron, french;;moi;;pron, danish;;mig;;pron, dutch;;me;;pron, arabic;;\u0640\u0646\u0650\u064a\u064e;;pron, swedish;;mig;;pron, armenian;;\u056b\u0576\u0571;;pron, irish;;m\u00e9;;pron, greek;;\u03b5\u03bc\u03ad\u03bd\u03b1;;pron, portuguese;;me;;pron, lampung api;;\u00f1a\u0294;;pron, dutch;;mij;;pron, arabic;;\u0625\u0650\u064a\u064e\u0651\u0627\u064a\u064e;;pron, american sign language;;1@sternum-fingerback;;pron, malay;;aku (-ku);;pron, arabic;;\u0640\u0646\u0650\u064a;;pron", "to": "me;;the first-person singular, as the object (of a verb, preposition, etc).;;(colloquial, proscribed) myself; as a reflexive indirect object of a verb; the ethical dative.", "value": 19, "width": 0.25}, {"from": "thou;;(archaic, dialectal, literary, religion, or humorous) nominative singular of ye (\u201cyou\u201d).", "languages": "udihe;;\u0441\u0438;;pron, sardinian;;tue;;pron, spanish;;t\u00fa;;pron, macedonian;;\u0442\u0438;;pron, dutch;;jij;;pron, lower sorbian;;ty;;pron, venetan;;ti;;pron, korean;;\ub108;;pron, french;;tu;;pron, czech;;ty;;pron, old english;;\u00fe\u016b;;pron, scottish gaelic;;thu;;pron, lithuanian;;tu;;pron, old french;;tu;;pron, yiddish;;\u05d3\u05d5;;pron, galician;;ti;;pron, belarusian;;\u0442\u044b;;pron, korean;;\ub2f9\uc2e0;;pron, slovene;;t\u00ed;;pron, arabic;;\u0627\u0646\u062a;;pron, thai;;\u0e40\u0e18\u0e2d;;pron, occitan;;tu;;pron, swedish;;du;;pron, romanian;;tu;;pron, norman;;tu;;pron, bulgarian;;\u0442\u0438;;pron, esperanto;;ci;;pron, gothic;;\ud800\udf38\ud800\udf3f;;pron, sinhalese;;\u0d94\u0dba\u0dcf;;pron, serbo-croatian;;t\u020b;;pron, japanese;;\u541b;;pron, irish;;t\u00fa;;pron, german;;du;;pron, assamese;;\u09a4\u0987;;pron, russian;;\u0442\u044b;;pron, welsh;;ti;;pron, ottoman turkish;;\u0633\u0646;;pron, icelandic;;\u00fe\u00fa;;pron, korean;;\ub124;;pron, arabic;;\u0623\u064e\u0646\u0652\u062a\u0650;;pron, catalan;;tu;;pron, corsican;;t\u00f9;;pron, slovak;;ty;;pron, asturian;;tu;;pron, malay;;engkau;;pron, church slavic;;\u0442\ua651;;pron, scottish gaelic;;tu;;pron, tunisian arabic;;\u0627\u0650\u0646\u0652\u062a\u0650;;pron, faroese;;t\u00fa;;pron, turkish;;sen;;pron, church slavic;;\u2c45\u2c4f\u2c3a;;pron, thai;;\u0e04\u0e38\u0e13;;pron, old turkic;;\ud803\udc3e\ud803\udc24;;pron, georgian;;\u10e8\u10d4\u10dc;;pron, karakhanid;;\u0633\u0646;;pron, finnish;;sin\u00e4;;pron, hindi;;\u0924\u0941\u092e;;pron, serbo-croatian;;\u0442\u0438\u0311;;pron, dalmatian;;te;;pron, chinese mandarin;;\u4f60;;pron, portuguese;;tu;;pron, friulian;;tu;;pron, thai;;\u0e21\u0e36\u0e07;;pron, old irish;;t\u00fa;;pron, hindi;;\u0924\u0942;;pron, arabic;;\u0623\u064e\u0646\u0652\u062a\u064e;;pron, dutch;;gij;;pron, italian;;tu;;pron, bengali;;\u09a4\u09c1\u0987;;pron, ukrainian;;\u0442\u0438;;pron, danish;;du;;pron, armenian;;\u0564\u0578\u0582;;pron, japanese;;\u304a\u524d;;pron, hungarian;;te;;pron, aromanian;;tu;;pron, polish;;ty;;pron", "to": "you;;(subject pronoun) the person spoken to or written to, as a subject. (originally as a mark of respect.)", "value": 76, "width": 1.0}, {"from": "thou;;(archaic, dialectal, literary, religion, or humorous) nominative singular of ye (\u201cyou\u201d).", "languages": "hindi;;\u0924\u0941\u092e;;pron, nheengatu;;ind\u00e9;;pron", "to": "you;;(indefinite personal pronoun) a dummy pronoun used in certain constructions, usually with verbs of receiving (such as get or find) or sensing (such as see or hear), typically stating the existence or typicality of something.", "value": 2, "width": 0.02631578947368421}, {"from": "you;;(indefinite personal pronoun) a dummy pronoun used in certain constructions, usually with verbs of receiving (such as get or find) or sensing (such as see or hear), typically stating the existence or typicality of something.", "languages": "zhuang;;mwngz;;pron, louisiana creole french;;vouz\u00f2t;;pron, welsh;;chwi;;pron, german;;sie;;pron, turkmen;;sen;;pron, latin;;v\u014ds;;pron, tagalog;;kayo;;pron, latvian;;j\u016bs;;pron, tamil;;\u0ba8\u0bc0\u0b99\u0bcd\u0b95\u0bb3\u0bcd;;pron, dutch;;je;;pron, hindi;;\u0906\u092a;;pron, scots;;ye;;pron, maori;;koutou;;pron, maori;;koe;;pron, dutch;;u;;pron, telugu;;\u0c28\u0c40\u0c35\u0c41;;pron, maori;;k\u014drua;;pron, welsh;;chi;;pron, georgian;;\u10d7\u10e5\u10d5\u10d4\u10dc;;pron, french;;vous;;pron, chichewa;;inu;;pron, american sign language;;1@insidechesthigh-radialup;;pron, taos;;\u0119\u030b;;pron, hindi;;\u0924\u0941\u092e;;pron, manx;;shiuish;;pron, old french;;vos;;pron, scottish gaelic;;sibh;;pron, west frisian;;jo;;pron, manx;;shiu;;pron", "to": "you;;(subject pronoun) the person spoken to or written to, as a subject. (originally as a mark of respect.)", "value": 29, "width": 0.3815789473684211}, {"from": "each other;;(reciprocal pronoun) to one another; one to the other; signifies that a verb applies to two or more entities both as subjects and as direct objects:", "languages": "french;;les uns les autres;;pron, macedonian;;\u043c\u0435\u0453\u0443\u0441\u0435\u0431\u043d\u043e;;pron, greek;;\u03b1\u03bb\u03bb\u03ae\u03bb\u03c9\u03bd;;pron, lower sorbian;;se;;pron, welsh;;ei gilydd;;pron, armenian;;\u056b\u0580\u0561\u0580;;pron, hawaiian;;kekahi me kekahi;;pron, aramaic;;\u071a\u0715\u0715\u0710;;pron, finnish;;toisensa;;pron, ancient greek;;\u1f00\u03bb\u03bb\u03ae\u03bb\u03c9\u03bd;;pron, romanian;;unul pe altul;;pron, swedish;;varandra;;pron, welsh;;ein gilydd;;pron, eastern mari;;\u0432\u0430\u0448;;pron, french;;l\u2019un l\u2019autre;;pron, irish;;a ch\u00e9ile;;pron, spanish;;el uno al otro;;pron, khmer;;\u1782\u17d2\u1793\u17b6;;pron, malagasy;;isika samy isika;;pron, portuguese;;se;;pron, italian;;a vicenda;;pron, japanese;;\u304a\u4e92\u3044\u306b;;pron, russian;;\u0432\u0437\u0430\u0438\u0301\u043c\u043d\u043e;;pron, russian;;\u0434\u0440\u0443\u0433 \u0434\u0440\u0443\u0301\u0433\u0443;;pron, danish;;hinanden;;pron, old armenian;;\u0574\u056b\u0574\u0565\u0561\u0576\u0581;;pron, chinese mandarin;;\u4e92\u76f8;;pron, armenian;;\u0574\u056b\u0574\u0575\u0561\u0576\u0581;;pron, welsh;;eich gilydd;;pron, portuguese;;um ao outro;;pron, welsh;;y naill y llall;;pron, russian;;\u0434\u0440\u0443\u0433 \u0434\u0440\u0443\u0301\u0433\u0430;;pron, macedonian;;\u0435\u0434\u0435\u043d \u043d\u0430 \u0434\u0440\u0443\u0433;;pron, khmer;;\u1782\u17d2\u1793\u17b6\u1793\u17b9\u1784\u1782\u17d2\u1793\u17b6;;pron, dutch;;elkaar;;pron, scottish gaelic;;c\u00e0ch a ch\u00e8ile;;pron, old armenian;;\u056b\u0580\u0565\u0561\u0580;;pron, german;;einander;;pron, polish;;nawzajem;;pron, hungarian;;egym\u00e1s;;pron, dutch;;elkander;;pron, scottish gaelic;;a ch\u00e8ile;;pron, hawaiian;;kekahi i kekahi;;pron", "to": "one another;;(reciprocal pronoun) used of a reciprocal relationship among a group of two or more people or things; compare each other.", "value": 43, "width": 0.5657894736842105}, {"from": "myself;;(reflexive pronoun) me, as direct or indirect object the speaker as the object of a verb or preposition, when the speaker is also the subject.", "languages": "dutch;;me;;pron, swedish;;mig;;pron, spanish;;me;;pron, german;;mir;;pron, armenian;;\u056b\u0576\u0571;;pron, french;;me;;pron, portuguese;;me;;pron, russian;;\u0441\u0435\u0431\u0435\u0301;;pron, scottish gaelic;;mise;;pron", "to": "me;;the first-person singular, as the object (of a verb, preposition, etc).;;(colloquial, proscribed) myself; as a reflexive indirect object of a verb; the ethical dative.", "value": 9, "width": 0.11842105263157894}]);
+
+                  nodeColors = {};
+                  allNodes = nodes.get({ returnType: "Object" });
+                  for (nodeId in allNodes) {
+                    nodeColors[nodeId] = allNodes[nodeId].color;
+                  }
+                  allEdges = edges.get({ returnType: "Object" });
+                  // adding nodes and edges to the graph
+                  data = {nodes: nodes, edges: edges};
+
+                  var options = {
+    "configure": {
+        "enabled": false
+    },
+    "edges": {
+        "color": {
+            "inherit": true
+        },
+        "smooth": {
+            "enabled": true,
+            "type": "dynamic"
+        }
+    },
+    "interaction": {
+        "dragNodes": true,
+        "hideEdgesOnDrag": false,
+        "hideNodesOnDrag": false
+    },
+    "physics": {
+        "enabled": true,
+        "stabilization": {
+            "enabled": true,
+            "fit": true,
+            "iterations": 1000,
+            "onlyDynamicEdges": false,
+            "updateInterval": 50
+        }
+    }
+};
+
+                  
+
+
+                  
+
+                  network = new vis.Network(container, data, options);
+
+                  
+
+                  
+
+                  
+
+
+                  
+
+                  return network;
+
+              }
+              drawGraph();
+        </script>
+    
+    <script>
+        // Function to update the legend
+        function updateLegend(content) {
+            const legend = document.getElementById('language-legend');
+            legend.innerHTML = content;
+        }
+
+        // Add event listeners to edges using vis.js API
+        network.on("hoverEdge", function (params) {
+            const edgeId = params.edge;
+            const edge = edges.get(edgeId);
+            if (edge && edge.languages) {
+                const languagesList = edge.languages.split(', ').map(lang => `<li>${lang}</li>`).join('');
+                const numLanguages = edge.languages.split(', ').length;
+                const nodePair = `${edge.from} - ${edge.to}`;
+                updateLegend(`<h3>Languages (${numLanguages}) for ${nodePair}:</h3><ul>${languagesList}</ul>`);
+            }
+        });
+
+        network.on("blurEdge", function () {
+            updateLegend('<h3>Languages:</h3><p>Hover over an edge to see languages.</p>');
+        });
+
+        network.on("click", function (params) {
+            if (params.edges && params.edges.length > 0) {
+                const edgeId = params.edges[0];
+                const edge = edges.get(edgeId);
+                if (edge && edge.languages) {
+                    const languagesList = edge.languages.split(', ').sort().map(lang => `<li>${lang.replaceAll(";;", " - ")}</li>`).join('');
+                    const numLanguages = edge.languages.split(', ').length;
+                    const title1 = edge.from.replaceAll(";;", "&#10;");
+                    const title2 = edge.to.replaceAll(";;", "&#10;");
+                    updateLegend(`<h2><div title="${title1}";>${edge.from.split(";;")[0]}</div><div title="${title2}";>${edge.to.split(";;")[0]}</div></h2><br><h3>Languages (${numLanguages})<br></h3><ul>${languagesList}</ul>`);
+                }
+            }
+        });
+    </script>
+    <style>
+        .container {
+            display: flex;
+            width: 100%;
+            margin-top: 48px;
+        }
+        #mynetwork {
+            flex: 3;
+            height: 750px;
+            width: 90%
+            background-color: #222222;
+            border: 1px solid lightgray;
+        }
+        #language-legend h2 {
+            display: flex; 
+            flex-direction: column;
+            font-weight: bold;
+        }
+        #language-legend h3 {
+             border-bottom: 1px solid black; 
+             padding-bottom: 8px
+        }
+        #language-legend {
+            flex: 1;
+            margin-left: 20px;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            background-color: #f9f9f9;
+            overflow-y: auto;
+            max-height: 750px;
+        }
+        #language-legend ul {
+            list-style-type: none;
+            padding: 0;
+        }
+        #language-legend li {
+            margin: 5px 0;
+            font-size: 1.2em;
+        }
+    </style>
+    </body>
+</html>

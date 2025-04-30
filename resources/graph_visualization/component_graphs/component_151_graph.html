@@ -1,0 +1,239 @@
+<html>
+    <head>
+        <meta charset="utf-8">
+        
+            <script src="lib/bindings/utils.js"></script>
+            <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/vis-network/9.1.2/dist/dist/vis-network.min.css" integrity="sha512-WgxfT5LWjfszlPHXRmBWHkV2eceiWTOBvrKCNbdgDYTHrT2AeLCGbF4sZlZw3UMN3WtL0tGUoIAKsu8mllg/XA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/vis-network/9.1.2/dist/vis-network.min.js" integrity="sha512-LnvoEWDFrqGHlHmDD2101OrLcbsfkrzoSpvtSQtxK3RMnRV0eOkhhBN2dXHKRrUU8p2DGRTk35n4O8nWSVe1mQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+            
+        
+<center>
+<h1></h1>
+</center>
+
+<!-- <link rel="stylesheet" href="../node_modules/vis/dist/vis.min.css" type="text/css" />
+<script type="text/javascript" src="../node_modules/vis/dist/vis.js"> </script>-->
+        <link
+          href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/css/bootstrap.min.css"
+          rel="stylesheet"
+          integrity="sha384-eOJMYsd53ii+scO/bJGFsiCZc+5NDVN2yr8+0RDqr0Ql0h+rP48ckxlpbzKgwra6"
+          crossorigin="anonymous"
+        />
+        <script
+          src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.bundle.min.js"
+          integrity="sha384-JEW9xMcG8R+pH31jmWH6WWP0WintQrMb4s7ZOdauHnUtxwoG2vI5DkLtS3qm9Ekf"
+          crossorigin="anonymous"
+        ></script>
+
+
+        <center>
+          <h1></h1>
+        </center>
+        <style type="text/css">
+
+             #mynetwork {
+                 width: 100%;
+                 height: 100vh;
+                 background-color: #222222;
+                 border: 1px solid lightgray;
+                 position: relative;
+                 float: left;
+             }
+
+             
+
+             
+
+             
+        </style>
+    </head>
+
+
+    <body>
+        <div class="card" style="width: 100%">
+            
+            
+            <div class="container"><div id="mynetwork" class="card-body"></div>
+    <div id="language-legend">
+        <h3>Languages:</h3>
+        <p>Click on an edge to see languages.</p>
+    </div>
+    </div>
+        </div>
+
+        
+        
+
+        <script type="text/javascript">
+
+              // initialize global variables.
+              var edges;
+              var nodes;
+              var allNodes;
+              var allEdges;
+              var nodeColors;
+              var originalNodes;
+              var network;
+              var container;
+              var options, data;
+              var filter = {
+                  item : '',
+                  property : '',
+                  value : []
+              };
+
+              
+
+              
+
+              // This method is responsible for drawing the graph, returns the drawn network
+              function drawGraph() {
+                  var container = document.getElementById('mynetwork');
+
+                  
+
+                  // parsing and collecting nodes and edges from the python
+                  nodes = new vis.DataSet([{"color": "#97c2fc", "font": {"color": "white"}, "id": "error;;(statistics, countable) the difference between a measured or calculated value and a true one.", "label": "error", "shape": "dot", "title": "error;;(statistics, countable) the difference between a measured or calculated value and a true one."}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "bug;;(chiefly computing, engineering jargon) a problem that needs fixing.", "label": "bug", "shape": "dot", "title": "bug;;(chiefly computing, engineering jargon) a problem that needs fixing."}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "error;;(countable) a mistake; an accidental wrong action or a false statement not made deliberately.", "label": "error", "shape": "dot", "title": "error;;(countable) a mistake; an accidental wrong action or a false statement not made deliberately."}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "crime;;(countable) a specific act committed in violation of the law, especially crimimal law.", "label": "crime", "shape": "dot", "title": "crime;;(countable) a specific act committed in violation of the law, especially crimimal law."}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "fault;;(typically uncountable) culpability; the responsibility for a blameworthy event.", "label": "fault", "shape": "dot", "title": "fault;;(typically uncountable) culpability; the responsibility for a blameworthy event."}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "crash;;(computing) a malfunction of computer software or hardware which causes it to shut down or become partially or totally inoperable.", "label": "crash", "shape": "dot", "title": "crash;;(computing) a malfunction of computer software or hardware which causes it to shut down or become partially or totally inoperable."}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "fault;;a point at which something is divided, interrupted, or disconnected.;;(geology) a fracture in a rock formation causing a discontinuity.", "label": "fault", "shape": "dot", "title": "fault;;a point at which something is divided, interrupted, or disconnected.;;(geology) a fracture in a rock formation causing a discontinuity."}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "felony;;(law, criminology, us, historical in uk) a serious criminal offense, which, under united states federal law, is punishable by a term of imprisonment of not less than one year or by the death penalty in the most serious offenses.", "label": "felony", "shape": "dot", "title": "felony;;(law, criminology, us, historical in uk) a serious criminal offense, which, under united states federal law, is punishable by a term of imprisonment of not less than one year or by the death penalty in the most serious offenses."}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "sin;;(theology) a violation of divine will or religious law.", "label": "sin", "shape": "dot", "title": "sin;;(theology) a violation of divine will or religious law."}]);
+                  edges = new vis.DataSet([{"from": "error;;(statistics, countable) the difference between a measured or calculated value and a true one.", "languages": "italian;;errore;;noun, armenian;;\u057d\u056d\u0561\u056c;;noun, czech;;chyba;;noun, german;;fehler;;noun, slovak;;chyba;;noun, spanish;;error;;noun, bulgarian;;\u0433\u0440\u0435\u0301\u0448\u043a\u0430;;noun, portuguese;;erro;;noun, greek;;\u03c3\u03c6\u03ac\u03bb\u03bc\u03b1;;noun", "to": "bug;;(chiefly computing, engineering jargon) a problem that needs fixing.", "value": 9, "width": 0.4090909090909091}, {"from": "error;;(statistics, countable) the difference between a measured or calculated value and a true one.", "languages": "armenian;;\u057d\u056d\u0561\u056c;;noun, central kurdish;;\u06be\u06d5\u06b5\u06d5;;noun, french;;erreur;;noun, malay;;ralat;;noun, portuguese;;erro;;noun, slovene;;napaka;;noun, hebrew;;\u05e9\u05b0\u05c1\u05d2\u05b4\u05d9\u05d0\u05b8\u05d4;;noun, tagalog;;mali;;noun, afrikaans;;fout;;noun, macedonian;;\u0433\u0440\u0435\u0301\u0448\u043a\u0430;;noun, bulgarian;;\u0433\u0440\u0435\u0301\u0448\u043a\u0430;;noun, finnish;;virhe;;noun, slovak;;chyba;;noun, belarusian;;\u0445\u0456\u0301\u0431\u0430;;noun, italian;;errore;;noun, czech;;chyba;;noun, german;;fehler;;noun, dutch;;fout;;noun, spanish;;error;;noun, asturian;;error;;noun, ukrainian;;\u0445\u0438\u0301\u0431\u0430;;noun, greek;;\u03c3\u03c6\u03ac\u03bb\u03bc\u03b1;;noun", "to": "error;;(countable) a mistake; an accidental wrong action or a false statement not made deliberately.", "value": 22, "width": 1.0}, {"from": "bug;;(chiefly computing, engineering jargon) a problem that needs fixing.", "languages": "armenian;;\u057d\u056d\u0561\u056c;;noun, chinese mandarin;;\u932f\u8aa4 /\u9519\u8bef;;noun, portuguese;;erro;;noun, arabic;;\u062e\u064e\u0637\u064e\u0623;;noun, hungarian;;hiba;;noun, bulgarian;;\u0433\u0440\u0435\u0301\u0448\u043a\u0430;;noun, belarusian;;\u043f\u0430\u043c\u044b\u0301\u043b\u043a\u0430;;noun, esperanto;;eraro;;noun, slovak;;chyba;;noun, khmer;;\u1780\u17c6\u17a0\u17bb\u179f;;noun, polish;;b\u0142\u0105d;;noun, catalan;;error;;noun, russian;;\u043e\u0448\u0438\u0301\u0431\u043a\u0430;;noun, esperanto;;miso;;noun, georgian;;\u10e8\u10d4\u10ea\u10d3\u10dd\u10db\u10d0;;noun, italian;;errore;;noun, czech;;chyba;;noun, german;;fehler;;noun, ukrainian;;\u043f\u043e\u043c\u0438\u0301\u043b\u043a\u0430;;noun, spanish;;error;;noun, vietnamese;;l\u1ed7i;;noun, greek;;\u03c3\u03c6\u03ac\u03bb\u03bc\u03b1;;noun", "to": "error;;(countable) a mistake; an accidental wrong action or a false statement not made deliberately.", "value": 22, "width": 1.0}, {"from": "bug;;(chiefly computing, engineering jargon) a problem that needs fixing.", "languages": "georgian;;\u10e8\u10d4\u10ea\u10d3\u10dd\u10db\u10d0;;noun, spanish;;error;;noun, portuguese;;falha;;noun, spanish;;fallo;;noun", "to": "crash;;(computing) a malfunction of computer software or hardware which causes it to shut down or become partially or totally inoperable.", "value": 4, "width": 0.18181818181818182}, {"from": "bug;;(chiefly computing, engineering jargon) a problem that needs fixing.", "languages": "portuguese;;falha;;noun, spanish;;falla;;noun", "to": "fault;;a point at which something is divided, interrupted, or disconnected.;;(geology) a fracture in a rock formation causing a discontinuity.", "value": 2, "width": 0.09090909090909091}, {"from": "error;;(countable) a mistake; an accidental wrong action or a false statement not made deliberately.", "languages": "georgian;;\u10e8\u10d4\u10ea\u10d3\u10dd\u10db\u10d0;;noun, spanish;;error;;noun, danish;;fejl;;noun", "to": "crash;;(computing) a malfunction of computer software or hardware which causes it to shut down or become partially or totally inoperable.", "value": 3, "width": 0.13636363636363635}, {"from": "error;;(countable) a mistake; an accidental wrong action or a false statement not made deliberately.", "languages": "estonian;;viga;;noun, arabic;;\u062e\u064e\u0637\u064e\u0623;;noun", "to": "fault;;(typically uncountable) culpability; the responsibility for a blameworthy event.", "value": 2, "width": 0.09090909090909091}, {"from": "crime;;(countable) a specific act committed in violation of the law, especially crimimal law.", "languages": "khmer;;\u1791\u17c4\u179f;;noun, ottoman turkish;;\u0635\u0648\u0686;;noun, malayalam;;\u0d15\u0d41\u0d31\u0d4d\u0d31\u0d02;;noun", "to": "fault;;(typically uncountable) culpability; the responsibility for a blameworthy event.", "value": 3, "width": 0.13636363636363635}, {"from": "crime;;(countable) a specific act committed in violation of the law, especially crimimal law.", "languages": "khmer;;\u1791\u17c4\u179f;;noun, higaonon;;sala;;noun, ottoman turkish;;\u0635\u0648\u0686;;noun, dari;;\u06af\u064f\u0646\u064e\u0627\u0647;;noun, latin;;scelus;;noun, japanese;;\u7f6a;;noun, korean;;\uc8c4;;noun, sanskrit;;\u090f\u0928\u0938\u094d;;noun, urdu;;\u0627\u064e\u067e\u0652\u0631\u0627\u062f\u06be;;noun, chinese mandarin;;\u7f6a;;noun", "to": "sin;;(theology) a violation of divine will or religious law.", "value": 10, "width": 0.45454545454545453}, {"from": "crime;;(countable) a specific act committed in violation of the law, especially crimimal law.", "languages": "italian;;reato;;noun, italian;;delitto;;noun, spanish;;delito;;noun, hebrew;;\u05e4\u05b6\u05bc\u05e9\u05b7\u05c1\u05e2;;noun, russian;;\u043f\u0440\u0435\u0441\u0442\u0443\u043f\u043b\u0435\u0301\u043d\u0438\u0435;;noun, spanish;;crimen;;noun, danish;;forbrydelse;;noun, hungarian;;b\u0171ntett;;noun, czech;;trestn\u00fd \u010din;;noun, maori;;taihara;;noun, plautdietsch;;vebr\u00e4akjen;;noun, arabic;;\u062c\u0650\u0646\u064e\u0627\u064a\u064e\u0629;;noun, dutch;;misdaad;;noun, polish;;zbrodnia;;noun", "to": "felony;;(law, criminology, us, historical in uk) a serious criminal offense, which, under united states federal law, is punishable by a term of imprisonment of not less than one year or by the death penalty in the most serious offenses.", "value": 14, "width": 0.6363636363636364}, {"from": "fault;;(typically uncountable) culpability; the responsibility for a blameworthy event.", "languages": "latin;;culpa;;noun, french;;faute;;noun", "to": "fault;;a point at which something is divided, interrupted, or disconnected.;;(geology) a fracture in a rock formation causing a discontinuity.", "value": 2, "width": 0.09090909090909091}, {"from": "fault;;(typically uncountable) culpability; the responsibility for a blameworthy event.", "languages": "khmer;;\u1791\u17c4\u179f;;noun, ottoman turkish;;\u0635\u0648\u0686;;noun, zazaki;;guna;;noun, ottoman turkish;;\u0630\u0646\u0628;;noun, azerbaijani;;g\u00fcnah;;noun", "to": "sin;;(theology) a violation of divine will or religious law.", "value": 5, "width": 0.22727272727272727}]);
+
+                  nodeColors = {};
+                  allNodes = nodes.get({ returnType: "Object" });
+                  for (nodeId in allNodes) {
+                    nodeColors[nodeId] = allNodes[nodeId].color;
+                  }
+                  allEdges = edges.get({ returnType: "Object" });
+                  // adding nodes and edges to the graph
+                  data = {nodes: nodes, edges: edges};
+
+                  var options = {
+    "configure": {
+        "enabled": false
+    },
+    "edges": {
+        "color": {
+            "inherit": true
+        },
+        "smooth": {
+            "enabled": true,
+            "type": "dynamic"
+        }
+    },
+    "interaction": {
+        "dragNodes": true,
+        "hideEdgesOnDrag": false,
+        "hideNodesOnDrag": false
+    },
+    "physics": {
+        "enabled": true,
+        "stabilization": {
+            "enabled": true,
+            "fit": true,
+            "iterations": 1000,
+            "onlyDynamicEdges": false,
+            "updateInterval": 50
+        }
+    }
+};
+
+                  
+
+
+                  
+
+                  network = new vis.Network(container, data, options);
+
+                  
+
+                  
+
+                  
+
+
+                  
+
+                  return network;
+
+              }
+              drawGraph();
+        </script>
+    
+    <script>
+        // Function to update the legend
+        function updateLegend(content) {
+            const legend = document.getElementById('language-legend');
+            legend.innerHTML = content;
+        }
+
+        // Add event listeners to edges using vis.js API
+        network.on("hoverEdge", function (params) {
+            const edgeId = params.edge;
+            const edge = edges.get(edgeId);
+            if (edge && edge.languages) {
+                const languagesList = edge.languages.split(', ').map(lang => `<li>${lang}</li>`).join('');
+                const numLanguages = edge.languages.split(', ').length;
+                const nodePair = `${edge.from} - ${edge.to}`;
+                updateLegend(`<h3>Languages (${numLanguages}) for ${nodePair}:</h3><ul>${languagesList}</ul>`);
+            }
+        });
+
+        network.on("blurEdge", function () {
+            updateLegend('<h3>Languages:</h3><p>Hover over an edge to see languages.</p>');
+        });
+
+        network.on("click", function (params) {
+            if (params.edges && params.edges.length > 0) {
+                const edgeId = params.edges[0];
+                const edge = edges.get(edgeId);
+                if (edge && edge.languages) {
+                    const languagesList = edge.languages.split(', ').sort().map(lang => `<li>${lang.replaceAll(";;", " - ")}</li>`).join('');
+                    const numLanguages = edge.languages.split(', ').length;
+                    const title1 = edge.from.replaceAll(";;", "&#10;");
+                    const title2 = edge.to.replaceAll(";;", "&#10;");
+                    updateLegend(`<h2><div title="${title1}";>${edge.from.split(";;")[0]}</div><div title="${title2}";>${edge.to.split(";;")[0]}</div></h2><br><h3>Languages (${numLanguages})<br></h3><ul>${languagesList}</ul>`);
+                }
+            }
+        });
+    </script>
+    <style>
+        .container {
+            display: flex;
+            width: 100%;
+            margin-top: 48px;
+        }
+        #mynetwork {
+            flex: 3;
+            height: 750px;
+            width: 90%
+            background-color: #222222;
+            border: 1px solid lightgray;
+        }
+        #language-legend h2 {
+            display: flex; 
+            flex-direction: column;
+            font-weight: bold;
+        }
+        #language-legend h3 {
+             border-bottom: 1px solid black; 
+             padding-bottom: 8px
+        }
+        #language-legend {
+            flex: 1;
+            margin-left: 20px;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            background-color: #f9f9f9;
+            overflow-y: auto;
+            max-height: 750px;
+        }
+        #language-legend ul {
+            list-style-type: none;
+            padding: 0;
+        }
+        #language-legend li {
+            margin: 5px 0;
+            font-size: 1.2em;
+        }
+    </style>
+    </body>
+</html>

@@ -1,0 +1,239 @@
+<html>
+    <head>
+        <meta charset="utf-8">
+        
+            <script src="lib/bindings/utils.js"></script>
+            <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/vis-network/9.1.2/dist/dist/vis-network.min.css" integrity="sha512-WgxfT5LWjfszlPHXRmBWHkV2eceiWTOBvrKCNbdgDYTHrT2AeLCGbF4sZlZw3UMN3WtL0tGUoIAKsu8mllg/XA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/vis-network/9.1.2/dist/vis-network.min.js" integrity="sha512-LnvoEWDFrqGHlHmDD2101OrLcbsfkrzoSpvtSQtxK3RMnRV0eOkhhBN2dXHKRrUU8p2DGRTk35n4O8nWSVe1mQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+            
+        
+<center>
+<h1></h1>
+</center>
+
+<!-- <link rel="stylesheet" href="../node_modules/vis/dist/vis.min.css" type="text/css" />
+<script type="text/javascript" src="../node_modules/vis/dist/vis.js"> </script>-->
+        <link
+          href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/css/bootstrap.min.css"
+          rel="stylesheet"
+          integrity="sha384-eOJMYsd53ii+scO/bJGFsiCZc+5NDVN2yr8+0RDqr0Ql0h+rP48ckxlpbzKgwra6"
+          crossorigin="anonymous"
+        />
+        <script
+          src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.bundle.min.js"
+          integrity="sha384-JEW9xMcG8R+pH31jmWH6WWP0WintQrMb4s7ZOdauHnUtxwoG2vI5DkLtS3qm9Ekf"
+          crossorigin="anonymous"
+        ></script>
+
+
+        <center>
+          <h1></h1>
+        </center>
+        <style type="text/css">
+
+             #mynetwork {
+                 width: 100%;
+                 height: 100vh;
+                 background-color: #222222;
+                 border: 1px solid lightgray;
+                 position: relative;
+                 float: left;
+             }
+
+             
+
+             
+
+             
+        </style>
+    </head>
+
+
+    <body>
+        <div class="card" style="width: 100%">
+            
+            
+            <div class="container"><div id="mynetwork" class="card-body"></div>
+    <div id="language-legend">
+        <h3>Languages:</h3>
+        <p>Click on an edge to see languages.</p>
+    </div>
+    </div>
+        </div>
+
+        
+        
+
+        <script type="text/javascript">
+
+              // initialize global variables.
+              var edges;
+              var nodes;
+              var allNodes;
+              var allEdges;
+              var nodeColors;
+              var originalNodes;
+              var network;
+              var container;
+              var options, data;
+              var filter = {
+                  item : '',
+                  property : '',
+                  value : []
+              };
+
+              
+
+              
+
+              // This method is responsible for drawing the graph, returns the drawn network
+              function drawGraph() {
+                  var container = document.getElementById('mynetwork');
+
+                  
+
+                  // parsing and collecting nodes and edges from the python
+                  nodes = new vis.DataSet([{"color": "#97c2fc", "font": {"color": "white"}, "id": "television;;(uncountable, broadcasting) an electronic communication medium that allows the transmission of real-time visual images, and often sound.", "label": "television", "shape": "dot", "title": "television;;(uncountable, broadcasting) an electronic communication medium that allows the transmission of real-time visual images, and often sound."}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "television;;(countable) an electronic home entertainment device equipped with a screen and a speaker for receiving television signals and displaying them in audio-visual form.", "label": "television", "shape": "dot", "title": "television;;(countable) an electronic home entertainment device equipped with a screen and a speaker for receiving television signals and displaying them in audio-visual form."}]);
+                  edges = new vis.DataSet([{"from": "television;;(uncountable, broadcasting) an electronic communication medium that allows the transmission of real-time visual images, and often sound.", "languages": "arabic;;\u062a\u0650\u0644\u0650\u0641\u0650\u0632\u0652\u064a\u064f\u0648\u0646;;noun, japanese;;\u30c6\u30ec\u30d3;;noun, iranian persian;;\u062a\u0650\u0644\u0650\u0648\u06cc\u0632\u06cc\u0648\u0646;;noun, basque;;telebista;;noun, cia-cia;;\ub5c4\ub808\u112b\u1175\uc2dc;;noun, guaran\u00ed;;terevi;;noun, urdu;;\u0679\u06cc\u0644\u06cc \u0648\u0650\u06cc\u0698\u064e\u0646;;noun, danish;;tv;;noun, yoruba;;t\u1eb9lif\u00ed\u1e63\u1ecd\u0300n;;noun, greek;;\u03c4\u03b7\u03bb\u03b5\u03cc\u03c1\u03b1\u03c3\u03b7;;noun, danish;;fjernsyn;;noun, scottish gaelic;;telebhisean;;noun, cherokee;;\uab70\uaba3\u13fc\uab83\uabab\uab9d\uab79;;noun, scottish gaelic;;cian-dhealbh;;noun, vietnamese;;ti-vi;;noun, hungarian;;telev\u00edzi\u00f3;;noun, galician;;tele;;noun, swahili;;televisheni;;noun, navajo;;n\u00ed\u0142ch\u02bci naalkid\u00ed;;noun, occitan;;television;;noun, galician;;televisi\u00f3n;;noun, vietnamese;;tv;;noun, ingrian;;televizora;;noun, norwegian nynorsk;;fjernsyn;;noun, dutch;;televisie;;noun, maltese;;televi\u017cjoni;;noun, welsh;;teledu;;noun, assyrian neo-aramaic;;\u0726\u072a\u0735\u0723\u071a\u0738\u0719\u0718\u0735\u0710;;noun, khmer;;\u1791\u17bc\u179a\u1791\u179f\u17d2\u179f\u1793\u17cd;;noun, korean;;\ud154\ub808\ube44\uc804;;noun, czech;;televize;;noun, turkish;;televizyon;;noun, cornish;;pellwolok;;noun, kazakh;;\u0442\u0435\u043b\u0435\u0434\u0438\u0434\u0430\u0440;;noun, hungarian;;t\u00e9v\u00e9;;noun, asturian;;televisor;;noun, portuguese;;televis\u00e3o;;noun, spanish;;televisi\u00f3n;;noun, swedish;;television;;noun, l\u00fc;;\u19b6\u198e\u19c3\u19c8\u1989\u19b9\u19c8;;noun, bengali;;\u099f\u09c7\u09b2\u09bf\u09ad\u09bf\u09b6\u09a8;;noun, hebrew;;\u05d8\u05dc\u05d5\u05d5\u05d9\u05d6\u05d9\u05d4 \\ \u05d8\u05b6\u05dc\u05b6\u05d5\u05b4\u05d9\u05d6\u05b0\u05d9\u05b8\u05d4;;noun, korean;;\ud2f0\ubdd4;;noun, arabic;;\u062a\u0650\u0644\u0652\u0641\u064e\u0627\u0632;;noun, catalan;;televisi\u00f3;;noun, korean;;\ud154\ub808\ube44;;noun, swahili;;runinga;;noun, assyrian neo-aramaic;;\u072c\u0739\u071d\u0720\u071d\u073c\u0712\u032e\u0738\u0719\u071d\u0718\u073f\u0722;;noun, sicilian;;tivv\u00f9;;noun, norwegian bokm\u00e5l;;tv;;noun, french;;t\u00e9l\u00e9;;noun, thai;;\u0e42\u0e17\u0e23\u0e17\u0e31\u0e28\u0e19\u0e4c;;noun, korean;;\ud2f0\ube44;;noun, malay;;televisyen;;noun, korean;;\ud154\ub808\ube44\uc8e4;;noun, finnish;;televisio;;noun, spanish;;tele;;noun, malayalam;;\u0d1f\u0d46\u0d32\u0d3f\u0d35\u0d3f\u0d37\u0d7b;;noun, urdu;;\u062f\u064f\u0648\u0631 \u0646\u064f\u0645\u0627\u0626\u06cc;;noun, norman;;t\u00e9l\u00e9v\u00eesion;;noun, icelandic;;sj\u00f3nvarp;;noun, hindi;;\u0926\u0942\u0930\u0926\u0930\u094d\u0936\u0928;;noun, cornish;;televisyon;;noun, asturian;;televisi\u00f3n;;noun, dari;;\u062a\u064e\u0644\u0648\u0650\u06cc\u0632\u0650\u06cc\u064f\u0648\u0646;;noun, scots;;televeesion;;noun, norwegian bokm\u00e5l;;fjernsyn;;noun, mongolian;;\u0437\u0443\u0440\u0430\u0433\u0442;;noun, ido;;televiziono;;noun, afrikaans;;televisie;;noun, scots;;telly;;noun, gujarati;;\u0aa6\u0ac2\u0ab0\u0aa6\u0ab0\u0acd\u0ab6\u0aa8;;noun, indonesian;;televisi;;noun, latin;;t\u0113lev\u012bsi\u014d;;noun, italian;;tiv\u00f9;;noun, norwegian nynorsk;;tv;;noun", "to": "television;;(countable) an electronic home entertainment device equipped with a screen and a speaker for receiving television signals and displaying them in audio-visual form.", "value": 76, "width": 76.0}]);
+
+                  nodeColors = {};
+                  allNodes = nodes.get({ returnType: "Object" });
+                  for (nodeId in allNodes) {
+                    nodeColors[nodeId] = allNodes[nodeId].color;
+                  }
+                  allEdges = edges.get({ returnType: "Object" });
+                  // adding nodes and edges to the graph
+                  data = {nodes: nodes, edges: edges};
+
+                  var options = {
+    "configure": {
+        "enabled": false
+    },
+    "edges": {
+        "color": {
+            "inherit": true
+        },
+        "smooth": {
+            "enabled": true,
+            "type": "dynamic"
+        }
+    },
+    "interaction": {
+        "dragNodes": true,
+        "hideEdgesOnDrag": false,
+        "hideNodesOnDrag": false
+    },
+    "physics": {
+        "enabled": true,
+        "stabilization": {
+            "enabled": true,
+            "fit": true,
+            "iterations": 1000,
+            "onlyDynamicEdges": false,
+            "updateInterval": 50
+        }
+    }
+};
+
+                  
+
+
+                  
+
+                  network = new vis.Network(container, data, options);
+
+                  
+
+                  
+
+                  
+
+
+                  
+
+                  return network;
+
+              }
+              drawGraph();
+        </script>
+    
+    <script>
+        // Function to update the legend
+        function updateLegend(content) {
+            const legend = document.getElementById('language-legend');
+            legend.innerHTML = content;
+        }
+
+        // Add event listeners to edges using vis.js API
+        network.on("hoverEdge", function (params) {
+            const edgeId = params.edge;
+            const edge = edges.get(edgeId);
+            if (edge && edge.languages) {
+                const languagesList = edge.languages.split(', ').map(lang => `<li>${lang}</li>`).join('');
+                const numLanguages = edge.languages.split(', ').length;
+                const nodePair = `${edge.from} - ${edge.to}`;
+                updateLegend(`<h3>Languages (${numLanguages}) for ${nodePair}:</h3><ul>${languagesList}</ul>`);
+            }
+        });
+
+        network.on("blurEdge", function () {
+            updateLegend('<h3>Languages:</h3><p>Hover over an edge to see languages.</p>');
+        });
+
+        network.on("click", function (params) {
+            if (params.edges && params.edges.length > 0) {
+                const edgeId = params.edges[0];
+                const edge = edges.get(edgeId);
+                if (edge && edge.languages) {
+                    const languagesList = edge.languages.split(', ').sort().map(lang => `<li>${lang.replaceAll(";;", " - ")}</li>`).join('');
+                    const numLanguages = edge.languages.split(', ').length;
+                    const title1 = edge.from.replaceAll(";;", "&#10;");
+                    const title2 = edge.to.replaceAll(";;", "&#10;");
+                    updateLegend(`<h2><div title="${title1}";>${edge.from.split(";;")[0]}</div><div title="${title2}";>${edge.to.split(";;")[0]}</div></h2><br><h3>Languages (${numLanguages})<br></h3><ul>${languagesList}</ul>`);
+                }
+            }
+        });
+    </script>
+    <style>
+        .container {
+            display: flex;
+            width: 100%;
+            margin-top: 48px;
+        }
+        #mynetwork {
+            flex: 3;
+            height: 750px;
+            width: 90%
+            background-color: #222222;
+            border: 1px solid lightgray;
+        }
+        #language-legend h2 {
+            display: flex; 
+            flex-direction: column;
+            font-weight: bold;
+        }
+        #language-legend h3 {
+             border-bottom: 1px solid black; 
+             padding-bottom: 8px
+        }
+        #language-legend {
+            flex: 1;
+            margin-left: 20px;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            background-color: #f9f9f9;
+            overflow-y: auto;
+            max-height: 750px;
+        }
+        #language-legend ul {
+            list-style-type: none;
+            padding: 0;
+        }
+        #language-legend li {
+            margin: 5px 0;
+            font-size: 1.2em;
+        }
+    </style>
+    </body>
+</html>

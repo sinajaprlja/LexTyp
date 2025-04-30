@@ -1,0 +1,239 @@
+<html>
+    <head>
+        <meta charset="utf-8">
+        
+            <script src="lib/bindings/utils.js"></script>
+            <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/vis-network/9.1.2/dist/dist/vis-network.min.css" integrity="sha512-WgxfT5LWjfszlPHXRmBWHkV2eceiWTOBvrKCNbdgDYTHrT2AeLCGbF4sZlZw3UMN3WtL0tGUoIAKsu8mllg/XA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/vis-network/9.1.2/dist/vis-network.min.js" integrity="sha512-LnvoEWDFrqGHlHmDD2101OrLcbsfkrzoSpvtSQtxK3RMnRV0eOkhhBN2dXHKRrUU8p2DGRTk35n4O8nWSVe1mQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+            
+        
+<center>
+<h1></h1>
+</center>
+
+<!-- <link rel="stylesheet" href="../node_modules/vis/dist/vis.min.css" type="text/css" />
+<script type="text/javascript" src="../node_modules/vis/dist/vis.js"> </script>-->
+        <link
+          href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/css/bootstrap.min.css"
+          rel="stylesheet"
+          integrity="sha384-eOJMYsd53ii+scO/bJGFsiCZc+5NDVN2yr8+0RDqr0Ql0h+rP48ckxlpbzKgwra6"
+          crossorigin="anonymous"
+        />
+        <script
+          src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.bundle.min.js"
+          integrity="sha384-JEW9xMcG8R+pH31jmWH6WWP0WintQrMb4s7ZOdauHnUtxwoG2vI5DkLtS3qm9Ekf"
+          crossorigin="anonymous"
+        ></script>
+
+
+        <center>
+          <h1></h1>
+        </center>
+        <style type="text/css">
+
+             #mynetwork {
+                 width: 100%;
+                 height: 100vh;
+                 background-color: #222222;
+                 border: 1px solid lightgray;
+                 position: relative;
+                 float: left;
+             }
+
+             
+
+             
+
+             
+        </style>
+    </head>
+
+
+    <body>
+        <div class="card" style="width: 100%">
+            
+            
+            <div class="container"><div id="mynetwork" class="card-body"></div>
+    <div id="language-legend">
+        <h3>Languages:</h3>
+        <p>Click on an edge to see languages.</p>
+    </div>
+    </div>
+        </div>
+
+        
+        
+
+        <script type="text/javascript">
+
+              // initialize global variables.
+              var edges;
+              var nodes;
+              var allNodes;
+              var allEdges;
+              var nodeColors;
+              var originalNodes;
+              var network;
+              var container;
+              var options, data;
+              var filter = {
+                  item : '',
+                  property : '',
+                  value : []
+              };
+
+              
+
+              
+
+              // This method is responsible for drawing the graph, returns the drawn network
+              function drawGraph() {
+                  var container = document.getElementById('mynetwork');
+
+                  
+
+                  // parsing and collecting nodes and edges from the python
+                  nodes = new vis.DataSet([{"color": "#97c2fc", "font": {"color": "white"}, "id": "crab;;(uncountable) the meat of this crustacean, served as food; crabmeat.", "label": "crab", "shape": "dot", "title": "crab;;(uncountable) the meat of this crustacean, served as food; crabmeat."}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "cancer;;(medicine, oncology, pathology) a disease in which the cells of a tissue undergo uncontrolled (and often rapid) proliferation.", "label": "cancer", "shape": "dot", "title": "cancer;;(medicine, oncology, pathology) a disease in which the cells of a tissue undergo uncontrolled (and often rapid) proliferation."}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "prawn;;(commonwealth) a crustacean, sometimes confused with shrimp.", "label": "prawn", "shape": "dot", "title": "prawn;;(commonwealth) a crustacean, sometimes confused with shrimp."}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "crayfish;;any of numerous freshwater decapod crustaceans in superfamily astacoidea or parastacoidea, resembling the related lobster but usually much smaller.;;(new england, pennsylvania, upper midwestern us) a freshwater crustacean (family cambaridae), sometimes used as an inexpensive seafood or as fish bait.", "label": "crayfish", "shape": "dot", "title": "crayfish;;any of numerous freshwater decapod crustaceans in superfamily astacoidea or parastacoidea, resembling the related lobster but usually much smaller.;;(new england, pennsylvania, upper midwestern us) a freshwater crustacean (family cambaridae), sometimes used as an inexpensive seafood or as fish bait."}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "carcinoma;;(countable) an invasive malignant tumour derived from epithelial tissue that tends to metastasize to other areas of the body.", "label": "carcinoma", "shape": "dot", "title": "carcinoma;;(countable) an invasive malignant tumour derived from epithelial tissue that tends to metastasize to other areas of the body."}]);
+                  edges = new vis.DataSet([{"from": "crab;;(uncountable) the meat of this crustacean, served as food; crabmeat.", "languages": "uyghur;;\u0642\u0649\u0633\u0642\u06c7\u0686\u067e\u0627\u0642\u0627;;noun, uzbek;;qisqichbaqa;;noun, romagnol;;g\u00e2mbar;;noun", "to": "prawn;;(commonwealth) a crustacean, sometimes confused with shrimp.", "value": 3, "width": 0.15789473684210525}, {"from": "crab;;(uncountable) the meat of this crustacean, served as food; crabmeat.", "languages": "bulgarian;;\u0440\u0430\u043a;;noun, faroese;;krabbi;;noun, serbo-croatian;;r\u0201k;;noun, serbo-croatian;;\u0440\u0430\u030f\u043a;;noun, arabic;;\u0633\u064e\u0631\u064e\u0637\u064e\u0627\u0646;;noun, plautdietsch;;kjr\u00e4ft;;noun, hindi;;\u0915\u0930\u094d\u0915\u091f;;noun, macedonian;;\u0440\u0430\u043a;;noun, ancient greek;;\u03ba\u03b1\u03c1\u03ba\u03af\u03bd\u03bf\u03c2;;noun, greek;;\u03ba\u03b1\u03c1\u03ba\u03af\u03bd\u03bf\u03c2;;noun, icelandic;;krabbi;;noun, hungarian;;r\u00e1k;;noun, latin;;cancer;;noun", "to": "cancer;;(medicine, oncology, pathology) a disease in which the cells of a tissue undergo uncontrolled (and often rapid) proliferation.", "value": 13, "width": 0.6842105263157895}, {"from": "crab;;(uncountable) the meat of this crustacean, served as food; crabmeat.", "languages": "uzbek;;qisqichbaqa;;noun, bulgarian;;\u0440\u0430\u043a;;noun, finnish;;rapu;;noun, tatar;;\u043a\u044b\u0441\u043b\u0430;;noun, ojibwe;;ashaageshiinh;;noun, macedonian;;\u0440\u0430\u043a;;noun, mongolian;;\u0445\u0430\u0432\u0447;;noun, turkmen;;le\u0148\u0148e\u00e7;;noun, mongolian;;\u182c\u1820\u182a\u1834\u1822;;noun, uyghur;;\u0642\u0649\u0633\u0642\u06c7\u0686\u067e\u0627\u0642\u0627;;noun, tajik;;\u0445\u0430\u0440\u0447\u0430\u043d\u0433;;noun, hungarian;;r\u00e1k;;noun, spanish;;cangrejo;;noun, latin;;cancer;;noun", "to": "crayfish;;any of numerous freshwater decapod crustaceans in superfamily astacoidea or parastacoidea, resembling the related lobster but usually much smaller.;;(new england, pennsylvania, upper midwestern us) a freshwater crustacean (family cambaridae), sometimes used as an inexpensive seafood or as fish bait.", "value": 14, "width": 0.7368421052631579}, {"from": "cancer;;(medicine, oncology, pathology) a disease in which the cells of a tissue undergo uncontrolled (and often rapid) proliferation.", "languages": "swedish;;kr\u00e4fta;;noun, bulgarian;;\u0440\u0430\u043a;;noun, macedonian;;\u0440\u0430\u043a;;noun, tajik;;\u0441\u0430\u0440\u0430\u0442\u043e\u043d;;noun, hungarian;;r\u00e1k;;noun, latin;;cancer;;noun, azerbaijani;;x\u0259r\u00e7\u0259ng;;noun, latvian;;v\u0113zis;;noun, belarusian;;\u0440\u0430\u043a;;noun, russian;;\u0440\u0430\u043a;;noun, ukrainian;;\u0440\u0430\u043a;;noun, kyrgyz;;\u0440\u0430\u043a;;noun, slovak;;rak;;noun, uzbek;;saraton;;noun, yiddish;;\u05e8\u05d0\u05b7\u05e7;;noun, polish;;rak;;noun, slovene;;rak;;noun, lithuanian;;v\u0117\u017eys;;noun, uzbek;;rak;;noun", "to": "crayfish;;any of numerous freshwater decapod crustaceans in superfamily astacoidea or parastacoidea, resembling the related lobster but usually much smaller.;;(new england, pennsylvania, upper midwestern us) a freshwater crustacean (family cambaridae), sometimes used as an inexpensive seafood or as fish bait.", "value": 19, "width": 1.0}, {"from": "cancer;;(medicine, oncology, pathology) a disease in which the cells of a tissue undergo uncontrolled (and often rapid) proliferation.", "languages": "polish;;rak;;noun, thai;;\u0e21\u0e30\u0e40\u0e23\u0e47\u0e07;;noun, scottish gaelic;;aillse;;noun, arabic;;\u0633\u064e\u0631\u064e\u0637\u064e\u0627\u0646;;noun, chinese cantonese;;\u764c;;noun", "to": "carcinoma;;(countable) an invasive malignant tumour derived from epithelial tissue that tends to metastasize to other areas of the body.", "value": 5, "width": 0.2631578947368421}, {"from": "prawn;;(commonwealth) a crustacean, sometimes confused with shrimp.", "languages": "uzbek;;qisqichbaqa;;noun, italian;;gambero;;noun, lao;;\u0e81\u0eb8\u0ec9\u0e87;;noun, thai;;\u0e01\u0e38\u0e49\u0e07;;noun, uyghur;;\u0642\u0649\u0633\u0642\u06c7\u0686\u067e\u0627\u0642\u0627;;noun, burmese;;\u1015\u102f\u1005\u103d\u1014\u103a;;noun", "to": "crayfish;;any of numerous freshwater decapod crustaceans in superfamily astacoidea or parastacoidea, resembling the related lobster but usually much smaller.;;(new england, pennsylvania, upper midwestern us) a freshwater crustacean (family cambaridae), sometimes used as an inexpensive seafood or as fish bait.", "value": 6, "width": 0.3157894736842105}]);
+
+                  nodeColors = {};
+                  allNodes = nodes.get({ returnType: "Object" });
+                  for (nodeId in allNodes) {
+                    nodeColors[nodeId] = allNodes[nodeId].color;
+                  }
+                  allEdges = edges.get({ returnType: "Object" });
+                  // adding nodes and edges to the graph
+                  data = {nodes: nodes, edges: edges};
+
+                  var options = {
+    "configure": {
+        "enabled": false
+    },
+    "edges": {
+        "color": {
+            "inherit": true
+        },
+        "smooth": {
+            "enabled": true,
+            "type": "dynamic"
+        }
+    },
+    "interaction": {
+        "dragNodes": true,
+        "hideEdgesOnDrag": false,
+        "hideNodesOnDrag": false
+    },
+    "physics": {
+        "enabled": true,
+        "stabilization": {
+            "enabled": true,
+            "fit": true,
+            "iterations": 1000,
+            "onlyDynamicEdges": false,
+            "updateInterval": 50
+        }
+    }
+};
+
+                  
+
+
+                  
+
+                  network = new vis.Network(container, data, options);
+
+                  
+
+                  
+
+                  
+
+
+                  
+
+                  return network;
+
+              }
+              drawGraph();
+        </script>
+    
+    <script>
+        // Function to update the legend
+        function updateLegend(content) {
+            const legend = document.getElementById('language-legend');
+            legend.innerHTML = content;
+        }
+
+        // Add event listeners to edges using vis.js API
+        network.on("hoverEdge", function (params) {
+            const edgeId = params.edge;
+            const edge = edges.get(edgeId);
+            if (edge && edge.languages) {
+                const languagesList = edge.languages.split(', ').map(lang => `<li>${lang}</li>`).join('');
+                const numLanguages = edge.languages.split(', ').length;
+                const nodePair = `${edge.from} - ${edge.to}`;
+                updateLegend(`<h3>Languages (${numLanguages}) for ${nodePair}:</h3><ul>${languagesList}</ul>`);
+            }
+        });
+
+        network.on("blurEdge", function () {
+            updateLegend('<h3>Languages:</h3><p>Hover over an edge to see languages.</p>');
+        });
+
+        network.on("click", function (params) {
+            if (params.edges && params.edges.length > 0) {
+                const edgeId = params.edges[0];
+                const edge = edges.get(edgeId);
+                if (edge && edge.languages) {
+                    const languagesList = edge.languages.split(', ').sort().map(lang => `<li>${lang.replaceAll(";;", " - ")}</li>`).join('');
+                    const numLanguages = edge.languages.split(', ').length;
+                    const title1 = edge.from.replaceAll(";;", "&#10;");
+                    const title2 = edge.to.replaceAll(";;", "&#10;");
+                    updateLegend(`<h2><div title="${title1}";>${edge.from.split(";;")[0]}</div><div title="${title2}";>${edge.to.split(";;")[0]}</div></h2><br><h3>Languages (${numLanguages})<br></h3><ul>${languagesList}</ul>`);
+                }
+            }
+        });
+    </script>
+    <style>
+        .container {
+            display: flex;
+            width: 100%;
+            margin-top: 48px;
+        }
+        #mynetwork {
+            flex: 3;
+            height: 750px;
+            width: 90%
+            background-color: #222222;
+            border: 1px solid lightgray;
+        }
+        #language-legend h2 {
+            display: flex; 
+            flex-direction: column;
+            font-weight: bold;
+        }
+        #language-legend h3 {
+             border-bottom: 1px solid black; 
+             padding-bottom: 8px
+        }
+        #language-legend {
+            flex: 1;
+            margin-left: 20px;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            background-color: #f9f9f9;
+            overflow-y: auto;
+            max-height: 750px;
+        }
+        #language-legend ul {
+            list-style-type: none;
+            padding: 0;
+        }
+        #language-legend li {
+            margin: 5px 0;
+            font-size: 1.2em;
+        }
+    </style>
+    </body>
+</html>

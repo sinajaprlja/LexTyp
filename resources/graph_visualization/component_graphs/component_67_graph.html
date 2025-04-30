@@ -1,0 +1,239 @@
+<html>
+    <head>
+        <meta charset="utf-8">
+        
+            <script src="lib/bindings/utils.js"></script>
+            <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/vis-network/9.1.2/dist/dist/vis-network.min.css" integrity="sha512-WgxfT5LWjfszlPHXRmBWHkV2eceiWTOBvrKCNbdgDYTHrT2AeLCGbF4sZlZw3UMN3WtL0tGUoIAKsu8mllg/XA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/vis-network/9.1.2/dist/vis-network.min.js" integrity="sha512-LnvoEWDFrqGHlHmDD2101OrLcbsfkrzoSpvtSQtxK3RMnRV0eOkhhBN2dXHKRrUU8p2DGRTk35n4O8nWSVe1mQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+            
+        
+<center>
+<h1></h1>
+</center>
+
+<!-- <link rel="stylesheet" href="../node_modules/vis/dist/vis.min.css" type="text/css" />
+<script type="text/javascript" src="../node_modules/vis/dist/vis.js"> </script>-->
+        <link
+          href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/css/bootstrap.min.css"
+          rel="stylesheet"
+          integrity="sha384-eOJMYsd53ii+scO/bJGFsiCZc+5NDVN2yr8+0RDqr0Ql0h+rP48ckxlpbzKgwra6"
+          crossorigin="anonymous"
+        />
+        <script
+          src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.bundle.min.js"
+          integrity="sha384-JEW9xMcG8R+pH31jmWH6WWP0WintQrMb4s7ZOdauHnUtxwoG2vI5DkLtS3qm9Ekf"
+          crossorigin="anonymous"
+        ></script>
+
+
+        <center>
+          <h1></h1>
+        </center>
+        <style type="text/css">
+
+             #mynetwork {
+                 width: 100%;
+                 height: 100vh;
+                 background-color: #222222;
+                 border: 1px solid lightgray;
+                 position: relative;
+                 float: left;
+             }
+
+             
+
+             
+
+             
+        </style>
+    </head>
+
+
+    <body>
+        <div class="card" style="width: 100%">
+            
+            
+            <div class="container"><div id="mynetwork" class="card-body"></div>
+    <div id="language-legend">
+        <h3>Languages:</h3>
+        <p>Click on an edge to see languages.</p>
+    </div>
+    </div>
+        </div>
+
+        
+        
+
+        <script type="text/javascript">
+
+              // initialize global variables.
+              var edges;
+              var nodes;
+              var allNodes;
+              var allEdges;
+              var nodeColors;
+              var originalNodes;
+              var network;
+              var container;
+              var options, data;
+              var filter = {
+                  item : '',
+                  property : '',
+                  value : []
+              };
+
+              
+
+              
+
+              // This method is responsible for drawing the graph, returns the drawn network
+              function drawGraph() {
+                  var container = document.getElementById('mynetwork');
+
+                  
+
+                  // parsing and collecting nodes and edges from the python
+                  nodes = new vis.DataSet([{"color": "#97c2fc", "font": {"color": "white"}, "id": "get married;;(intransitive) to become married (to someone).", "label": "get married", "shape": "dot", "title": "get married;;(intransitive) to become married (to someone)."}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "marry off;;(idiomatic) to successfully arrange the marriage of someone, especially a relative.", "label": "marry off", "shape": "dot", "title": "marry off;;(idiomatic) to successfully arrange the marriage of someone, especially a relative."}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "marry;;(transitive) to unite in wedlock or matrimony; to perform the ceremony of joining spouses; to bring about a marital union according to the laws or customs of a place.", "label": "marry", "shape": "dot", "title": "marry;;(transitive) to unite in wedlock or matrimony; to perform the ceremony of joining spouses; to bring about a marital union according to the laws or customs of a place."}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "marry;;(intransitive, figuratively, of inanimate or abstract things) to join or connect. see also marry up.", "label": "marry", "shape": "dot", "title": "marry;;(intransitive, figuratively, of inanimate or abstract things) to join or connect. see also marry up."}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "marry;;(transitive) to arrange for the marriage of; to give away as wife or husband.", "label": "marry", "shape": "dot", "title": "marry;;(transitive) to arrange for the marriage of; to give away as wife or husband."}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "marry;;(transitive) to take as husband or wife.", "label": "marry", "shape": "dot", "title": "marry;;(transitive) to take as husband or wife."}]);
+                  edges = new vis.DataSet([{"from": "get married;;(intransitive) to become married (to someone).", "languages": "chinese mandarin;;\u5a36;;verb, korean;;\uc2dc\uc9d1\uac00\ub2e4;;verb, finnish;;menn\u00e4 naimisiin;;verb, spanish;;casarse;;verb, finnish;;avioitua;;verb, chinese mandarin;;\u7d50\u5a5a /\u7ed3\u5a5a;;verb, ukrainian;;\u043e\u0434\u0440\u0443\u0436\u0438\u0301\u0442\u0438\u0441\u044f;;verb, belarusian;;\u0430\u0436\u0430\u043d\u0456\u0301\u0446\u0446\u0430;;verb, welsh;;priodi;;verb, belarusian;;\u0432\u044b\u0301\u0439\u0441\u0446\u0456 \u0437\u0430\u0301\u043c\u0443\u0436;;verb, greek;;\u03c0\u03b1\u03bd\u03c4\u03c1\u03b5\u03cd\u03bf\u03bc\u03b1\u03b9;;verb, bulgarian;;\u043e\u0436\u0435\u0301\u043d\u0432\u0430\u043c \u0441\u0435;;verb, vietnamese;;k\u1ebft h\u00f4n;;verb, korean;;\uacb0\ud63c\ud558\ub2e4;;verb, hungarian;;megn\u0151s\u00fcl;;verb, french;;se marier;;verb, aromanian;;mi-m\u00e3rit;;verb, mongolian;;\u0433\u044d\u0440\u043b\u044d\u0445;;verb, russian;;\u0432\u044b\u0301\u0439\u0442\u0438 \u0437\u0430\u0301\u043c\u0443\u0436;;verb, ukrainian;;\u0436\u0435\u043d\u0438\u0301\u0442\u0438\u0441\u044f;;verb, hungarian;;feles\u00e9g\u00fcl vesz;;verb, korean;;\uc7a5\uac00\uac00\ub2e4;;verb, ukrainian;;\u0432\u0438\u0301\u0439\u0442\u0438 \u0437\u0430\u0301\u043c\u0456\u0436;;verb, ukrainian;;\u043e\u0434\u0440\u0443\u0301\u0436\u0443\u0432\u0430\u0442\u0438\u0441\u044f;;verb, ukrainian;;\u0432\u0438\u0445\u043e\u0301\u0434\u0438\u0442\u0438 \u0437\u0430\u0301\u043c\u0456\u0436;;verb, belarusian;;\u0436\u0430\u043d\u0456\u0301\u0446\u0446\u0430;;verb, indonesian;;menikah;;verb, polish;;\u017ceni\u0107 si\u0119;;verb, romanian;;a se c\u0103s\u0103tori;;verb, german;;heiraten;;verb, chinese mandarin;;\u5ac1;;verb, czech;;vd\u00e1t se;;verb, belarusian;;\u0432\u044b\u0445\u043e\u0301\u0434\u0437\u0456\u0446\u044c \u0437\u0430\u0301\u043c\u0443\u0436;;verb, czech;;\u017eenit se;;verb, polish;;o\u017ceni\u0107 si\u0119;;verb, ukrainian;;\u0431\u0440\u0430\u0301\u0442\u0438 \u0448\u043b\u044e\u0431;;verb, russian;;\u0432\u044b\u0445\u043e\u0434\u0438\u0301\u0442\u044c \u0437\u0430\u0301\u043c\u0443\u0436;;verb, latvian;;prec\u0113ties;;verb, arabic;;\u062a\u064e\u0632\u064e\u0648\u064e\u0651\u062c\u064e;;verb, bulgarian;;\u043e\u0436\u0435\u0301\u043d\u044f \u0441\u0435;;verb, vietnamese;;c\u01b0\u1edbi;;verb, catalan;;casar-se;;verb, turkish;;evlenmek;;verb, polish;;wyj\u015b\u0107 za m\u0105\u017c;;verb, danish;;gifte sig;;verb, polish;;bra\u0107 \u015blub;;verb, romanian;;a se cununa;;verb, swedish;;gifta sig;;verb, japanese;;\u7d50\u5a5a\u3059\u308b;;verb, romanian;;a se \u00eensura;;verb, azerbaijani;;evl\u0259nm\u0259k;;verb, romanian;;a se m\u0103rita;;verb, hungarian;;f\u00e9rjhez megy;;verb, chinese mandarin;;\u505a\u59bb\u5b50;;verb", "to": "marry;;(transitive) to take as husband or wife.", "value": 54, "width": 1.0}, {"from": "get married;;(intransitive) to become married (to someone).", "languages": "vietnamese;;c\u01b0\u1edbi;;verb, catalan;;casar-se;;verb, esperanto;;edzi\u011di;;verb, hungarian;;\u00f6sszeh\u00e1zasodik;;verb, arabic;;\u062a\u064e\u0632\u064e\u0648\u064e\u0651\u062c\u064e;;verb, turkish;;evlenmek;;verb, finnish;;menn\u00e4 naimisiin;;verb, swedish;;gifta sig;;verb, chinese mandarin;;\u7d50\u5a5a /\u7ed3\u5a5a;;verb, german;;heiraten;;verb, russian;;\u0436\u0435\u043d\u0438\u0301\u0442\u044c\u0441\u044f;;verb, japanese;;\u7d50\u5a5a\u3059\u308b;;verb, czech;;\u017eenit se;;verb, czech;;br\u00e1t si;;verb, italian;;sposarsi;;verb, yiddish;;\u05d7\u05ea\u05d5\u05e0\u05d4 \u05d4\u05d0\u05b8\u05d1\u05df;;verb, greek;;\u03c0\u03b1\u03bd\u03c4\u03c1\u03b5\u03cd\u03bf\u03bc\u03b1\u03b9;;verb, korean;;\uacb0\ud63c\ud558\ub2e4;;verb", "to": "marry;;(intransitive, figuratively, of inanimate or abstract things) to join or connect. see also marry up.", "value": 18, "width": 0.3333333333333333}, {"from": "marry off;;(idiomatic) to successfully arrange the marriage of someone, especially a relative.", "languages": "ukrainian;;\u043e\u0434\u0440\u0443\u0436\u0438\u0301\u0442\u0438;;verb, italian;;dare in matrimonio;;verb, greek;;\u03c0\u03b1\u03bd\u03c4\u03c1\u03b5\u03cd\u03c9;;verb, finnish;;naittaa;;verb, arabic;;\u0632\u064e\u0648\u064e\u0651\u062c\u064e;;verb, french;;marier;;verb, turkish;;evlendirmek;;verb, swedish;;gifta bort;;verb, ukrainian;;\u0436\u0435\u043d\u0438\u0301\u0442\u0438;;verb, ukrainian;;\u043e\u0434\u0440\u0443\u0301\u0436\u0443\u0432\u0430\u0442\u0438;;verb", "to": "marry;;(transitive) to arrange for the marriage of; to give away as wife or husband.", "value": 10, "width": 0.18518518518518517}, {"from": "marry off;;(idiomatic) to successfully arrange the marriage of someone, especially a relative.", "languages": "ukrainian;;\u043e\u0434\u0440\u0443\u0436\u0438\u0301\u0442\u0438;;verb, greek;;\u03c0\u03b1\u03bd\u03c4\u03c1\u03b5\u03cd\u03c9;;verb, german;;verheiraten;;verb, arabic;;\u0632\u064e\u0648\u064e\u0651\u062c\u064e;;verb, french;;marier;;verb, spanish;;casar;;verb, ukrainian;;\u043e\u0434\u0440\u0443\u0301\u0436\u0443\u0432\u0430\u0442\u0438;;verb", "to": "marry;;(transitive) to unite in wedlock or matrimony; to perform the ceremony of joining spouses; to bring about a marital union according to the laws or customs of a place.", "value": 7, "width": 0.12962962962962962}, {"from": "marry;;(transitive) to unite in wedlock or matrimony; to perform the ceremony of joining spouses; to bring about a marital union according to the laws or customs of a place.", "languages": "turkish;;evlenmek;;verb, maori;;m\u0101rena;;verb, catalan;;casar;;verb, georgian;;\u10e5\u10dd\u10e0\u10ec\u10d8\u10dc\u10d3\u10d4\u10d1\u10d0;;verb, galician;;casar;;verb, dutch;;huwen;;verb, dutch;;trouwen;;verb, portuguese;;casar;;verb, spanish;;casar;;verb, latin;;marito;;verb, central kurdish;;\u062f\u0627\u062e\u0648\u0627\u0632\u06cc;;verb, georgian;;\u10d3\u10d0\u10e5\u10dd\u10e0\u10ec\u10d8\u10dc\u10d3\u10d4\u10d1\u10d0;;verb", "to": "marry;;(transitive) to take as husband or wife.", "value": 12, "width": 0.2222222222222222}, {"from": "marry;;(transitive) to unite in wedlock or matrimony; to perform the ceremony of joining spouses; to bring about a marital union according to the laws or customs of a place.", "languages": "turkish;;evlenmek;;verb, maori;;m\u0101rena;;verb, dutch;;trouwen;;verb, georgian;;\u10e5\u10dd\u10e0\u10ec\u10d8\u10dc\u10d3\u10d4\u10d1\u10d0;;verb, galician;;casar;;verb, dutch;;huwen;;verb, portuguese;;casar;;verb, georgian;;\u10d3\u10d0\u10e5\u10dd\u10e0\u10ec\u10d8\u10dc\u10d3\u10d4\u10d1\u10d0;;verb", "to": "marry;;(intransitive, figuratively, of inanimate or abstract things) to join or connect. see also marry up.", "value": 8, "width": 0.14814814814814814}, {"from": "marry;;(transitive) to unite in wedlock or matrimony; to perform the ceremony of joining spouses; to bring about a marital union according to the laws or customs of a place.", "languages": "ukrainian;;\u043e\u0434\u0440\u0443\u0436\u0438\u0301\u0442\u0438;;verb, catalan;;casar;;verb, galician;;casar;;verb, greek;;\u03c0\u03b1\u03bd\u03c4\u03c1\u03b5\u03cd\u03c9;;verb, portuguese;;casar;;verb, arabic;;\u0632\u064e\u0648\u064e\u0651\u062c\u064e;;verb, icelandic;;gifta;;verb, french;;marier;;verb, latin;;marito;;verb, old english;;\u0121iftian;;verb, armenian;;\u0561\u0574\u0578\u0582\u057d\u0576\u0561\u0581\u0576\u0565\u056c;;verb, ukrainian;;\u043e\u0434\u0440\u0443\u0301\u0436\u0443\u0432\u0430\u0442\u0438;;verb", "to": "marry;;(transitive) to arrange for the marriage of; to give away as wife or husband.", "value": 12, "width": 0.2222222222222222}, {"from": "marry;;(intransitive, figuratively, of inanimate or abstract things) to join or connect. see also marry up.", "languages": "maori;;m\u0101rena;;verb, georgian;;\u10e5\u10dd\u10e0\u10ec\u10d8\u10dc\u10d3\u10d4\u10d1\u10d0;;verb, galician;;casar;;verb, finnish;;menn\u00e4 naimisiin;;verb, chinese mandarin;;\u7d50\u5a5a /\u7ed3\u5a5a;;verb, greek;;\u03c0\u03b1\u03bd\u03c4\u03c1\u03b5\u03cd\u03bf\u03bc\u03b1\u03b9;;verb, georgian;;\u10d3\u10d0\u10e5\u10dd\u10e0\u10ec\u10d8\u10dc\u10d3\u10d4\u10d1\u10d0;;verb, icelandic;;giftast;;verb, korean;;\uacb0\ud63c\ud558\ub2e4;;verb, georgian;;\u10e3\u10e6\u10da\u10d3\u10d4\u10d1\u10d0;;verb, dutch;;huwen;;verb, portuguese;;casar;;verb, armenian;;\u0561\u0574\u0578\u0582\u057d\u0576\u0561\u0576\u0561\u056c;;verb, german;;heiraten;;verb, georgian;;\u10e8\u10d4\u10e3\u10e6\u10da\u10d3\u10d4\u10d1\u10d0;;verb, czech;;\u017eenit se;;verb, norman;;s\u0027mathier;;verb, arabic;;\u062a\u064e\u0632\u064e\u0648\u064e\u0651\u062c\u064e;;verb, vietnamese;;c\u01b0\u1edbi;;verb, catalan;;casar-se;;verb, turkish;;evlenmek;;verb, dutch;;trouwen;;verb, swedish;;gifta sig;;verb, irish;;p\u00f3s;;verb, japanese;;\u7d50\u5a5a\u3059\u308b;;verb, scots;;mairy;;verb", "to": "marry;;(transitive) to take as husband or wife.", "value": 26, "width": 0.48148148148148145}, {"from": "marry;;(intransitive, figuratively, of inanimate or abstract things) to join or connect. see also marry up.", "languages": "portuguese;;casar;;verb, galician;;casar;;verb", "to": "marry;;(transitive) to arrange for the marriage of; to give away as wife or husband.", "value": 2, "width": 0.037037037037037035}, {"from": "marry;;(transitive) to arrange for the marriage of; to give away as wife or husband.", "languages": "catalan;;casar;;verb, galician;;casar;;verb, italian;;sposare;;verb, portuguese;;casar;;verb, latin;;marito;;verb", "to": "marry;;(transitive) to take as husband or wife.", "value": 5, "width": 0.09259259259259259}]);
+
+                  nodeColors = {};
+                  allNodes = nodes.get({ returnType: "Object" });
+                  for (nodeId in allNodes) {
+                    nodeColors[nodeId] = allNodes[nodeId].color;
+                  }
+                  allEdges = edges.get({ returnType: "Object" });
+                  // adding nodes and edges to the graph
+                  data = {nodes: nodes, edges: edges};
+
+                  var options = {
+    "configure": {
+        "enabled": false
+    },
+    "edges": {
+        "color": {
+            "inherit": true
+        },
+        "smooth": {
+            "enabled": true,
+            "type": "dynamic"
+        }
+    },
+    "interaction": {
+        "dragNodes": true,
+        "hideEdgesOnDrag": false,
+        "hideNodesOnDrag": false
+    },
+    "physics": {
+        "enabled": true,
+        "stabilization": {
+            "enabled": true,
+            "fit": true,
+            "iterations": 1000,
+            "onlyDynamicEdges": false,
+            "updateInterval": 50
+        }
+    }
+};
+
+                  
+
+
+                  
+
+                  network = new vis.Network(container, data, options);
+
+                  
+
+                  
+
+                  
+
+
+                  
+
+                  return network;
+
+              }
+              drawGraph();
+        </script>
+    
+    <script>
+        // Function to update the legend
+        function updateLegend(content) {
+            const legend = document.getElementById('language-legend');
+            legend.innerHTML = content;
+        }
+
+        // Add event listeners to edges using vis.js API
+        network.on("hoverEdge", function (params) {
+            const edgeId = params.edge;
+            const edge = edges.get(edgeId);
+            if (edge && edge.languages) {
+                const languagesList = edge.languages.split(', ').map(lang => `<li>${lang}</li>`).join('');
+                const numLanguages = edge.languages.split(', ').length;
+                const nodePair = `${edge.from} - ${edge.to}`;
+                updateLegend(`<h3>Languages (${numLanguages}) for ${nodePair}:</h3><ul>${languagesList}</ul>`);
+            }
+        });
+
+        network.on("blurEdge", function () {
+            updateLegend('<h3>Languages:</h3><p>Hover over an edge to see languages.</p>');
+        });
+
+        network.on("click", function (params) {
+            if (params.edges && params.edges.length > 0) {
+                const edgeId = params.edges[0];
+                const edge = edges.get(edgeId);
+                if (edge && edge.languages) {
+                    const languagesList = edge.languages.split(', ').sort().map(lang => `<li>${lang.replaceAll(";;", " - ")}</li>`).join('');
+                    const numLanguages = edge.languages.split(', ').length;
+                    const title1 = edge.from.replaceAll(";;", "&#10;");
+                    const title2 = edge.to.replaceAll(";;", "&#10;");
+                    updateLegend(`<h2><div title="${title1}";>${edge.from.split(";;")[0]}</div><div title="${title2}";>${edge.to.split(";;")[0]}</div></h2><br><h3>Languages (${numLanguages})<br></h3><ul>${languagesList}</ul>`);
+                }
+            }
+        });
+    </script>
+    <style>
+        .container {
+            display: flex;
+            width: 100%;
+            margin-top: 48px;
+        }
+        #mynetwork {
+            flex: 3;
+            height: 750px;
+            width: 90%
+            background-color: #222222;
+            border: 1px solid lightgray;
+        }
+        #language-legend h2 {
+            display: flex; 
+            flex-direction: column;
+            font-weight: bold;
+        }
+        #language-legend h3 {
+             border-bottom: 1px solid black; 
+             padding-bottom: 8px
+        }
+        #language-legend {
+            flex: 1;
+            margin-left: 20px;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            background-color: #f9f9f9;
+            overflow-y: auto;
+            max-height: 750px;
+        }
+        #language-legend ul {
+            list-style-type: none;
+            padding: 0;
+        }
+        #language-legend li {
+            margin: 5px 0;
+            font-size: 1.2em;
+        }
+    </style>
+    </body>
+</html>

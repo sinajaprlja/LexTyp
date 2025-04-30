@@ -1,0 +1,239 @@
+<html>
+    <head>
+        <meta charset="utf-8">
+        
+            <script src="lib/bindings/utils.js"></script>
+            <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/vis-network/9.1.2/dist/dist/vis-network.min.css" integrity="sha512-WgxfT5LWjfszlPHXRmBWHkV2eceiWTOBvrKCNbdgDYTHrT2AeLCGbF4sZlZw3UMN3WtL0tGUoIAKsu8mllg/XA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/vis-network/9.1.2/dist/vis-network.min.js" integrity="sha512-LnvoEWDFrqGHlHmDD2101OrLcbsfkrzoSpvtSQtxK3RMnRV0eOkhhBN2dXHKRrUU8p2DGRTk35n4O8nWSVe1mQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+            
+        
+<center>
+<h1></h1>
+</center>
+
+<!-- <link rel="stylesheet" href="../node_modules/vis/dist/vis.min.css" type="text/css" />
+<script type="text/javascript" src="../node_modules/vis/dist/vis.js"> </script>-->
+        <link
+          href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/css/bootstrap.min.css"
+          rel="stylesheet"
+          integrity="sha384-eOJMYsd53ii+scO/bJGFsiCZc+5NDVN2yr8+0RDqr0Ql0h+rP48ckxlpbzKgwra6"
+          crossorigin="anonymous"
+        />
+        <script
+          src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.bundle.min.js"
+          integrity="sha384-JEW9xMcG8R+pH31jmWH6WWP0WintQrMb4s7ZOdauHnUtxwoG2vI5DkLtS3qm9Ekf"
+          crossorigin="anonymous"
+        ></script>
+
+
+        <center>
+          <h1></h1>
+        </center>
+        <style type="text/css">
+
+             #mynetwork {
+                 width: 100%;
+                 height: 100vh;
+                 background-color: #222222;
+                 border: 1px solid lightgray;
+                 position: relative;
+                 float: left;
+             }
+
+             
+
+             
+
+             
+        </style>
+    </head>
+
+
+    <body>
+        <div class="card" style="width: 100%">
+            
+            
+            <div class="container"><div id="mynetwork" class="card-body"></div>
+    <div id="language-legend">
+        <h3>Languages:</h3>
+        <p>Click on an edge to see languages.</p>
+    </div>
+    </div>
+        </div>
+
+        
+        
+
+        <script type="text/javascript">
+
+              // initialize global variables.
+              var edges;
+              var nodes;
+              var allNodes;
+              var allEdges;
+              var nodeColors;
+              var originalNodes;
+              var network;
+              var container;
+              var options, data;
+              var filter = {
+                  item : '',
+                  property : '',
+                  value : []
+              };
+
+              
+
+              
+
+              // This method is responsible for drawing the graph, returns the drawn network
+              function drawGraph() {
+                  var container = document.getElementById('mynetwork');
+
+                  
+
+                  // parsing and collecting nodes and edges from the python
+                  nodes = new vis.DataSet([{"color": "#97c2fc", "font": {"color": "white"}, "id": "presenter;;(radio, television) someone who presents a broadcast programme; a compere or master of ceremonies.", "label": "presenter", "shape": "dot", "title": "presenter;;(radio, television) someone who presents a broadcast programme; a compere or master of ceremonies."}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "anchor;;(television) an anchorman or anchorwoman.", "label": "anchor", "shape": "dot", "title": "anchor;;(television) an anchorman or anchorwoman."}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "speaker;;(politics) the chair or presiding officer of certain legislative bodies, such as the u.k. house of commons or the u.s. house of representatives.", "label": "speaker", "shape": "dot", "title": "speaker;;(politics) the chair or presiding officer of certain legislative bodies, such as the u.k. house of commons or the u.s. house of representatives."}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "broadcaster;;(broadcasting);;a person whose job it is to effect such broadcasts; specifically, one who presents radio or television programmes (especially documentaries or news programmes); a presenter.", "label": "broadcaster", "shape": "dot", "title": "broadcaster;;(broadcasting);;a person whose job it is to effect such broadcasts; specifically, one who presents radio or television programmes (especially documentaries or news programmes); a presenter."}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "narrator;;(film and television) the person providing the voice-over in a documentary.", "label": "narrator", "shape": "dot", "title": "narrator;;(film and television) the person providing the voice-over in a documentary."}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "anchor;;(nautical) a tool used to moor a vessel to the bottom of a sea or river to resist movement.", "label": "anchor", "shape": "dot", "title": "anchor;;(nautical) a tool used to moor a vessel to the bottom of a sea or river to resist movement."}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "narrator;;(narratology) the person or the \"voice\" whose viewpoint is used in telling a story.", "label": "narrator", "shape": "dot", "title": "narrator;;(narratology) the person or the \"voice\" whose viewpoint is used in telling a story."}]);
+                  edges = new vis.DataSet([{"from": "presenter;;(radio, television) someone who presents a broadcast programme; a compere or master of ceremonies.", "languages": "turkish;;sunucu;;noun, french;;pr\u00e9sentateur;;noun, malayalam;;\u0d05\u0d35\u0d24\u0d3e\u0d30\u0d15\u0d7b;;noun, russian;;\u0432\u0435\u0434\u0443\u0301\u0449\u0438\u0439;;noun, german;;moderator;;noun, ukrainian;;\u0432\u0435\u0434\u0443\u0301\u0447\u0438\u0439;;noun, swedish;;programledare;;noun, romanian;;prezentator;;noun, ukrainian;;\u0432\u0435\u0434\u0443\u0301\u0447\u0430;;noun, spanish;;presentador;;noun", "to": "anchor;;(television) an anchorman or anchorwoman.", "value": 10, "width": 0.30303030303030304}, {"from": "anchor;;(television) an anchorman or anchorwoman.", "languages": "norwegian bokm\u00e5l;;anker;;noun, portuguese;;\u00e2ncora;;noun, swedish;;ankare;;noun, finnish;;ankkuri;;noun", "to": "anchor;;(nautical) a tool used to moor a vessel to the bottom of a sea or river to resist movement.", "value": 4, "width": 0.12121212121212122}, {"from": "anchor;;(television) an anchorman or anchorwoman.", "languages": "polish;;spiker;;noun, macedonian;;\u0441\u043f\u0438\u043a\u0435\u0440;;noun", "to": "speaker;;(politics) the chair or presiding officer of certain legislative bodies, such as the u.k. house of commons or the u.s. house of representatives.", "value": 2, "width": 0.06060606060606061}, {"from": "anchor;;(television) an anchorman or anchorwoman.", "languages": "belarusian;;\u0434\u044b\u0301\u043a\u0442\u0430\u0440;;noun, ukrainian;;\u0434\u0438\u0301\u043a\u0442\u043e\u0440\u043a\u0430;;noun, ukrainian;;\u0434\u0438\u0301\u043a\u0442\u043e\u0440;;noun, russian;;\u0434\u0438\u0301\u043a\u0442\u043e\u0440;;noun, belarusian;;\u0434\u044b\u0301\u043a\u0442\u0430\u0440\u043a\u0430;;noun", "to": "narrator;;(film and television) the person providing the voice-over in a documentary.", "value": 5, "width": 0.15151515151515152}, {"from": "anchor;;(television) an anchorman or anchorwoman.", "languages": "chinese mandarin;;\u64ad\u97f3\u54e1 /\u64ad\u97f3\u5458;;noun, chinese mandarin;;\u4e3b\u64ad;;noun, arabic;;\u0645\u064f\u0630\u0650\u064a\u0639\u064e\u0629;;noun, arabic;;\u0645\u064f\u0630\u0650\u064a\u0639;;noun, russian;;\u0434\u0438\u0301\u043a\u0442\u043e\u0440;;noun", "to": "broadcaster;;(broadcasting);;a person whose job it is to effect such broadcasts; specifically, one who presents radio or television programmes (especially documentaries or news programmes); a presenter.", "value": 5, "width": 0.15151515151515152}, {"from": "broadcaster;;(broadcasting);;a person whose job it is to effect such broadcasts; specifically, one who presents radio or television programmes (especially documentaries or news programmes); a presenter.", "languages": "russian;;\u0434\u0438\u0301\u043a\u0442\u043e\u0440;;noun, russian;;\u0434\u0438\u0301\u043a\u0442\u043e\u0440\u0448\u0430;;noun", "to": "narrator;;(film and television) the person providing the voice-over in a documentary.", "value": 2, "width": 0.06060606060606061}, {"from": "narrator;;(film and television) the person providing the voice-over in a documentary.", "languages": "galician;;narrador;;noun, faroese;;fr\u00e1s\u00f8guf\u00f3lk;;noun, icelandic;;s\u00f6guma\u00f0ur;;noun, french;;narrateur;;noun, italian;;narratrice;;noun, thai;;\u0e1c\u0e39\u0e49\u0e1a\u0e23\u0e23\u0e22\u0e32\u0e22;;noun, arabic;;\u0631\u064e\u0627\u0648\u064d;;noun, portuguese;;narrador;;noun, malay;;pencerita;;noun, northern sami;;muitaleaddji;;noun, korean;;\uc774\uc57c\uae30\ud558\ub294 \uc0ac\ub78c;;noun, spanish;;narrador;;noun, malay;;pengarang;;noun, malay;;narator;;noun, japanese;;\u30ca\u30ec\u30fc\u30bf\u30fc;;noun, greek;;\u03b1\u03c6\u03b7\u03b3\u03b7\u03c4\u03ae\u03c2;;noun, dutch;;vertelster;;noun, greek;;\u03b1\u03c6\u03b7\u03b3\u03ae\u03c4\u03c1\u03b9\u03b1;;noun, maori;;wahataki;;noun, french;;narratrice;;noun, norwegian bokm\u00e5l;;forteller;;noun, romanian;;narator;;noun, italian;;narratore;;noun, turkish;;anlat\u0131c\u0131;;noun, korean;;\ub0b4\ub808\uc774\ud130;;noun, finnish;;kertoja;;noun, dutch;;verteller;;noun, esperanto;;rakontanto;;noun, catalan;;narrador;;noun, norwegian nynorsk;;forteljar;;noun, malay;;pengisah;;noun, arabic;;\u0631\u064e\u0627\u0648\u0650\u064a\u064e\u0629;;noun, danish;;fort\u00e6ller;;noun", "to": "narrator;;(narratology) the person or the \"voice\" whose viewpoint is used in telling a story.", "value": 33, "width": 1.0}]);
+
+                  nodeColors = {};
+                  allNodes = nodes.get({ returnType: "Object" });
+                  for (nodeId in allNodes) {
+                    nodeColors[nodeId] = allNodes[nodeId].color;
+                  }
+                  allEdges = edges.get({ returnType: "Object" });
+                  // adding nodes and edges to the graph
+                  data = {nodes: nodes, edges: edges};
+
+                  var options = {
+    "configure": {
+        "enabled": false
+    },
+    "edges": {
+        "color": {
+            "inherit": true
+        },
+        "smooth": {
+            "enabled": true,
+            "type": "dynamic"
+        }
+    },
+    "interaction": {
+        "dragNodes": true,
+        "hideEdgesOnDrag": false,
+        "hideNodesOnDrag": false
+    },
+    "physics": {
+        "enabled": true,
+        "stabilization": {
+            "enabled": true,
+            "fit": true,
+            "iterations": 1000,
+            "onlyDynamicEdges": false,
+            "updateInterval": 50
+        }
+    }
+};
+
+                  
+
+
+                  
+
+                  network = new vis.Network(container, data, options);
+
+                  
+
+                  
+
+                  
+
+
+                  
+
+                  return network;
+
+              }
+              drawGraph();
+        </script>
+    
+    <script>
+        // Function to update the legend
+        function updateLegend(content) {
+            const legend = document.getElementById('language-legend');
+            legend.innerHTML = content;
+        }
+
+        // Add event listeners to edges using vis.js API
+        network.on("hoverEdge", function (params) {
+            const edgeId = params.edge;
+            const edge = edges.get(edgeId);
+            if (edge && edge.languages) {
+                const languagesList = edge.languages.split(', ').map(lang => `<li>${lang}</li>`).join('');
+                const numLanguages = edge.languages.split(', ').length;
+                const nodePair = `${edge.from} - ${edge.to}`;
+                updateLegend(`<h3>Languages (${numLanguages}) for ${nodePair}:</h3><ul>${languagesList}</ul>`);
+            }
+        });
+
+        network.on("blurEdge", function () {
+            updateLegend('<h3>Languages:</h3><p>Hover over an edge to see languages.</p>');
+        });
+
+        network.on("click", function (params) {
+            if (params.edges && params.edges.length > 0) {
+                const edgeId = params.edges[0];
+                const edge = edges.get(edgeId);
+                if (edge && edge.languages) {
+                    const languagesList = edge.languages.split(', ').sort().map(lang => `<li>${lang.replaceAll(";;", " - ")}</li>`).join('');
+                    const numLanguages = edge.languages.split(', ').length;
+                    const title1 = edge.from.replaceAll(";;", "&#10;");
+                    const title2 = edge.to.replaceAll(";;", "&#10;");
+                    updateLegend(`<h2><div title="${title1}";>${edge.from.split(";;")[0]}</div><div title="${title2}";>${edge.to.split(";;")[0]}</div></h2><br><h3>Languages (${numLanguages})<br></h3><ul>${languagesList}</ul>`);
+                }
+            }
+        });
+    </script>
+    <style>
+        .container {
+            display: flex;
+            width: 100%;
+            margin-top: 48px;
+        }
+        #mynetwork {
+            flex: 3;
+            height: 750px;
+            width: 90%
+            background-color: #222222;
+            border: 1px solid lightgray;
+        }
+        #language-legend h2 {
+            display: flex; 
+            flex-direction: column;
+            font-weight: bold;
+        }
+        #language-legend h3 {
+             border-bottom: 1px solid black; 
+             padding-bottom: 8px
+        }
+        #language-legend {
+            flex: 1;
+            margin-left: 20px;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            background-color: #f9f9f9;
+            overflow-y: auto;
+            max-height: 750px;
+        }
+        #language-legend ul {
+            list-style-type: none;
+            padding: 0;
+        }
+        #language-legend li {
+            margin: 5px 0;
+            font-size: 1.2em;
+        }
+    </style>
+    </body>
+</html>

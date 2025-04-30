@@ -1,0 +1,239 @@
+<html>
+    <head>
+        <meta charset="utf-8">
+        
+            <script src="lib/bindings/utils.js"></script>
+            <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/vis-network/9.1.2/dist/dist/vis-network.min.css" integrity="sha512-WgxfT5LWjfszlPHXRmBWHkV2eceiWTOBvrKCNbdgDYTHrT2AeLCGbF4sZlZw3UMN3WtL0tGUoIAKsu8mllg/XA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/vis-network/9.1.2/dist/vis-network.min.js" integrity="sha512-LnvoEWDFrqGHlHmDD2101OrLcbsfkrzoSpvtSQtxK3RMnRV0eOkhhBN2dXHKRrUU8p2DGRTk35n4O8nWSVe1mQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+            
+        
+<center>
+<h1></h1>
+</center>
+
+<!-- <link rel="stylesheet" href="../node_modules/vis/dist/vis.min.css" type="text/css" />
+<script type="text/javascript" src="../node_modules/vis/dist/vis.js"> </script>-->
+        <link
+          href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/css/bootstrap.min.css"
+          rel="stylesheet"
+          integrity="sha384-eOJMYsd53ii+scO/bJGFsiCZc+5NDVN2yr8+0RDqr0Ql0h+rP48ckxlpbzKgwra6"
+          crossorigin="anonymous"
+        />
+        <script
+          src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.bundle.min.js"
+          integrity="sha384-JEW9xMcG8R+pH31jmWH6WWP0WintQrMb4s7ZOdauHnUtxwoG2vI5DkLtS3qm9Ekf"
+          crossorigin="anonymous"
+        ></script>
+
+
+        <center>
+          <h1></h1>
+        </center>
+        <style type="text/css">
+
+             #mynetwork {
+                 width: 100%;
+                 height: 100vh;
+                 background-color: #222222;
+                 border: 1px solid lightgray;
+                 position: relative;
+                 float: left;
+             }
+
+             
+
+             
+
+             
+        </style>
+    </head>
+
+
+    <body>
+        <div class="card" style="width: 100%">
+            
+            
+            <div class="container"><div id="mynetwork" class="card-body"></div>
+    <div id="language-legend">
+        <h3>Languages:</h3>
+        <p>Click on an edge to see languages.</p>
+    </div>
+    </div>
+        </div>
+
+        
+        
+
+        <script type="text/javascript">
+
+              // initialize global variables.
+              var edges;
+              var nodes;
+              var allNodes;
+              var allEdges;
+              var nodeColors;
+              var originalNodes;
+              var network;
+              var container;
+              var options, data;
+              var filter = {
+                  item : '',
+                  property : '',
+                  value : []
+              };
+
+              
+
+              
+
+              // This method is responsible for drawing the graph, returns the drawn network
+              function drawGraph() {
+                  var container = document.getElementById('mynetwork');
+
+                  
+
+                  // parsing and collecting nodes and edges from the python
+                  nodes = new vis.DataSet([{"color": "#97c2fc", "font": {"color": "white"}, "id": "jude;;(biblical) the second last book of the new testament of the bible.", "label": "jude", "shape": "dot", "title": "jude;;(biblical) the second last book of the new testament of the bible."}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "judas;;(biblical) one of the twelve original apostles of jesus, known for his role in jesus\u0027 betrayal into the hands of roman authorities.", "label": "judas", "shape": "dot", "title": "judas;;(biblical) one of the twelve original apostles of jesus, known for his role in jesus\u0027 betrayal into the hands of roman authorities."}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "judas;;(biblical, archaic) alternative form of jude, the penultimate book of the bible and its ascribed author, jude the apostle.", "label": "judas", "shape": "dot", "title": "judas;;(biblical, archaic) alternative form of jude, the penultimate book of the bible and its ascribed author, jude the apostle."}]);
+                  edges = new vis.DataSet([{"from": "jude;;(biblical) the second last book of the new testament of the bible.", "languages": "tagalog;;judas;;name, arabic;;\u064a\u064e\u0647\u064f\u0648\u0630\u064e\u0627;;name, german;;judas;;name, hawaiian;;iuda;;name, welsh;;jwdas;;name, finnish;;juudas;;name, catalan;;judes;;name, macedonian;;\u0458\u0443\u0434\u0430;;name, persian;;\u06cc\u0647\u0648\u062f\u0627;;name, albanian;;juda;;name, spanish;;judas;;name, italian;;giuda;;name, hindi;;\u092f\u0939\u0942\u0926\u093e;;name, portuguese;;judas;;name", "to": "judas;;(biblical) one of the twelve original apostles of jesus, known for his role in jesus\u0027 betrayal into the hands of roman authorities.", "value": 14, "width": 0.18421052631578946}, {"from": "jude;;(biblical) the second last book of the new testament of the bible.", "languages": "tagalog;;judas;;name, arabic;;\u064a\u064e\u0647\u064f\u0648\u0630\u064e\u0627;;name, german;;judas;;name, hawaiian;;iuda;;name, welsh;;jwdas;;name, lithuanian;;judo lai\u0161kas;;name, finnish;;juudas;;name, catalan;;judes;;name, macedonian;;\u0458\u0443\u0434\u0430;;name, persian;;\u06cc\u0647\u0648\u062f\u0627;;name, albanian;;juda;;name, spanish;;judas;;name, italian;;giuda;;name, hindi;;\u092f\u0939\u0942\u0926\u093e;;name, portuguese;;judas;;name", "to": "judas;;(biblical, archaic) alternative form of jude, the penultimate book of the bible and its ascribed author, jude the apostle.", "value": 15, "width": 0.19736842105263158}, {"from": "judas;;(biblical) one of the twelve original apostles of jesus, known for his role in jesus\u0027 betrayal into the hands of roman authorities.", "languages": "malay;;judas;;name, old french;;judas;;name, belarusian;;\u0456\u0443\u0301\u0434\u0430;;name, lavukaleve;;jude;;name, norwegian nynorsk;;judas;;name, armenian;;\u0570\u0578\u0582\u0564\u0561;;name, old armenian;;\u0575\u0578\u0582\u0564\u0561\u0575;;name, manx;;yude;;name, macedonian;;\u0458\u0443\u0434\u0430;;name, norwegian bokm\u00e5l;;judas;;name, french;;judas;;name, chinese mandarin;;\u7336\u5927 /\u72b9\u5927;;name, swahili;;yuda;;name, latin;;i\u016bd\u0101s;;name, west frisian;;judas;;name, faroese;;judas;;name, italian;;giuda;;name, german;;judas;;name, hebrew;;\u05d9\u05b0\u05d4\u05d5\u05bc\u05d3\u05b8\u05d4;;name, tagalog;;judas;;name, old armenian;;\u0575\u0578\u0582\u0564\u0561;;name, korean;;\uc720\ub2e4;;name, scottish gaelic;;i\u00f9das;;name, irish;;i\u00fad\u00e1s;;name, dutch;;judas;;name, swedish;;judas;;name, waray-waray;;judas;;name, hawaiian;;iuda;;name, northern kurdish;;yeh\u00fbda;;name, slovene;;juda;;name, turkish;;yehuda;;name, finnish;;juudas;;name, catalan;;judes;;name, basque;;judas;;name, albanian;;juda;;name, tagalog;;hudas;;name, estonian;;juudas;;name, serbo-croatian;;j\u0217da;;name, tajik;;\u044f\u04b3\u0443\u0434\u043e;;name, hindi;;\u092f\u0939\u0942\u0926\u093e;;name, arabic;;\u064a\u064e\u0647\u064f\u0648\u0630\u064e\u0627;;name, vietnamese;;giu\u0111a;;name, ancient greek;;\u1f30\u03bf\u03cd\u03b4\u03b1\u03c2;;name, icelandic;;j\u00fadas;;name, limburgish;;judas;;name, cebuano;;judas;;name, scots;;jude;;name, welsh;;jwdas;;name, maori;;h\u016bria;;name, georgian;;\u10d8\u10e3\u10d3\u10d0;;name, zealandic;;judas;;name, romanian;;iuda;;name, greenlandic;;judasi;;name, urdu;;\u06cc\u06c1\u0648\u062f\u0627;;name, spanish;;judas;;name, belarusian;;\u044e\u0301\u0434\u0430;;name, russian;;\u0438\u0443\u0301\u0434\u0430;;name, portuguese;;judas;;name, bulgarian;;\u044e\u0301\u0434\u0430;;name, greek;;\u03b9\u03bf\u03cd\u03b4\u03b1\u03c2;;name, slovene;;jude\u017e;;name, breton;;jud;;name, hungarian;;j\u00fad\u00e1s;;name, ido;;iudas;;name, danish;;judas;;name, corsican;;ghjuda;;name, thai;;\u0e08\u0e39\u0e14\u0e32\u0e2a\u0e4c;;name, tatar;;\u044f\u04bb\u04af\u0434;;name, persian;;\u06cc\u0647\u0648\u062f\u0627;;name, serbo-croatian;;\u0458\u0443\u0311\u0434\u0430;;name, maltese;;\u0121uda;;name, japanese;;\u30e6\u30c0;;name, afrikaans;;judas;;name, indonesian;;yudas;;name, maore comorian;;yudasi;;name, ukrainian;;\u044e\u0301\u0434\u0430;;name", "to": "judas;;(biblical, archaic) alternative form of jude, the penultimate book of the bible and its ascribed author, jude the apostle.", "value": 76, "width": 1.0}]);
+
+                  nodeColors = {};
+                  allNodes = nodes.get({ returnType: "Object" });
+                  for (nodeId in allNodes) {
+                    nodeColors[nodeId] = allNodes[nodeId].color;
+                  }
+                  allEdges = edges.get({ returnType: "Object" });
+                  // adding nodes and edges to the graph
+                  data = {nodes: nodes, edges: edges};
+
+                  var options = {
+    "configure": {
+        "enabled": false
+    },
+    "edges": {
+        "color": {
+            "inherit": true
+        },
+        "smooth": {
+            "enabled": true,
+            "type": "dynamic"
+        }
+    },
+    "interaction": {
+        "dragNodes": true,
+        "hideEdgesOnDrag": false,
+        "hideNodesOnDrag": false
+    },
+    "physics": {
+        "enabled": true,
+        "stabilization": {
+            "enabled": true,
+            "fit": true,
+            "iterations": 1000,
+            "onlyDynamicEdges": false,
+            "updateInterval": 50
+        }
+    }
+};
+
+                  
+
+
+                  
+
+                  network = new vis.Network(container, data, options);
+
+                  
+
+                  
+
+                  
+
+
+                  
+
+                  return network;
+
+              }
+              drawGraph();
+        </script>
+    
+    <script>
+        // Function to update the legend
+        function updateLegend(content) {
+            const legend = document.getElementById('language-legend');
+            legend.innerHTML = content;
+        }
+
+        // Add event listeners to edges using vis.js API
+        network.on("hoverEdge", function (params) {
+            const edgeId = params.edge;
+            const edge = edges.get(edgeId);
+            if (edge && edge.languages) {
+                const languagesList = edge.languages.split(', ').map(lang => `<li>${lang}</li>`).join('');
+                const numLanguages = edge.languages.split(', ').length;
+                const nodePair = `${edge.from} - ${edge.to}`;
+                updateLegend(`<h3>Languages (${numLanguages}) for ${nodePair}:</h3><ul>${languagesList}</ul>`);
+            }
+        });
+
+        network.on("blurEdge", function () {
+            updateLegend('<h3>Languages:</h3><p>Hover over an edge to see languages.</p>');
+        });
+
+        network.on("click", function (params) {
+            if (params.edges && params.edges.length > 0) {
+                const edgeId = params.edges[0];
+                const edge = edges.get(edgeId);
+                if (edge && edge.languages) {
+                    const languagesList = edge.languages.split(', ').sort().map(lang => `<li>${lang.replaceAll(";;", " - ")}</li>`).join('');
+                    const numLanguages = edge.languages.split(', ').length;
+                    const title1 = edge.from.replaceAll(";;", "&#10;");
+                    const title2 = edge.to.replaceAll(";;", "&#10;");
+                    updateLegend(`<h2><div title="${title1}";>${edge.from.split(";;")[0]}</div><div title="${title2}";>${edge.to.split(";;")[0]}</div></h2><br><h3>Languages (${numLanguages})<br></h3><ul>${languagesList}</ul>`);
+                }
+            }
+        });
+    </script>
+    <style>
+        .container {
+            display: flex;
+            width: 100%;
+            margin-top: 48px;
+        }
+        #mynetwork {
+            flex: 3;
+            height: 750px;
+            width: 90%
+            background-color: #222222;
+            border: 1px solid lightgray;
+        }
+        #language-legend h2 {
+            display: flex; 
+            flex-direction: column;
+            font-weight: bold;
+        }
+        #language-legend h3 {
+             border-bottom: 1px solid black; 
+             padding-bottom: 8px
+        }
+        #language-legend {
+            flex: 1;
+            margin-left: 20px;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            background-color: #f9f9f9;
+            overflow-y: auto;
+            max-height: 750px;
+        }
+        #language-legend ul {
+            list-style-type: none;
+            padding: 0;
+        }
+        #language-legend li {
+            margin: 5px 0;
+            font-size: 1.2em;
+        }
+    </style>
+    </body>
+</html>

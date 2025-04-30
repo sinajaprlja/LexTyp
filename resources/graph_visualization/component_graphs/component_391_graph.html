@@ -1,0 +1,239 @@
+<html>
+    <head>
+        <meta charset="utf-8">
+        
+            <script src="lib/bindings/utils.js"></script>
+            <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/vis-network/9.1.2/dist/dist/vis-network.min.css" integrity="sha512-WgxfT5LWjfszlPHXRmBWHkV2eceiWTOBvrKCNbdgDYTHrT2AeLCGbF4sZlZw3UMN3WtL0tGUoIAKsu8mllg/XA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/vis-network/9.1.2/dist/vis-network.min.js" integrity="sha512-LnvoEWDFrqGHlHmDD2101OrLcbsfkrzoSpvtSQtxK3RMnRV0eOkhhBN2dXHKRrUU8p2DGRTk35n4O8nWSVe1mQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+            
+        
+<center>
+<h1></h1>
+</center>
+
+<!-- <link rel="stylesheet" href="../node_modules/vis/dist/vis.min.css" type="text/css" />
+<script type="text/javascript" src="../node_modules/vis/dist/vis.js"> </script>-->
+        <link
+          href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/css/bootstrap.min.css"
+          rel="stylesheet"
+          integrity="sha384-eOJMYsd53ii+scO/bJGFsiCZc+5NDVN2yr8+0RDqr0Ql0h+rP48ckxlpbzKgwra6"
+          crossorigin="anonymous"
+        />
+        <script
+          src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.bundle.min.js"
+          integrity="sha384-JEW9xMcG8R+pH31jmWH6WWP0WintQrMb4s7ZOdauHnUtxwoG2vI5DkLtS3qm9Ekf"
+          crossorigin="anonymous"
+        ></script>
+
+
+        <center>
+          <h1></h1>
+        </center>
+        <style type="text/css">
+
+             #mynetwork {
+                 width: 100%;
+                 height: 100vh;
+                 background-color: #222222;
+                 border: 1px solid lightgray;
+                 position: relative;
+                 float: left;
+             }
+
+             
+
+             
+
+             
+        </style>
+    </head>
+
+
+    <body>
+        <div class="card" style="width: 100%">
+            
+            
+            <div class="container"><div id="mynetwork" class="card-body"></div>
+    <div id="language-legend">
+        <h3>Languages:</h3>
+        <p>Click on an edge to see languages.</p>
+    </div>
+    </div>
+        </div>
+
+        
+        
+
+        <script type="text/javascript">
+
+              // initialize global variables.
+              var edges;
+              var nodes;
+              var allNodes;
+              var allEdges;
+              var nodeColors;
+              var originalNodes;
+              var network;
+              var container;
+              var options, data;
+              var filter = {
+                  item : '',
+                  property : '',
+                  value : []
+              };
+
+              
+
+              
+
+              // This method is responsible for drawing the graph, returns the drawn network
+              function drawGraph() {
+                  var container = document.getElementById('mynetwork');
+
+                  
+
+                  // parsing and collecting nodes and edges from the python
+                  nodes = new vis.DataSet([{"color": "#97c2fc", "font": {"color": "white"}, "id": "protein;;(biochemistry, countable) any of numerous large, complex naturally-produced molecules composed of one or more long chains of amino acids, in which the amino acid groups are held together by peptide bonds.", "label": "protein", "shape": "dot", "title": "protein;;(biochemistry, countable) any of numerous large, complex naturally-produced molecules composed of one or more long chains of amino acids, in which the amino acid groups are held together by peptide bonds."}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "protein;;(nutrition, uncountable) one of three major classes of food or source of food energy (4 kcal/gram) abundant in animal-derived foods (meat) and some vegetables, such as legumes.", "label": "protein", "shape": "dot", "title": "protein;;(nutrition, uncountable) one of three major classes of food or source of food energy (4 kcal/gram) abundant in animal-derived foods (meat) and some vegetables, such as legumes."}]);
+                  edges = new vis.DataSet([{"from": "protein;;(biochemistry, countable) any of numerous large, complex naturally-produced molecules composed of one or more long chains of amino acids, in which the amino acid groups are held together by peptide bonds.", "languages": "mongolian;;\u0443\u0443\u0440\u0430\u0433;;noun, danish;;protein;;noun, catalan;;prote\u00efna;;noun, ingrian;;valkulain;;noun, swahili;;protini;;noun, serbo-croatian;;bel\u00e1n\u010devina;;noun, hindi;;\u092a\u094d\u0930\u094b\u092d\u0942\u091c\u093f\u0928;;noun, french;;prot\u00e9ine;;noun, finnish;;proteiini;;noun, german;;protein;;noun, romanian;;protein\u0103;;noun, estonian;;lihtvalk;;noun, asturian;;prote\u00edna;;noun, wu chinese;;\u86cb\u767d\u8cea /\u86cb\u767d\u8d28;;noun, bashkir;;\u0430\u04a1\u04bb\u044b\u043c;;noun, dutch;;eiwit;;noun, korean;;\ub2e8\ubc31\uc9c8;;noun, vietnamese;;ch\u1ea5t \u0111\u1ea1m;;noun, swedish;;\u00e4ggvite\u00e4mne;;noun, italian;;proteina;;noun, chinese;;\u86cb\u767d\u8cea /\u86cb\u767d\u8d28;;noun, hebrew;;\u05d7\u05b6\u05dc\u05b0\u05d1\u05bc\u05d5\u05b9\u05df;;noun, latvian;;olbaltumvielas;;noun, swedish;;protein;;noun, estonian;;proteiin;;noun, armenian;;\u057d\u057a\u056b\u057f\u0561\u056f\u0578\u0582\u0581;;noun, russian;;\u0431\u0435\u043b\u043e\u0301\u043a;;noun, hakka chinese;;\u86cb\u767d\u8cea /\u86cb\u767d\u8d28;;noun, chinese mandarin;;\u86cb\u767d\u8cea /\u86cb\u767d\u8d28;;noun, czech;;b\u00edlkovina;;noun, spanish;;prote\u00edna;;noun, portuguese;;prote\u00edna;;noun, eastern min chinese;;\u5375\u767d\u8cea /\u5375\u767d\u8d28;;noun, latvian;;olbaltums;;noun, russian;;\u043f\u0440\u043e\u0442\u0435\u0438\u0301\u043d;;noun, greek;;\u03c0\u03c1\u03c9\u03c4\u03b5\u0390\u03bd\u03b7;;noun, turkish;;protein;;noun, thai;;\u0e42\u0e1b\u0e23\u0e15\u0e35\u0e19;;noun, chinese cantonese;;\u86cb\u767d\u8cea /\u86cb\u767d\u8d28;;noun, hungarian;;feh\u00e9rje;;noun, khmer;;\u1794\u17d2\u179a\u17bc\u178f\u17c1\u17a2\u17ca\u17b8\u1793;;noun, japanese;;\u86cb\u767d\u8cea;;noun, dutch;;prote\u00efne;;noun, german;;eiwei\u00df;;noun, serbo-croatian;;bjel\u00e1n\u010devina;;noun, slovene;;beljakovina;;noun, galician;;prote\u00edna;;noun, finnish;;valkuaisaine;;noun, vietnamese;;pr\u00f4-t\u00ea-in;;noun, mongolian;;\u1824\u182d\u1824\u1837\u1820\u182d;;noun, chinese;;\u5375\u767d\u8cea /\u5375\u767d\u8d28;;noun, polish;;bia\u0142ko;;noun, japanese;;\u30d7\u30ed\u30c6\u30a4\u30f3;;noun", "to": "protein;;(nutrition, uncountable) one of three major classes of food or source of food energy (4 kcal/gram) abundant in animal-derived foods (meat) and some vegetables, such as legumes.", "value": 53, "width": 1.0}]);
+
+                  nodeColors = {};
+                  allNodes = nodes.get({ returnType: "Object" });
+                  for (nodeId in allNodes) {
+                    nodeColors[nodeId] = allNodes[nodeId].color;
+                  }
+                  allEdges = edges.get({ returnType: "Object" });
+                  // adding nodes and edges to the graph
+                  data = {nodes: nodes, edges: edges};
+
+                  var options = {
+    "configure": {
+        "enabled": false
+    },
+    "edges": {
+        "color": {
+            "inherit": true
+        },
+        "smooth": {
+            "enabled": true,
+            "type": "dynamic"
+        }
+    },
+    "interaction": {
+        "dragNodes": true,
+        "hideEdgesOnDrag": false,
+        "hideNodesOnDrag": false
+    },
+    "physics": {
+        "enabled": true,
+        "stabilization": {
+            "enabled": true,
+            "fit": true,
+            "iterations": 1000,
+            "onlyDynamicEdges": false,
+            "updateInterval": 50
+        }
+    }
+};
+
+                  
+
+
+                  
+
+                  network = new vis.Network(container, data, options);
+
+                  
+
+                  
+
+                  
+
+
+                  
+
+                  return network;
+
+              }
+              drawGraph();
+        </script>
+    
+    <script>
+        // Function to update the legend
+        function updateLegend(content) {
+            const legend = document.getElementById('language-legend');
+            legend.innerHTML = content;
+        }
+
+        // Add event listeners to edges using vis.js API
+        network.on("hoverEdge", function (params) {
+            const edgeId = params.edge;
+            const edge = edges.get(edgeId);
+            if (edge && edge.languages) {
+                const languagesList = edge.languages.split(', ').map(lang => `<li>${lang}</li>`).join('');
+                const numLanguages = edge.languages.split(', ').length;
+                const nodePair = `${edge.from} - ${edge.to}`;
+                updateLegend(`<h3>Languages (${numLanguages}) for ${nodePair}:</h3><ul>${languagesList}</ul>`);
+            }
+        });
+
+        network.on("blurEdge", function () {
+            updateLegend('<h3>Languages:</h3><p>Hover over an edge to see languages.</p>');
+        });
+
+        network.on("click", function (params) {
+            if (params.edges && params.edges.length > 0) {
+                const edgeId = params.edges[0];
+                const edge = edges.get(edgeId);
+                if (edge && edge.languages) {
+                    const languagesList = edge.languages.split(', ').sort().map(lang => `<li>${lang.replaceAll(";;", " - ")}</li>`).join('');
+                    const numLanguages = edge.languages.split(', ').length;
+                    const title1 = edge.from.replaceAll(";;", "&#10;");
+                    const title2 = edge.to.replaceAll(";;", "&#10;");
+                    updateLegend(`<h2><div title="${title1}";>${edge.from.split(";;")[0]}</div><div title="${title2}";>${edge.to.split(";;")[0]}</div></h2><br><h3>Languages (${numLanguages})<br></h3><ul>${languagesList}</ul>`);
+                }
+            }
+        });
+    </script>
+    <style>
+        .container {
+            display: flex;
+            width: 100%;
+            margin-top: 48px;
+        }
+        #mynetwork {
+            flex: 3;
+            height: 750px;
+            width: 90%
+            background-color: #222222;
+            border: 1px solid lightgray;
+        }
+        #language-legend h2 {
+            display: flex; 
+            flex-direction: column;
+            font-weight: bold;
+        }
+        #language-legend h3 {
+             border-bottom: 1px solid black; 
+             padding-bottom: 8px
+        }
+        #language-legend {
+            flex: 1;
+            margin-left: 20px;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            background-color: #f9f9f9;
+            overflow-y: auto;
+            max-height: 750px;
+        }
+        #language-legend ul {
+            list-style-type: none;
+            padding: 0;
+        }
+        #language-legend li {
+            margin: 5px 0;
+            font-size: 1.2em;
+        }
+    </style>
+    </body>
+</html>

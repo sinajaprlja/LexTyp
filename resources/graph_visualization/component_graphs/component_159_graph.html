@@ -1,0 +1,239 @@
+<html>
+    <head>
+        <meta charset="utf-8">
+        
+            <script src="lib/bindings/utils.js"></script>
+            <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/vis-network/9.1.2/dist/dist/vis-network.min.css" integrity="sha512-WgxfT5LWjfszlPHXRmBWHkV2eceiWTOBvrKCNbdgDYTHrT2AeLCGbF4sZlZw3UMN3WtL0tGUoIAKsu8mllg/XA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/vis-network/9.1.2/dist/vis-network.min.js" integrity="sha512-LnvoEWDFrqGHlHmDD2101OrLcbsfkrzoSpvtSQtxK3RMnRV0eOkhhBN2dXHKRrUU8p2DGRTk35n4O8nWSVe1mQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+            
+        
+<center>
+<h1></h1>
+</center>
+
+<!-- <link rel="stylesheet" href="../node_modules/vis/dist/vis.min.css" type="text/css" />
+<script type="text/javascript" src="../node_modules/vis/dist/vis.js"> </script>-->
+        <link
+          href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/css/bootstrap.min.css"
+          rel="stylesheet"
+          integrity="sha384-eOJMYsd53ii+scO/bJGFsiCZc+5NDVN2yr8+0RDqr0Ql0h+rP48ckxlpbzKgwra6"
+          crossorigin="anonymous"
+        />
+        <script
+          src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.bundle.min.js"
+          integrity="sha384-JEW9xMcG8R+pH31jmWH6WWP0WintQrMb4s7ZOdauHnUtxwoG2vI5DkLtS3qm9Ekf"
+          crossorigin="anonymous"
+        ></script>
+
+
+        <center>
+          <h1></h1>
+        </center>
+        <style type="text/css">
+
+             #mynetwork {
+                 width: 100%;
+                 height: 100vh;
+                 background-color: #222222;
+                 border: 1px solid lightgray;
+                 position: relative;
+                 float: left;
+             }
+
+             
+
+             
+
+             
+        </style>
+    </head>
+
+
+    <body>
+        <div class="card" style="width: 100%">
+            
+            
+            <div class="container"><div id="mynetwork" class="card-body"></div>
+    <div id="language-legend">
+        <h3>Languages:</h3>
+        <p>Click on an edge to see languages.</p>
+    </div>
+    </div>
+        </div>
+
+        
+        
+
+        <script type="text/javascript">
+
+              // initialize global variables.
+              var edges;
+              var nodes;
+              var allNodes;
+              var allEdges;
+              var nodeColors;
+              var originalNodes;
+              var network;
+              var container;
+              var options, data;
+              var filter = {
+                  item : '',
+                  property : '',
+                  value : []
+              };
+
+              
+
+              
+
+              // This method is responsible for drawing the graph, returns the drawn network
+              function drawGraph() {
+                  var container = document.getElementById('mynetwork');
+
+                  
+
+                  // parsing and collecting nodes and edges from the python
+                  nodes = new vis.DataSet([{"color": "#97c2fc", "font": {"color": "white"}, "id": "heat;;(uncountable) the condition or quality of being hot.", "label": "heat", "shape": "dot", "title": "heat;;(uncountable) the condition or quality of being hot."}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "cold;;(uncountable) a condition of low temperature.", "label": "cold", "shape": "dot", "title": "cold;;(uncountable) a condition of low temperature."}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "heat;;(uncountable) thermal energy.", "label": "heat", "shape": "dot", "title": "heat;;(uncountable) thermal energy."}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "influenza;;(pathology) an acute contagious disease of the upper airways and lungs, caused by a virus, which rapidly spreads around the world in seasonal epidemics.", "label": "influenza", "shape": "dot", "title": "influenza;;(pathology) an acute contagious disease of the upper airways and lungs, caused by a virus, which rapidly spreads around the world in seasonal epidemics."}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "common cold;;(pathology) a very common, mild viral infection of the nose and throat, whose symptoms typically include sneezing, sniffling, a running or blocked nose, a sore throat, coughing and a headache.", "label": "common cold", "shape": "dot", "title": "common cold;;(pathology) a very common, mild viral infection of the nose and throat, whose symptoms typically include sneezing, sniffling, a running or blocked nose, a sore throat, coughing and a headache."}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "fever;;(medicine) a higher than normal body temperature of a person (or, generally, a mammal), usually caused by disease.", "label": "fever", "shape": "dot", "title": "fever;;(medicine) a higher than normal body temperature of a person (or, generally, a mammal), usually caused by disease."}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "cold;;(countable, pathology) a common, usually harmless, usually viral illness, usually with congestion of the nasal passages and sometimes fever.", "label": "cold", "shape": "dot", "title": "cold;;(countable, pathology) a common, usually harmless, usually viral illness, usually with congestion of the nasal passages and sometimes fever."}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "malaria;;(pathology) a disease spread by mosquito, in which a protozoan, plasmodium, multiplies in blood every few days.", "label": "malaria", "shape": "dot", "title": "malaria;;(pathology) a disease spread by mosquito, in which a protozoan, plasmodium, multiplies in blood every few days."}]);
+                  edges = new vis.DataSet([{"from": "heat;;(uncountable) the condition or quality of being hot.", "languages": "korean;;\uc5f4;;noun, egyptian;;s-m-m-t-q7;;noun, georgian;;\u10e1\u10d8\u10ea\u10ee\u10d4;;noun, russian;;\u0436\u0430\u0440;;noun, slovene;;vro\u010dina;;noun", "to": "fever;;(medicine) a higher than normal body temperature of a person (or, generally, a mammal), usually caused by disease.", "value": 5, "width": 0.12195121951219512}, {"from": "heat;;(uncountable) the condition or quality of being hot.", "languages": "middle english;;hete;;noun, french;;chaleur;;noun, spanish;;calor;;noun, russian;;\u0436\u0430\u0440;;noun, egyptian;;s-r:f-q7;;noun, sanskrit;;\u0918\u0930\u094d\u092e;;noun, basque;;bero;;noun, korean;;\uc5f4;;noun, italian;;calore;;noun, volap\u00fck;;hit;;noun, tagalog;;init;;noun, ancient greek;;\u03b8\u03ad\u03c1\u03bc\u03b7;;noun, latin;;calor;;noun, finnish;;l\u00e4mp\u00f6;;noun, guinea-bissau creole;;kalur;;noun, kabuverdianu;;kalor;;noun, chinese cantonese;;\u71b1 /\u70ed;;noun, persian;;\u062f\u0627\u063a\u06cc;;noun, ottoman turkish;;\u0635\u06cc\u062c\u0627\u0642;;noun, ilocano;;pudot;;noun, romanian;;c\u0103ldur\u0103;;noun, galician;;calor;;noun, thai;;\u0e04\u0e27\u0e32\u0e21\u0e23\u0e49\u0e2d\u0e19;;noun, danish;;varme;;noun, chinese mandarin;;\u71b1 /\u70ed;;noun, old english;;h\u01e3tu;;noun, polish;;ciep\u0142o;;noun, german;;w\u00e4rme;;noun, papiamentu;;kalor;;noun, hindi;;\u0917\u0930\u094d\u092e;;noun, hebrew;;\u05d7\u05d5\u05dd;;noun, russian;;\u0442\u0435\u043f\u043b\u043e\u0301;;noun, plautdietsch;;hett;;noun, arabic;;\u062d\u064e\u0631\u064e\u0627\u0631\u064e\u0629;;noun, hiligaynon;;init;;noun, norwegian;;varme;;noun, pashto;;\u062a\u0648\u062f\u0648\u062e\u064a;;noun, swedish;;v\u00e4rme;;noun, portuguese;;calor;;noun, irish;;teas;;noun, kapampangan;;pali;;noun", "to": "heat;;(uncountable) thermal energy.", "value": 41, "width": 1.0}, {"from": "cold;;(uncountable) a condition of low temperature.", "languages": "arabic;;\u0628\u064e\u0631\u0652\u062f;;noun, ottoman turkish;;\u0635\u0648\u063a\u0648\u0642;;noun, persian;;\u0633\u0631\u0645\u0627;;noun", "to": "cold;;(countable, pathology) a common, usually harmless, usually viral illness, usually with congestion of the nasal passages and sometimes fever.", "value": 3, "width": 0.07317073170731707}, {"from": "heat;;(uncountable) thermal energy.", "languages": "korean;;\uc5f4;;noun, armenian;;\u057b\u0565\u0580\u0574\u0578\u0582\u0569\u0575\u0578\u0582\u0576;;noun, pangasinan;;puetang;;noun, japanese;;\u71b1;;noun, russian;;\u0436\u0430\u0440;;noun, ukrainian;;\u0436\u0430\u0440;;noun, swahili;;harara;;noun, armenian;;\u057f\u0561\u0584\u0578\u0582\u0569\u0575\u0578\u0582\u0576;;noun, arabic;;\u062d\u0631\u0627\u0631\u0629;;noun", "to": "fever;;(medicine) a higher than normal body temperature of a person (or, generally, a mammal), usually caused by disease.", "value": 9, "width": 0.21951219512195122}, {"from": "influenza;;(pathology) an acute contagious disease of the upper airways and lungs, caused by a virus, which rapidly spreads around the world in seasonal epidemics.", "languages": "portuguese;;gripe;;noun, italian;;influenza;;noun, spanish;;gripa;;noun, romanian;;grip\u0103;;noun, korean;;\uac10\uae30;;noun, spanish;;gripe;;noun", "to": "cold;;(countable, pathology) a common, usually harmless, usually viral illness, usually with congestion of the nasal passages and sometimes fever.", "value": 6, "width": 0.14634146341463414}, {"from": "influenza;;(pathology) an acute contagious disease of the upper airways and lungs, caused by a virus, which rapidly spreads around the world in seasonal epidemics.", "languages": "italian;;febbre;;noun, navajo;;tahoniig\u00e1\u00e1h;;noun", "to": "fever;;(medicine) a higher than normal body temperature of a person (or, generally, a mammal), usually caused by disease.", "value": 2, "width": 0.04878048780487805}, {"from": "influenza;;(pathology) an acute contagious disease of the upper airways and lungs, caused by a virus, which rapidly spreads around the world in seasonal epidemics.", "languages": "romanian;;grip\u0103;;noun, korean;;\uac10\uae30;;noun", "to": "common cold;;(pathology) a very common, mild viral infection of the nose and throat, whose symptoms typically include sneezing, sniffling, a running or blocked nose, a sore throat, coughing and a headache.", "value": 2, "width": 0.04878048780487805}, {"from": "common cold;;(pathology) a very common, mild viral infection of the nose and throat, whose symptoms typically include sneezing, sniffling, a running or blocked nose, a sore throat, coughing and a headache.", "languages": "hindi;;\u091c\u093c\u0941\u0915\u093e\u092e;;noun, korean;;\uac10\uae30;;noun, portuguese;;resfriado;;noun, ottoman turkish;;\u0646\u0632\u0644\u0647;;noun, dutch;;verkoudheid;;noun, japanese;;\u98a8\u90aa;;noun, german;;erk\u00e4ltung;;noun, ottoman turkish;;\u0637\u0648\u0645\u0627\u063a\u06cc;;noun, swedish;;f\u00f6rkylning;;noun, ukrainian;;\u0437\u0430\u0441\u0442\u0443\u0301\u0434\u0430;;noun, romanian;;r\u0103ceal\u0103;;noun, hindi;;\u0938\u0930\u094d\u0926\u0940;;noun, armenian;;\u0570\u0561\u0580\u0562\u0578\u0582\u056d;;noun, indonesian;;pilek;;noun, finnish;;vilustuminen;;noun, thai;;\u0e2b\u0e27\u0e31\u0e14;;noun, tibetan;;\u0f46\u0f58\u0f66\u0f0b\u0f54;;noun, arabic;;\u0632\u064f\u0643\u064e\u0627\u0645;;noun, ottoman turkish;;\u0632\u0643\u0627\u0645;;noun, french;;rhume;;noun, russian;;\u043f\u0440\u043e\u0441\u0442\u0443\u0301\u0434\u0430;;noun, danish;;fork\u00f8lelse;;noun, hindi;;\u092a\u094d\u0930\u0924\u093f\u0936\u094d\u092f\u093e\u092f;;noun, marathi;;\u0938\u0930\u094d\u0926\u0940;;noun, sanskrit;;\u092a\u094d\u0930\u0924\u093f\u0936\u094d\u092f\u093e\u092f;;noun, ottoman turkish;;\u0635\u0648\u063a\u0648\u0642;;noun, polish;;przezi\u0119bienie;;noun, portuguese;;constipa\u00e7\u00e3o;;noun, faroese;;kr\u00edm;;noun, malayalam;;\u0d1c\u0d32\u0d26\u0d4b\u0d37\u0d02;;noun, hungarian;;n\u00e1tha;;noun, romanian;;grip\u0103;;noun, ukrainian;;\u043f\u0440\u043e\u0441\u0442\u0443\u0301\u0434\u0430;;noun, chinese mandarin;;\u611f\u5192;;noun, czech;;nachlazen\u00ed;;noun, hindi;;\u091c\u0941\u0915\u093e\u092e;;noun", "to": "cold;;(countable, pathology) a common, usually harmless, usually viral illness, usually with congestion of the nasal passages and sometimes fever.", "value": 36, "width": 0.8780487804878049}, {"from": "fever;;(medicine) a higher than normal body temperature of a person (or, generally, a mammal), usually caused by disease.", "languages": "uzbek;;bezgak;;noun, ukrainian;;\u043b\u0438\u0445\u043e\u043c\u0430\u0301\u043d\u043a\u0430;;noun, kyrgyz;;\u0431\u0435\u0437\u0433\u0435\u043a;;noun", "to": "malaria;;(pathology) a disease spread by mosquito, in which a protozoan, plasmodium, multiplies in blood every few days.", "value": 3, "width": 0.07317073170731707}]);
+
+                  nodeColors = {};
+                  allNodes = nodes.get({ returnType: "Object" });
+                  for (nodeId in allNodes) {
+                    nodeColors[nodeId] = allNodes[nodeId].color;
+                  }
+                  allEdges = edges.get({ returnType: "Object" });
+                  // adding nodes and edges to the graph
+                  data = {nodes: nodes, edges: edges};
+
+                  var options = {
+    "configure": {
+        "enabled": false
+    },
+    "edges": {
+        "color": {
+            "inherit": true
+        },
+        "smooth": {
+            "enabled": true,
+            "type": "dynamic"
+        }
+    },
+    "interaction": {
+        "dragNodes": true,
+        "hideEdgesOnDrag": false,
+        "hideNodesOnDrag": false
+    },
+    "physics": {
+        "enabled": true,
+        "stabilization": {
+            "enabled": true,
+            "fit": true,
+            "iterations": 1000,
+            "onlyDynamicEdges": false,
+            "updateInterval": 50
+        }
+    }
+};
+
+                  
+
+
+                  
+
+                  network = new vis.Network(container, data, options);
+
+                  
+
+                  
+
+                  
+
+
+                  
+
+                  return network;
+
+              }
+              drawGraph();
+        </script>
+    
+    <script>
+        // Function to update the legend
+        function updateLegend(content) {
+            const legend = document.getElementById('language-legend');
+            legend.innerHTML = content;
+        }
+
+        // Add event listeners to edges using vis.js API
+        network.on("hoverEdge", function (params) {
+            const edgeId = params.edge;
+            const edge = edges.get(edgeId);
+            if (edge && edge.languages) {
+                const languagesList = edge.languages.split(', ').map(lang => `<li>${lang}</li>`).join('');
+                const numLanguages = edge.languages.split(', ').length;
+                const nodePair = `${edge.from} - ${edge.to}`;
+                updateLegend(`<h3>Languages (${numLanguages}) for ${nodePair}:</h3><ul>${languagesList}</ul>`);
+            }
+        });
+
+        network.on("blurEdge", function () {
+            updateLegend('<h3>Languages:</h3><p>Hover over an edge to see languages.</p>');
+        });
+
+        network.on("click", function (params) {
+            if (params.edges && params.edges.length > 0) {
+                const edgeId = params.edges[0];
+                const edge = edges.get(edgeId);
+                if (edge && edge.languages) {
+                    const languagesList = edge.languages.split(', ').sort().map(lang => `<li>${lang.replaceAll(";;", " - ")}</li>`).join('');
+                    const numLanguages = edge.languages.split(', ').length;
+                    const title1 = edge.from.replaceAll(";;", "&#10;");
+                    const title2 = edge.to.replaceAll(";;", "&#10;");
+                    updateLegend(`<h2><div title="${title1}";>${edge.from.split(";;")[0]}</div><div title="${title2}";>${edge.to.split(";;")[0]}</div></h2><br><h3>Languages (${numLanguages})<br></h3><ul>${languagesList}</ul>`);
+                }
+            }
+        });
+    </script>
+    <style>
+        .container {
+            display: flex;
+            width: 100%;
+            margin-top: 48px;
+        }
+        #mynetwork {
+            flex: 3;
+            height: 750px;
+            width: 90%
+            background-color: #222222;
+            border: 1px solid lightgray;
+        }
+        #language-legend h2 {
+            display: flex; 
+            flex-direction: column;
+            font-weight: bold;
+        }
+        #language-legend h3 {
+             border-bottom: 1px solid black; 
+             padding-bottom: 8px
+        }
+        #language-legend {
+            flex: 1;
+            margin-left: 20px;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            background-color: #f9f9f9;
+            overflow-y: auto;
+            max-height: 750px;
+        }
+        #language-legend ul {
+            list-style-type: none;
+            padding: 0;
+        }
+        #language-legend li {
+            margin: 5px 0;
+            font-size: 1.2em;
+        }
+    </style>
+    </body>
+</html>

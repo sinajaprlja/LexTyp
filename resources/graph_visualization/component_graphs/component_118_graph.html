@@ -1,0 +1,239 @@
+<html>
+    <head>
+        <meta charset="utf-8">
+        
+            <script src="lib/bindings/utils.js"></script>
+            <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/vis-network/9.1.2/dist/dist/vis-network.min.css" integrity="sha512-WgxfT5LWjfszlPHXRmBWHkV2eceiWTOBvrKCNbdgDYTHrT2AeLCGbF4sZlZw3UMN3WtL0tGUoIAKsu8mllg/XA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/vis-network/9.1.2/dist/vis-network.min.js" integrity="sha512-LnvoEWDFrqGHlHmDD2101OrLcbsfkrzoSpvtSQtxK3RMnRV0eOkhhBN2dXHKRrUU8p2DGRTk35n4O8nWSVe1mQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+            
+        
+<center>
+<h1></h1>
+</center>
+
+<!-- <link rel="stylesheet" href="../node_modules/vis/dist/vis.min.css" type="text/css" />
+<script type="text/javascript" src="../node_modules/vis/dist/vis.js"> </script>-->
+        <link
+          href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/css/bootstrap.min.css"
+          rel="stylesheet"
+          integrity="sha384-eOJMYsd53ii+scO/bJGFsiCZc+5NDVN2yr8+0RDqr0Ql0h+rP48ckxlpbzKgwra6"
+          crossorigin="anonymous"
+        />
+        <script
+          src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.bundle.min.js"
+          integrity="sha384-JEW9xMcG8R+pH31jmWH6WWP0WintQrMb4s7ZOdauHnUtxwoG2vI5DkLtS3qm9Ekf"
+          crossorigin="anonymous"
+        ></script>
+
+
+        <center>
+          <h1></h1>
+        </center>
+        <style type="text/css">
+
+             #mynetwork {
+                 width: 100%;
+                 height: 100vh;
+                 background-color: #222222;
+                 border: 1px solid lightgray;
+                 position: relative;
+                 float: left;
+             }
+
+             
+
+             
+
+             
+        </style>
+    </head>
+
+
+    <body>
+        <div class="card" style="width: 100%">
+            
+            
+            <div class="container"><div id="mynetwork" class="card-body"></div>
+    <div id="language-legend">
+        <h3>Languages:</h3>
+        <p>Click on an edge to see languages.</p>
+    </div>
+    </div>
+        </div>
+
+        
+        
+
+        <script type="text/javascript">
+
+              // initialize global variables.
+              var edges;
+              var nodes;
+              var allNodes;
+              var allEdges;
+              var nodeColors;
+              var originalNodes;
+              var network;
+              var container;
+              var options, data;
+              var filter = {
+                  item : '',
+                  property : '',
+                  value : []
+              };
+
+              
+
+              
+
+              // This method is responsible for drawing the graph, returns the drawn network
+              function drawGraph() {
+                  var container = document.getElementById('mynetwork');
+
+                  
+
+                  // parsing and collecting nodes and edges from the python
+                  nodes = new vis.DataSet([{"color": "#97c2fc", "font": {"color": "white"}, "id": "football;;(countable) the ball used in any game called \"football\".", "label": "football", "shape": "dot", "title": "football;;(countable) the ball used in any game called \"football\"."}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "soccer;;(originated, late 19th c, now often us, australia, ireland, philippines, and other countries; see usage notes) association football.", "label": "soccer", "shape": "dot", "title": "soccer;;(originated, late 19th c, now often us, australia, ireland, philippines, and other countries; see usage notes) association football."}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "football;;(uk, africa, caribbean, south asia, uncountable) association football, also called soccer: a game in which two teams each contend to get a round ball into the other team\u0027s goal primarily by kicking the ball.", "label": "football", "shape": "dot", "title": "football;;(uk, africa, caribbean, south asia, uncountable) association football, also called soccer: a game in which two teams each contend to get a round ball into the other team\u0027s goal primarily by kicking the ball."}]);
+                  edges = new vis.DataSet([{"from": "football;;(countable) the ball used in any game called \"football\".", "languages": "german;;fu\u00dfball;;noun, hindi;;\u092b\u0941\u091f\u092c\u093e\u0932;;noun, estonian;;jalgpall;;noun, danish;;fodbold;;noun, swedish;;fotboll;;noun, icelandic;;f\u00f3tbolti;;noun, chinese cantonese;;\u8db3\u7403;;noun, arabic;;\u0643\u0648\u0631\u0629;;noun, west frisian;;fuotbal;;noun, norwegian bokm\u00e5l;;fotball;;noun, finnish;;jalkapallo;;noun, thai;;\u0e1f\u0e38\u0e15\u0e1a\u0e2d\u0e25;;noun, lao;;\u0e9f\u0eb8\u0e94\u0e9a\u0eb2\u0e99;;noun, irish;;peil;;noun, dutch;;voetbal;;noun", "to": "soccer;;(originated, late 19th c, now often us, australia, ireland, philippines, and other countries; see usage notes) association football.", "value": 15, "width": 0.6818181818181818}, {"from": "football;;(countable) the ball used in any game called \"football\".", "languages": "chinese cantonese;;\u8db3\u7403;;noun, norwegian bokm\u00e5l;;fotball;;noun, norwegian nynorsk;;fotball;;noun, finnish;;jalkapallo;;noun, kashmiri;;\u0641\u064f\u0679 \u0628\u0627\u0644;;noun, scots;;fitbaw;;noun, german;;fu\u00dfball;;noun, german;;fussball;;noun, faroese;;f\u00f3tb\u00f3ltur;;noun, lao;;\u0e9f\u0eb8\u0e94\u0e9a\u0eb2\u0e99;;noun, catalan;;f\u00fatbal;;noun, hindi;;\u092b\u0941\u091f\u092c\u093e\u0932;;noun, danish;;fodbold;;noun, arabic;;\u0643\u0648\u0631\u0629;;noun, thai;;\u0e1f\u0e38\u0e15\u0e1a\u0e2d\u0e25;;noun, icelandic;;f\u00f3tbolti;;noun, irish;;peil;;noun, dutch;;voetbal;;noun, estonian;;jalgpall;;noun, swedish;;fotboll;;noun, west frisian;;fuotbal;;noun, lombard;;ballon;;noun", "to": "football;;(uk, africa, caribbean, south asia, uncountable) association football, also called soccer: a game in which two teams each contend to get a round ball into the other team\u0027s goal primarily by kicking the ball.", "value": 22, "width": 1.0}, {"from": "soccer;;(originated, late 19th c, now often us, australia, ireland, philippines, and other countries; see usage notes) association football.", "languages": "khmer;;\u1780\u17b8\u17a1\u17b6\u1794\u17b6\u179b\u17cb\u1791\u17b6\u178f\u17cb;;noun, zulu;;ibhola;;noun, walloon;;fousbale;;noun, chinese cantonese;;\u8db3\u7403;;noun, manx;;soccar;;noun, tibetan;;\u0f62\u0f90\u0f44\u0f0b\u0f62\u0fa9\u0f7a\u0f51\u0f0b\u0f66\u0fa4\u0f7c\u0f0b\u0f63\u0f7c;;noun, azerbaijani;;futbol;;noun, latvian;;futbols;;noun, hungarian;;foci;;noun, malayalam;;\u0d2b\u0d41\u0d1f\u0d4d\u0d2c\u0d4b\u0d7e;;noun, spanish;;futbol;;noun, marathi;;\u092b\u0941\u091f\u092c\u0949\u0932;;noun, belarusian;;\u0444\u0443\u0442\u0431\u043e\u0301\u043b;;noun, japanese;;\u30d5\u30c3\u30c8\u30dc\u30fc\u30eb;;noun, pashto;;\u0641\u0648\u067c\u0628\u0627\u0644;;noun, chinese mandarin;;\u8db3\u7403;;noun, finnish;;futis;;noun, afrikaans;;sokker;;noun, greek;;\u03c0\u03bf\u03b4\u03cc\u03c3\u03c6\u03b1\u03b9\u03c1\u03bf;;noun, japanese;;\u8e74\u7403;;noun, danish;;fodbold;;noun, guaran\u00ed;;vakapi;;noun, tagalog;;putbol;;noun, swahili;;soka;;noun, lower sorbian;;balokopanje;;noun, turkish;;ayak topu;;noun, icelandic;;f\u00f3tbolti;;noun, dinka;;adiirc\u00f6k;;noun, maori;;poikiri;;noun, telugu;;\u0c2b\u0c41\u0c1f\u0c4d \u0c2c\u0c3e\u0c32\u0c4d;;noun, sinhalese;;\u0db4\u0dcf\u0db4\u0db1\u0dca\u0daf\u0dd4\u0dc0;;noun, assyrian neo-aramaic;;\u0710\u0738\u0723\u0726\u0739\u071d\u072a \u072a\u0738\u0713\u0742\u0720\u0735\u0710;;noun, romanian;;fotbal;;noun, korean;;\ucd95\uad6c;;noun, galician;;f\u00fatbol;;noun, tok pisin;;kikbal;;noun, tajik;;\u0444\u0443\u0442\u0431\u043e\u043b;;noun, czech;;fotbal;;noun, bengali;;\u09ab\u09c1\u099f\u09ac\u09b2;;noun, russian;;\u0444\u0443\u0442\u0431\u043e\u0301\u043b;;noun, ukrainian;;\u0444\u0443\u0442\u0431\u043e\u0301\u043b;;noun, manx;;soccer;;noun, slovene;;nogomet;;noun, pashto;;\u0641\u062a\u0628\u0627\u0644;;noun, asturian;;f\u00fatbol;;noun, georgian;;\u10e4\u10d4\u10ee\u10d1\u10e3\u10e0\u10d7\u10d8;;noun, icelandic;;knattspyrna;;noun, turkmen;;futbol;;noun, kazakh;;\u0444\u0443\u0442\u0431\u043e\u043b;;noun, japanese;;\u30b5\u30c3\u30ab\u30fc;;noun, vietnamese;;b\u00f3ng \u0111\u00e1;;noun, kannada;;\u0cab\u0cc1\u0c9f\u0ccd\u0cac\u0cbe\u0cb2\u0ccd;;noun, hungarian;;futball;;noun, latvian;;k\u0101jbumba;;noun, hindi;;\u092b\u0941\u091f\u092c\u093e\u0932;;noun, miami;;aakalaah\u0161ima paaskoontia;;noun, slovak;;fotbal;;noun, uyghur;;\u067e\u06c7\u062a\u0628\u0648\u0644;;noun, arabic;;\u0643\u064f\u0631\u064e\u0629 \u0627\u064e\u0644\u0652\u0642\u064e\u062f\u064e\u0645;;noun, thai;;\u0e1f\u0e38\u0e15\u0e1a\u0e2d\u0e25;;noun, czech;;kopan\u00e1;;noun, walloon;;fotbal;;noun, hungarian;;labdar\u00fag\u00e1s;;noun, hindi;;\u092b\u0941\u091f\u092c\u0949\u0932;;noun, chichewa;;mpira;;noun, chinese;;\u8de4\u7403;;noun, esperanto;;futbalo;;noun, navajo;;joo\u0142 nab\u00edzn\u00edtaa\u0142\u00ed;;noun, tamil;;\u0b95\u0bbe\u0bb2\u0bcd\u0baa\u0ba8\u0bcd\u0ba4\u0bc1;;noun, serbo-croatian;;nogomet;;noun, kannada;;\u0cb8\u0cbe\u0c95\u0cb0\u0ccd;;noun, polish;;futbol;;noun, saterland frisian;;foutbal;;noun, finnish;;jalkapallo;;noun, lower sorbian;;kopa\u0144ca;;noun, sotho;;bolo;;noun, italian;;calcio;;noun, korean;;\ud48b\ubcfc;;noun, lao;;\u0e9f\u0eb8\u0e94\u0e9a\u0eb2\u0e99;;noun, zhuang;;cukgiuz;;noun, hakka chinese;;\u8db3\u7403;;noun, swahili;;kandanda;;noun, arabic;;\u0643\u0648\u0631\u0629;;noun, hindi;;\u092b\u093c\u0941\u091f\u092c\u0949\u0932;;noun, french;;football;;noun, burmese;;\u1018\u1031\u102c\u101c\u102f\u1036\u1038;;noun, malay;;bola sepak;;noun, interlingua;;football;;noun, malayalam;;\u0d38\u0d4b\u0d15\u0d4d\u0d15\u0d7c;;noun, nahuatl;;neicxitapayolhuiliztli;;noun, yiddish;;\u05e4\u05bf\u05d5\u05e1\u05d1\u05d0\u05b8\u05dc;;noun, west frisian;;fuotbal;;noun, polish;;pi\u0142ka no\u017cna;;noun, uzbek;;futbol;;noun, greenlandic;;arsaanneq;;noun, greenlandic;;isikkamik arsaanneq;;noun, russian;;\u043d\u043e\u0433\u043e\u043c\u044f\u0301\u0447;;noun, irish;;sacar;;noun, turkish;;futbol;;noun, norwegian bokm\u00e5l;;fotball;;noun, hindi;;\u092b\u093c\u0941\u091f\u092c\u093e\u0932;;noun, lithuanian;;futbolas;;noun, slovak;;futbal;;noun, breton;;mell-droad;;noun, french;;soccer;;noun, serbo-croatian;;\u0444\u0443\u0434\u0431\u0430\u043b;;noun, chukchi;;\u04c4\u0430\u043f\u0513\u0451\u0447\u0435\u0442\u0442\u044b\u0440\u0433\u044b\u043d;;noun, tok pisin;;soka;;noun, german;;fu\u00dfball;;noun, maltese;;futbol;;noun, albanian;;futboll;;noun, portuguese;;futebol;;noun, upper sorbian;;kopa\u0144ca;;noun, inuktitut;;\u140a\u152a\u1483\u1455\u1585;;noun, spanish;;pambol;;noun, spanish;;f\u00fatbol;;noun, tatar;;\u0444\u0443\u0442\u0431\u043e\u043b;;noun, spanish;;balompi\u00e9;;noun, serbo-croatian;;\u043d\u043e\u0433\u043e\u043c\u0435\u0442;;noun, urdu;;\u0641\u0679 \u0628\u0627\u0644;;noun, scottish gaelic;;ball-coise;;noun, walloon;;fotbale;;noun, kyrgyz;;\u0444\u0443\u0442\u0431\u043e\u043b;;noun, armenian;;\u0586\u0578\u0582\u057f\u0562\u0578\u056c;;noun, spanish;;bal\u00f3n-pie;;noun, punjabi;;\u0a2b\u0a41\u0a1f\u0a2c\u0a3e\u0a32;;noun, catalan;;futbol;;noun, hebrew;;\u05db\u05b7\u05bc\u05d3\u05bc\u05d5\u05bc\u05e8\u05b6\u05d2\u05b6\u05dc;;noun, irish;;peil;;noun, dutch;;voetbal;;noun, estonian;;jalgpall;;noun, macedonian;;\u0444\u0443\u0301\u0434\u0431\u0430\u043b;;noun, swedish;;fotboll;;noun, serbo-croatian;;fudbal;;noun, chinese mandarin;;\u8e74\u7403;;noun, mongolian;;\u0445\u04e9\u043b\u0431\u04e9\u043c\u0431\u04e9\u0433;;noun, welsh;;p\u00eal-droed;;noun", "to": "football;;(uk, africa, caribbean, south asia, uncountable) association football, also called soccer: a game in which two teams each contend to get a round ball into the other team\u0027s goal primarily by kicking the ball.", "value": 137, "width": 6.2272727272727275}]);
+
+                  nodeColors = {};
+                  allNodes = nodes.get({ returnType: "Object" });
+                  for (nodeId in allNodes) {
+                    nodeColors[nodeId] = allNodes[nodeId].color;
+                  }
+                  allEdges = edges.get({ returnType: "Object" });
+                  // adding nodes and edges to the graph
+                  data = {nodes: nodes, edges: edges};
+
+                  var options = {
+    "configure": {
+        "enabled": false
+    },
+    "edges": {
+        "color": {
+            "inherit": true
+        },
+        "smooth": {
+            "enabled": true,
+            "type": "dynamic"
+        }
+    },
+    "interaction": {
+        "dragNodes": true,
+        "hideEdgesOnDrag": false,
+        "hideNodesOnDrag": false
+    },
+    "physics": {
+        "enabled": true,
+        "stabilization": {
+            "enabled": true,
+            "fit": true,
+            "iterations": 1000,
+            "onlyDynamicEdges": false,
+            "updateInterval": 50
+        }
+    }
+};
+
+                  
+
+
+                  
+
+                  network = new vis.Network(container, data, options);
+
+                  
+
+                  
+
+                  
+
+
+                  
+
+                  return network;
+
+              }
+              drawGraph();
+        </script>
+    
+    <script>
+        // Function to update the legend
+        function updateLegend(content) {
+            const legend = document.getElementById('language-legend');
+            legend.innerHTML = content;
+        }
+
+        // Add event listeners to edges using vis.js API
+        network.on("hoverEdge", function (params) {
+            const edgeId = params.edge;
+            const edge = edges.get(edgeId);
+            if (edge && edge.languages) {
+                const languagesList = edge.languages.split(', ').map(lang => `<li>${lang}</li>`).join('');
+                const numLanguages = edge.languages.split(', ').length;
+                const nodePair = `${edge.from} - ${edge.to}`;
+                updateLegend(`<h3>Languages (${numLanguages}) for ${nodePair}:</h3><ul>${languagesList}</ul>`);
+            }
+        });
+
+        network.on("blurEdge", function () {
+            updateLegend('<h3>Languages:</h3><p>Hover over an edge to see languages.</p>');
+        });
+
+        network.on("click", function (params) {
+            if (params.edges && params.edges.length > 0) {
+                const edgeId = params.edges[0];
+                const edge = edges.get(edgeId);
+                if (edge && edge.languages) {
+                    const languagesList = edge.languages.split(', ').sort().map(lang => `<li>${lang.replaceAll(";;", " - ")}</li>`).join('');
+                    const numLanguages = edge.languages.split(', ').length;
+                    const title1 = edge.from.replaceAll(";;", "&#10;");
+                    const title2 = edge.to.replaceAll(";;", "&#10;");
+                    updateLegend(`<h2><div title="${title1}";>${edge.from.split(";;")[0]}</div><div title="${title2}";>${edge.to.split(";;")[0]}</div></h2><br><h3>Languages (${numLanguages})<br></h3><ul>${languagesList}</ul>`);
+                }
+            }
+        });
+    </script>
+    <style>
+        .container {
+            display: flex;
+            width: 100%;
+            margin-top: 48px;
+        }
+        #mynetwork {
+            flex: 3;
+            height: 750px;
+            width: 90%
+            background-color: #222222;
+            border: 1px solid lightgray;
+        }
+        #language-legend h2 {
+            display: flex; 
+            flex-direction: column;
+            font-weight: bold;
+        }
+        #language-legend h3 {
+             border-bottom: 1px solid black; 
+             padding-bottom: 8px
+        }
+        #language-legend {
+            flex: 1;
+            margin-left: 20px;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            background-color: #f9f9f9;
+            overflow-y: auto;
+            max-height: 750px;
+        }
+        #language-legend ul {
+            list-style-type: none;
+            padding: 0;
+        }
+        #language-legend li {
+            margin: 5px 0;
+            font-size: 1.2em;
+        }
+    </style>
+    </body>
+</html>

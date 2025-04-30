@@ -1,0 +1,239 @@
+<html>
+    <head>
+        <meta charset="utf-8">
+        
+            <script src="lib/bindings/utils.js"></script>
+            <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/vis-network/9.1.2/dist/dist/vis-network.min.css" integrity="sha512-WgxfT5LWjfszlPHXRmBWHkV2eceiWTOBvrKCNbdgDYTHrT2AeLCGbF4sZlZw3UMN3WtL0tGUoIAKsu8mllg/XA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/vis-network/9.1.2/dist/vis-network.min.js" integrity="sha512-LnvoEWDFrqGHlHmDD2101OrLcbsfkrzoSpvtSQtxK3RMnRV0eOkhhBN2dXHKRrUU8p2DGRTk35n4O8nWSVe1mQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+            
+        
+<center>
+<h1></h1>
+</center>
+
+<!-- <link rel="stylesheet" href="../node_modules/vis/dist/vis.min.css" type="text/css" />
+<script type="text/javascript" src="../node_modules/vis/dist/vis.js"> </script>-->
+        <link
+          href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/css/bootstrap.min.css"
+          rel="stylesheet"
+          integrity="sha384-eOJMYsd53ii+scO/bJGFsiCZc+5NDVN2yr8+0RDqr0Ql0h+rP48ckxlpbzKgwra6"
+          crossorigin="anonymous"
+        />
+        <script
+          src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.bundle.min.js"
+          integrity="sha384-JEW9xMcG8R+pH31jmWH6WWP0WintQrMb4s7ZOdauHnUtxwoG2vI5DkLtS3qm9Ekf"
+          crossorigin="anonymous"
+        ></script>
+
+
+        <center>
+          <h1></h1>
+        </center>
+        <style type="text/css">
+
+             #mynetwork {
+                 width: 100%;
+                 height: 100vh;
+                 background-color: #222222;
+                 border: 1px solid lightgray;
+                 position: relative;
+                 float: left;
+             }
+
+             
+
+             
+
+             
+        </style>
+    </head>
+
+
+    <body>
+        <div class="card" style="width: 100%">
+            
+            
+            <div class="container"><div id="mynetwork" class="card-body"></div>
+    <div id="language-legend">
+        <h3>Languages:</h3>
+        <p>Click on an edge to see languages.</p>
+    </div>
+    </div>
+        </div>
+
+        
+        
+
+        <script type="text/javascript">
+
+              // initialize global variables.
+              var edges;
+              var nodes;
+              var allNodes;
+              var allEdges;
+              var nodeColors;
+              var originalNodes;
+              var network;
+              var container;
+              var options, data;
+              var filter = {
+                  item : '',
+                  property : '',
+                  value : []
+              };
+
+              
+
+              
+
+              // This method is responsible for drawing the graph, returns the drawn network
+              function drawGraph() {
+                  var container = document.getElementById('mynetwork');
+
+                  
+
+                  // parsing and collecting nodes and edges from the python
+                  nodes = new vis.DataSet([{"color": "#97c2fc", "font": {"color": "white"}, "id": "holy shit;;(idiomatic, vulgar, slang) expression of terror, awe, surprise, astonishment, etc., often at something seen for the first time or remembered immediately before using this term.", "label": "holy shit", "shape": "dot", "title": "holy shit;;(idiomatic, vulgar, slang) expression of terror, awe, surprise, astonishment, etc., often at something seen for the first time or remembered immediately before using this term."}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "get lost;;(colloquial, dismissal, impolite) used to rudely tell somebody to go away or leave one alone.", "label": "get lost", "shape": "dot", "title": "get lost;;(colloquial, dismissal, impolite) used to rudely tell somebody to go away or leave one alone."}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "goddamn;;(vulgar, colloquial) an expression of anger, surprise, intense excitement or frustration.", "label": "goddamn", "shape": "dot", "title": "goddamn;;(vulgar, colloquial) an expression of anger, surprise, intense excitement or frustration."}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "geez;;(euphemistic) an exclamation denoting surprise or frustration.", "label": "geez", "shape": "dot", "title": "geez;;(euphemistic) an exclamation denoting surprise or frustration."}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "damn;;(sometimes vulgar) used to express anger, irritation, disappointment, annoyance, contempt or surprise, etc. see also dammit.", "label": "damn", "shape": "dot", "title": "damn;;(sometimes vulgar) used to express anger, irritation, disappointment, annoyance, contempt or surprise, etc. see also dammit."}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "fuck;;(vulgar, colloquial) expressing dismay or discontent.", "label": "fuck", "shape": "dot", "title": "fuck;;(vulgar, colloquial) expressing dismay or discontent."}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "gosh;;(minced oath, euphemistic) a mild expression of surprise or enthusiasm.", "label": "gosh", "shape": "dot", "title": "gosh;;(minced oath, euphemistic) a mild expression of surprise or enthusiasm."}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "fuck off;;(vulgar, slang, dismissal) go away! get lost!", "label": "fuck off", "shape": "dot", "title": "fuck off;;(vulgar, slang, dismissal) go away! get lost!"}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "good heavens;;(dated, exclamation) an exclamation of surprise or shock.", "label": "good heavens", "shape": "dot", "title": "good heavens;;(dated, exclamation) an exclamation of surprise or shock."}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "oh my god;;(potentially offensive) an expression of anger, frustration, excitement, shock, awe, dismay, etc.", "label": "oh my god", "shape": "dot", "title": "oh my god;;(potentially offensive) an expression of anger, frustration, excitement, shock, awe, dismay, etc."}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "shit;;(vulgar) expression of worry, failure, shock, etc., often at something seen for the first time or remembered immediately before using this term.", "label": "shit", "shape": "dot", "title": "shit;;(vulgar) expression of worry, failure, shock, etc., often at something seen for the first time or remembered immediately before using this term."}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "shoo;;(informal, demeaning) go away! clear off!", "label": "shoo", "shape": "dot", "title": "shoo;;(informal, demeaning) go away! clear off!"}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "go away;;(dismissal) a command demanding someone to leave.", "label": "go away", "shape": "dot", "title": "go away;;(dismissal) a command demanding someone to leave."}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "dammit;;(mildly vulgar) expressing anger, irritation, contempt, or disappointment.", "label": "dammit", "shape": "dot", "title": "dammit;;(mildly vulgar) expressing anger, irritation, contempt, or disappointment."}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "for fuck\u0027s sake;;(idiomatic, colloquial, vulgar) an expression of anger or frustration.", "label": "for fuck\u0027s sake", "shape": "dot", "title": "for fuck\u0027s sake;;(idiomatic, colloquial, vulgar) an expression of anger or frustration."}]);
+                  edges = new vis.DataSet([{"from": "holy shit;;(idiomatic, vulgar, slang) expression of terror, awe, surprise, astonishment, etc., often at something seen for the first time or remembered immediately before using this term.", "languages": "greek;;\u03b3\u03b1\u03bc\u03ce\u03c4\u03bf;;intj, romanian;;mor\u021bii m\u0103-sii;;intj, hungarian;;bassza meg;;intj, serbo-croatian;;\u0458\u0435\u0431\u043e\u0442\u0435;;intj, jamaican creole;;pussyclaat;;intj, romanian;;s\u0103-mi bag pula;;intj, jamaican creole;;bomboclaat;;intj, serbo-croatian;;jebote;;intj, jamaican creole;;bloodclaat;;intj, hungarian;;basszus;;intj, romanian;;pizda m\u0103-sii;;intj", "to": "fuck;;(vulgar, colloquial) expressing dismay or discontent.", "value": 11, "width": 0.8461538461538461}, {"from": "holy shit;;(idiomatic, vulgar, slang) expression of terror, awe, surprise, astonishment, etc., often at something seen for the first time or remembered immediately before using this term.", "languages": "slovak;;kurva!;;intj, spanish;;\u00a1mierda!;;intj", "to": "shit;;(vulgar) expression of worry, failure, shock, etc., often at something seen for the first time or remembered immediately before using this term.", "value": 2, "width": 0.15384615384615385}, {"from": "holy shit;;(idiomatic, vulgar, slang) expression of terror, awe, surprise, astonishment, etc., often at something seen for the first time or remembered immediately before using this term.", "languages": "chinese mandarin;;\u5929\u554a;;intj, french;;nom de dieu;;intj", "to": "oh my god;;(potentially offensive) an expression of anger, frustration, excitement, shock, awe, dismay, etc.", "value": 2, "width": 0.15384615384615385}, {"from": "holy shit;;(idiomatic, vulgar, slang) expression of terror, awe, surprise, astonishment, etc., often at something seen for the first time or remembered immediately before using this term.", "languages": "greek;;\u03b3\u03b1\u03bc\u03ce\u03c4\u03bf;;intj, italian;;merda;;intj, esperanto;;damne;;intj", "to": "dammit;;(mildly vulgar) expressing anger, irritation, contempt, or disappointment.", "value": 3, "width": 0.23076923076923078}, {"from": "holy shit;;(idiomatic, vulgar, slang) expression of terror, awe, surprise, astonishment, etc., often at something seen for the first time or remembered immediately before using this term.", "languages": "spanish;;\u00a1hostia!;;intj, spanish;;\u00a1me cago en dios!;;intj, catalan;;me cago en d\u00e9u!;;intj", "to": "goddamn;;(vulgar, colloquial) an expression of anger, surprise, intense excitement or frustration.", "value": 3, "width": 0.23076923076923078}, {"from": "holy shit;;(idiomatic, vulgar, slang) expression of terror, awe, surprise, astonishment, etc., often at something seen for the first time or remembered immediately before using this term.", "languages": "serbo-croatian;;u pi\u010dku materinu;;intj, serbo-croatian;;\u0458\u0435\u0431\u043e\u0442\u0435;;intj, serbo-croatian;;\u0443 \u043f\u0438\u0447\u043a\u0443 \u043c\u0430\u0442\u0435\u0440\u0438\u043d\u0443;;intj, serbo-croatian;;jebote;;intj, french;;putain de merde;;intj, french;;nom de dieu;;intj", "to": "for fuck\u0027s sake;;(idiomatic, colloquial, vulgar) an expression of anger or frustration.", "value": 6, "width": 0.46153846153846156}, {"from": "get lost;;(colloquial, dismissal, impolite) used to rudely tell somebody to go away or leave one alone.", "languages": "spanish;;\u00a1vete!;;intj, portuguese;;se/te manda!;;intj, bulgarian;;\u0438\u0437\u0447\u0435\u0437\u0432\u0430\u0439!;;intj, german;;geh weg!;;intj, portuguese;;v\u00e1/vai embora!;;intj, vietnamese;;x\u00e9o;;intj, finnish;;h\u00e4ivy!;;intj, vietnamese;;ph\u1eafn;;intj, afrikaans;;voertsek;;intj, swedish;;f\u00f6rsvinn!;;intj, vietnamese;;c\u00fat;;intj, vietnamese;;bi\u1ebfn;;intj, italian;;vattene!;;intj", "to": "go away;;(dismissal) a command demanding someone to leave.", "value": 13, "width": 1.0}, {"from": "get lost;;(colloquial, dismissal, impolite) used to rudely tell somebody to go away or leave one alone.", "languages": "german;;hau ab!;;intj, finnish;;h\u00e4ivy!;;intj, german;;verpiss dich!;;intj, italian;;vattene!;;intj, polish;;spadaj!;;intj, german;;mach, dass du wegkommst!;;intj", "to": "fuck off;;(vulgar, slang, dismissal) go away! get lost!", "value": 6, "width": 0.46153846153846156}, {"from": "goddamn;;(vulgar, colloquial) an expression of anger, surprise, intense excitement or frustration.", "languages": "danish;;fuck;;intj, russian;;\u0431\u043b\u044f\u0434\u044c;;intj", "to": "fuck;;(vulgar, colloquial) expressing dismay or discontent.", "value": 2, "width": 0.15384615384615385}, {"from": "goddamn;;(vulgar, colloquial) an expression of anger, surprise, intense excitement or frustration.", "languages": "french;;merde!;;intj, portuguese;;droga!;;intj, indonesian;;sialan!;;intj, italian;;cazzo!;;intj, swedish;;fan!;;intj, italian;;merda!;;intj", "to": "shit;;(vulgar) expression of worry, failure, shock, etc., often at something seen for the first time or remembered immediately before using this term.", "value": 6, "width": 0.46153846153846156}, {"from": "goddamn;;(vulgar, colloquial) an expression of anger, surprise, intense excitement or frustration.", "languages": "japanese;;\u3057\u307e\u3063\u305f;;intj, german;;verdammt noch mal;;intj, chinese mandarin;;\u8a72\u6b7b /\u8be5\u6b7b;;intj", "to": "dammit;;(mildly vulgar) expressing anger, irritation, contempt, or disappointment.", "value": 3, "width": 0.23076923076923078}, {"from": "goddamn;;(vulgar, colloquial) an expression of anger, surprise, intense excitement or frustration.", "languages": "hungarian;;a francba;;intj, chinese mandarin;;\u7cdf\u7cd5;;intj, hungarian;;a fen\u00e9be;;intj, chinese mandarin;;\u8a72\u6b7b /\u8be5\u6b7b;;intj, polish;;cholera!;;intj", "to": "damn;;(sometimes vulgar) used to express anger, irritation, disappointment, annoyance, contempt or surprise, etc. see also dammit.", "value": 5, "width": 0.38461538461538464}, {"from": "geez;;(euphemistic) an exclamation denoting surprise or frustration.", "languages": "chinese mandarin;;\u5929\u554a;;intj, hungarian;;atya\u00e9g;;intj, estonian;;issand;;intj, hungarian;;jesszusom;;intj, french;;mon dieu;;intj", "to": "oh my god;;(potentially offensive) an expression of anger, frustration, excitement, shock, awe, dismay, etc.", "value": 5, "width": 0.38461538461538464}, {"from": "geez;;(euphemistic) an exclamation denoting surprise or frustration.", "languages": "italian;;cribbio;;intj, italian;;accidenti;;intj, spanish;;caramba;;intj, russian;;\u0431\u043b\u0438\u043d;;intj", "to": "damn;;(sometimes vulgar) used to express anger, irritation, disappointment, annoyance, contempt or surprise, etc. see also dammit.", "value": 4, "width": 0.3076923076923077}, {"from": "geez;;(euphemistic) an exclamation denoting surprise or frustration.", "languages": "swedish;;jisses;;intj, polish;;jeju;;intj, french;;bon sang;;intj, spanish;;caramba;;intj, italian;;accidenti;;intj, swedish;;j\u00f6sses;;intj", "to": "gosh;;(minced oath, euphemistic) a mild expression of surprise or enthusiasm.", "value": 6, "width": 0.46153846153846156}, {"from": "geez;;(euphemistic) an exclamation denoting surprise or frustration.", "languages": "swedish;;j\u00f6sses;;intj, hungarian;;atya\u00e9g;;intj, french;;ciel;;intj, hungarian;;jesszusom;;intj", "to": "good heavens;;(dated, exclamation) an exclamation of surprise or shock.", "value": 4, "width": 0.3076923076923077}, {"from": "damn;;(sometimes vulgar) used to express anger, irritation, disappointment, annoyance, contempt or surprise, etc. see also dammit.", "languages": "catalan;;collons;;intj, indonesian;;sialan;;intj, indonesian;;kampret;;intj, bulgarian;;\u043f\u043e \u0434\u044f\u0432\u043e\u043b\u0438\u0442\u0435;;intj, arabic;;\u0639\u064e\u0645\u064e\u0649;;intj, swedish;;fan;;intj, serbo-croatian;;kvragu;;intj, arabic;;\u0648\u064e\u062c\u064e\u0639;;intj, macedonian;;\u043f\u043e \u0453\u0430\u0432\u043e\u0301\u043b\u0438\u0442\u0435;;intj, indonesian;;brengsek;;intj, georgian;;\u10ef\u10d0\u10dc\u10d3\u10d0\u10d1\u10d0;;intj", "to": "fuck;;(vulgar, colloquial) expressing dismay or discontent.", "value": 11, "width": 0.8461538461538461}, {"from": "damn;;(sometimes vulgar) used to express anger, irritation, disappointment, annoyance, contempt or surprise, etc. see also dammit.", "languages": "polish;;kurde;;intj, russian;;\u043f\u0440\u043e\u043a\u043b\u044f\u0301\u0442\u0438\u0435;;intj, chinese mandarin;;\u4f60\u59b9;;intj, esperanto;;damne;;intj, german;;verdammt;;intj, macedonian;;\u043f\u043e \u0453\u0430\u0432\u043e\u0301\u043b\u0438\u0442\u0435;;intj, spanish;;maldici\u00f3n;;intj, indonesian;;sialan;;intj, portuguese;;maldi\u00e7\u00e3o;;intj, italian;;cribbio;;intj, italian;;cavolo;;intj, persian;;\u0644\u0639\u0646\u062a\u06cc;;intj, russian;;\u0447\u0451\u0440\u0442 \u043f\u043e\u0431\u0435\u0440\u0438\u0301;;intj, macedonian;;\u043f\u0440\u043e\u0301\u043a\u043b\u0435\u0442\u0441\u0442\u0432\u043e;;intj, dutch;;verdomme;;intj, serbo-croatian;;kvragu;;intj, chinese mandarin;;\u8a72\u6b7b /\u8be5\u6b7b;;intj, turkish;;lanet olsun;;intj, finnish;;pahus;;intj, bulgarian;;\u043f\u043e \u0434\u044f\u0432\u043e\u043b\u0438\u0442\u0435;;intj, italian;;dannazione;;intj, spanish;;maldita sea;;intj", "to": "dammit;;(mildly vulgar) expressing anger, irritation, contempt, or disappointment.", "value": 22, "width": 1.6923076923076923}, {"from": "damn;;(sometimes vulgar) used to express anger, irritation, disappointment, annoyance, contempt or surprise, etc. see also dammit.", "languages": "finnish;;samperi;;intj, catalan;;ostres;;intj, spanish;;caramba;;intj, italian;;accidenti;;intj, maori;;aeha;;intj", "to": "gosh;;(minced oath, euphemistic) a mild expression of surprise or enthusiasm.", "value": 5, "width": 0.38461538461538464}, {"from": "fuck;;(vulgar, colloquial) expressing dismay or discontent.", "languages": "icelandic;;dj\u00f6fulsins;;intj, icelandic;;helv\u00edtis;;intj, icelandic;;fjandans;;intj, malay;;sial;;intj", "to": "shit;;(vulgar) expression of worry, failure, shock, etc., often at something seen for the first time or remembered immediately before using this term.", "value": 4, "width": 0.3076923076923077}, {"from": "fuck;;(vulgar, colloquial) expressing dismay or discontent.", "languages": "italian;;cazzo;;intj, greek;;\u03b3\u03b1\u03bc\u03ce\u03c4\u03bf;;intj, indonesian;;sialan;;intj, portuguese;;porra;;intj, malay;;sial;;intj, french;;merde;;intj, bulgarian;;\u043f\u043e \u0434\u044f\u0432\u043e\u043b\u0438\u0442\u0435;;intj, latvian;;sasod\u012bts;;intj, serbo-croatian;;kvragu;;intj, macedonian;;\u043f\u043e \u0453\u0430\u0432\u043e\u0301\u043b\u0438\u0442\u0435;;intj", "to": "dammit;;(mildly vulgar) expressing anger, irritation, contempt, or disappointment.", "value": 10, "width": 0.7692307692307693}, {"from": "fuck;;(vulgar, colloquial) expressing dismay or discontent.", "languages": "javanese;;jancok;;intj, turkish;;siktir;;intj", "to": "fuck off;;(vulgar, slang, dismissal) go away! get lost!", "value": 2, "width": 0.15384615384615385}, {"from": "fuck;;(vulgar, colloquial) expressing dismay or discontent.", "languages": "serbo-croatian;;\u0458\u0435\u0431\u043e\u0442\u0435;;intj, serbo-croatian;;jebote;;intj, bulgarian;;\u043d\u0430 \u043c\u0430\u0439\u043a\u0430 \u043c\u0443 \u043f\u0443\u0442\u043a\u0430\u0442\u0430;;intj, french;;putain;;intj, turkish;;am\u0131na koyay\u0131m;;intj, macedonian;;\u0434\u0430 \u0442\u0438 \u0435\u0301\u0431\u0430\u043c;;intj", "to": "for fuck\u0027s sake;;(idiomatic, colloquial, vulgar) an expression of anger or frustration.", "value": 6, "width": 0.46153846153846156}, {"from": "gosh;;(minced oath, euphemistic) a mild expression of surprise or enthusiasm.", "languages": "portuguese;;meu deus;;intj, spanish;;dios m\u00edo;;intj", "to": "oh my god;;(potentially offensive) an expression of anger, frustration, excitement, shock, awe, dismay, etc.", "value": 2, "width": 0.15384615384615385}, {"from": "gosh;;(minced oath, euphemistic) a mild expression of surprise or enthusiasm.", "languages": "esperanto;;\u0109ielo;;intj, maori;;\u0101wai\u0101;;intj, swedish;;j\u00f6sses;;intj", "to": "good heavens;;(dated, exclamation) an exclamation of surprise or shock.", "value": 3, "width": 0.23076923076923078}, {"from": "fuck off;;(vulgar, slang, dismissal) go away! get lost!", "languages": "finnish;;h\u00e4ivy!;;intj, italian;;vattene!;;intj", "to": "go away;;(dismissal) a command demanding someone to leave.", "value": 2, "width": 0.15384615384615385}, {"from": "good heavens;;(dated, exclamation) an exclamation of surprise or shock.", "languages": "hungarian;;te j\u00f3s\u00e1gos \u00e9g;;intj, chinese mandarin;;\u6211\u7684\u5929\u554a;;intj, esperanto;;dio mia;;intj, galician;;meu deus;;intj, hungarian;;atya\u00e9g;;intj, norwegian;;herregud;;intj, hungarian;;te j\u00f3 \u00e9g;;intj, arabic;;\u064a\u0627 \u0633\u0644\u0627\u0645;;intj, hungarian;;jesszusom;;intj", "to": "oh my god;;(potentially offensive) an expression of anger, frustration, excitement, shock, awe, dismay, etc.", "value": 9, "width": 0.6923076923076923}, {"from": "shit;;(vulgar) expression of worry, failure, shock, etc., often at something seen for the first time or remembered immediately before using this term.", "languages": "romanian;;b\u0103ga-mi-a\u0219!;;intj, malay;;sial;;intj", "to": "dammit;;(mildly vulgar) expressing anger, irritation, contempt, or disappointment.", "value": 2, "width": 0.15384615384615385}, {"from": "shoo;;(informal, demeaning) go away! clear off!", "languages": "italian;;sci\u00f2!;;intj, greek;;\u03b4\u03af\u03bd\u03b5 \u03c4\u03bf\u03c5;;intj, italian;;vattene!;;intj, italian;;pussa via!;;intj", "to": "go away;;(dismissal) a command demanding someone to leave.", "value": 4, "width": 0.3076923076923077}]);
+
+                  nodeColors = {};
+                  allNodes = nodes.get({ returnType: "Object" });
+                  for (nodeId in allNodes) {
+                    nodeColors[nodeId] = allNodes[nodeId].color;
+                  }
+                  allEdges = edges.get({ returnType: "Object" });
+                  // adding nodes and edges to the graph
+                  data = {nodes: nodes, edges: edges};
+
+                  var options = {
+    "configure": {
+        "enabled": false
+    },
+    "edges": {
+        "color": {
+            "inherit": true
+        },
+        "smooth": {
+            "enabled": true,
+            "type": "dynamic"
+        }
+    },
+    "interaction": {
+        "dragNodes": true,
+        "hideEdgesOnDrag": false,
+        "hideNodesOnDrag": false
+    },
+    "physics": {
+        "enabled": true,
+        "stabilization": {
+            "enabled": true,
+            "fit": true,
+            "iterations": 1000,
+            "onlyDynamicEdges": false,
+            "updateInterval": 50
+        }
+    }
+};
+
+                  
+
+
+                  
+
+                  network = new vis.Network(container, data, options);
+
+                  
+
+                  
+
+                  
+
+
+                  
+
+                  return network;
+
+              }
+              drawGraph();
+        </script>
+    
+    <script>
+        // Function to update the legend
+        function updateLegend(content) {
+            const legend = document.getElementById('language-legend');
+            legend.innerHTML = content;
+        }
+
+        // Add event listeners to edges using vis.js API
+        network.on("hoverEdge", function (params) {
+            const edgeId = params.edge;
+            const edge = edges.get(edgeId);
+            if (edge && edge.languages) {
+                const languagesList = edge.languages.split(', ').map(lang => `<li>${lang}</li>`).join('');
+                const numLanguages = edge.languages.split(', ').length;
+                const nodePair = `${edge.from} - ${edge.to}`;
+                updateLegend(`<h3>Languages (${numLanguages}) for ${nodePair}:</h3><ul>${languagesList}</ul>`);
+            }
+        });
+
+        network.on("blurEdge", function () {
+            updateLegend('<h3>Languages:</h3><p>Hover over an edge to see languages.</p>');
+        });
+
+        network.on("click", function (params) {
+            if (params.edges && params.edges.length > 0) {
+                const edgeId = params.edges[0];
+                const edge = edges.get(edgeId);
+                if (edge && edge.languages) {
+                    const languagesList = edge.languages.split(', ').sort().map(lang => `<li>${lang.replaceAll(";;", " - ")}</li>`).join('');
+                    const numLanguages = edge.languages.split(', ').length;
+                    const title1 = edge.from.replaceAll(";;", "&#10;");
+                    const title2 = edge.to.replaceAll(";;", "&#10;");
+                    updateLegend(`<h2><div title="${title1}";>${edge.from.split(";;")[0]}</div><div title="${title2}";>${edge.to.split(";;")[0]}</div></h2><br><h3>Languages (${numLanguages})<br></h3><ul>${languagesList}</ul>`);
+                }
+            }
+        });
+    </script>
+    <style>
+        .container {
+            display: flex;
+            width: 100%;
+            margin-top: 48px;
+        }
+        #mynetwork {
+            flex: 3;
+            height: 750px;
+            width: 90%
+            background-color: #222222;
+            border: 1px solid lightgray;
+        }
+        #language-legend h2 {
+            display: flex; 
+            flex-direction: column;
+            font-weight: bold;
+        }
+        #language-legend h3 {
+             border-bottom: 1px solid black; 
+             padding-bottom: 8px
+        }
+        #language-legend {
+            flex: 1;
+            margin-left: 20px;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            background-color: #f9f9f9;
+            overflow-y: auto;
+            max-height: 750px;
+        }
+        #language-legend ul {
+            list-style-type: none;
+            padding: 0;
+        }
+        #language-legend li {
+            margin: 5px 0;
+            font-size: 1.2em;
+        }
+    </style>
+    </body>
+</html>

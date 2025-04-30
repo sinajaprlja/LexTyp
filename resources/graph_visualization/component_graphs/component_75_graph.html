@@ -1,0 +1,239 @@
+<html>
+    <head>
+        <meta charset="utf-8">
+        
+            <script src="lib/bindings/utils.js"></script>
+            <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/vis-network/9.1.2/dist/dist/vis-network.min.css" integrity="sha512-WgxfT5LWjfszlPHXRmBWHkV2eceiWTOBvrKCNbdgDYTHrT2AeLCGbF4sZlZw3UMN3WtL0tGUoIAKsu8mllg/XA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/vis-network/9.1.2/dist/vis-network.min.js" integrity="sha512-LnvoEWDFrqGHlHmDD2101OrLcbsfkrzoSpvtSQtxK3RMnRV0eOkhhBN2dXHKRrUU8p2DGRTk35n4O8nWSVe1mQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+            
+        
+<center>
+<h1></h1>
+</center>
+
+<!-- <link rel="stylesheet" href="../node_modules/vis/dist/vis.min.css" type="text/css" />
+<script type="text/javascript" src="../node_modules/vis/dist/vis.js"> </script>-->
+        <link
+          href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/css/bootstrap.min.css"
+          rel="stylesheet"
+          integrity="sha384-eOJMYsd53ii+scO/bJGFsiCZc+5NDVN2yr8+0RDqr0Ql0h+rP48ckxlpbzKgwra6"
+          crossorigin="anonymous"
+        />
+        <script
+          src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.bundle.min.js"
+          integrity="sha384-JEW9xMcG8R+pH31jmWH6WWP0WintQrMb4s7ZOdauHnUtxwoG2vI5DkLtS3qm9Ekf"
+          crossorigin="anonymous"
+        ></script>
+
+
+        <center>
+          <h1></h1>
+        </center>
+        <style type="text/css">
+
+             #mynetwork {
+                 width: 100%;
+                 height: 100vh;
+                 background-color: #222222;
+                 border: 1px solid lightgray;
+                 position: relative;
+                 float: left;
+             }
+
+             
+
+             
+
+             
+        </style>
+    </head>
+
+
+    <body>
+        <div class="card" style="width: 100%">
+            
+            
+            <div class="container"><div id="mynetwork" class="card-body"></div>
+    <div id="language-legend">
+        <h3>Languages:</h3>
+        <p>Click on an edge to see languages.</p>
+    </div>
+    </div>
+        </div>
+
+        
+        
+
+        <script type="text/javascript">
+
+              // initialize global variables.
+              var edges;
+              var nodes;
+              var allNodes;
+              var allEdges;
+              var nodeColors;
+              var originalNodes;
+              var network;
+              var container;
+              var options, data;
+              var filter = {
+                  item : '',
+                  property : '',
+                  value : []
+              };
+
+              
+
+              
+
+              // This method is responsible for drawing the graph, returns the drawn network
+              function drawGraph() {
+                  var container = document.getElementById('mynetwork');
+
+                  
+
+                  // parsing and collecting nodes and edges from the python
+                  nodes = new vis.DataSet([{"color": "#97c2fc", "font": {"color": "white"}, "id": "large intestine;;(anatomy) the second to last part of the digestive system, comprising the cecum, colon and rectum.", "label": "large intestine", "shape": "dot", "title": "large intestine;;(anatomy) the second to last part of the digestive system, comprising the cecum, colon and rectum."}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "colon;;(anatomy) part of the large intestine; the final segment of the digestive system, after (distal to) the ileum and before (proximal to) the rectum. (because the colon is the largest part of the large intestine (constituting most of it), it is often treated as synonymous therewith in broad or casual usage.)", "label": "colon", "shape": "dot", "title": "colon;;(anatomy) part of the large intestine; the final segment of the digestive system, after (distal to) the ileum and before (proximal to) the rectum. (because the colon is the largest part of the large intestine (constituting most of it), it is often treated as synonymous therewith in broad or casual usage.)"}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "bowel;;(chiefly medicine) a part or division of the intestines, usually the large intestine.", "label": "bowel", "shape": "dot", "title": "bowel;;(chiefly medicine) a part or division of the intestines, usually the large intestine."}]);
+                  edges = new vis.DataSet([{"from": "large intestine;;(anatomy) the second to last part of the digestive system, comprising the cecum, colon and rectum.", "languages": "swedish;;tjocktarm;;noun, slovene;;debelo \u010drevo;;noun, korean;;\ud070\ucc3d\uc790;;noun, korean;;\ub300\uc7a5;;noun, lithuanian;;gaubtin\u0117 \u017earna;;noun, slovak;;hrub\u00e9 \u010drevo;;noun, azerbaijani;;yo\u011fun ba\u011f\u0131rsaq;;noun, navajo;;ach\u02bc\u00ed\u00edd\u00ed\u00edl;;noun, russian;;\u0442\u043e\u0301\u043b\u0441\u0442\u0430\u044f \u043a\u0438\u0448\u043a\u0430\u0301;;noun, danish;;tyktarm;;noun, maori;;k\u014dpiro nui;;noun, japanese;;\u5927\u8178;;noun, hungarian;;vastagb\u00e9l;;noun, macedonian;;\u0434\u0435\u0431\u0435\u043b\u043e \u0446\u0440\u0435\u0432\u043e;;noun, korean;;\uad75\uc740\ubc38;;noun, swedish;;grovtarm;;noun", "to": "colon;;(anatomy) part of the large intestine; the final segment of the digestive system, after (distal to) the ileum and before (proximal to) the rectum. (because the colon is the largest part of the large intestine (constituting most of it), it is often treated as synonymous therewith in broad or casual usage.)", "value": 16, "width": 16.0}, {"from": "large intestine;;(anatomy) the second to last part of the digestive system, comprising the cecum, colon and rectum.", "languages": "turkish;;kal\u0131n ba\u011f\u0131rsak;;noun, uzbek;;yo\u02bbg\u02bbon ichak;;noun, korean;;\ud070\ucc3d\uc790;;noun, korean;;\ub300\uc7a5;;noun, french;;gros intestin;;noun, azerbaijani;;yo\u011fun ba\u011f\u0131rsaq;;noun, serbo-croatian;;debelo crevo;;noun, czech;;tlust\u00e9 st\u0159evo;;noun, chinese cantonese;;\u5927\u8178 /\u5927\u80a0;;noun, serbo-croatian;;\u0434\u0435\u0431\u0435\u043b\u043e \u0446\u0440\u0435\u0432\u043e;;noun, norwegian bokm\u00e5l;;tykktarm;;noun, vietnamese;;ru\u1ed9t gi\u00e0;;noun, slovak;;hrub\u00e9 \u010drevo;;noun, iranian persian;;\u0631\u0648\u062f\u0650\u0647\u0654 \u0628\u064f\u0632\u064f\u0631\u0652\u06af;;noun, lao;;\u0ea5\u0ecd\u0eb2\u0ec4\u0eaa\u0ec9\u0ec3\u0eab\u0e8d\u0ec8;;noun, german;;dickdarm;;noun, khmer;;\u1796\u17c4\u17c7\u179c\u17c0\u1793\u1792\u17c6;;noun, bengali;;\u09ac\u09c3\u09b9\u09a6\u09be\u09a8\u09cd\u09a4\u09cd\u09b0;;noun, russian;;\u0442\u043e\u0301\u043b\u0441\u0442\u0430\u044f \u043a\u0438\u0448\u043a\u0430\u0301;;noun, tajik;;\u0493\u0430\u0444\u0441\u0440\u04ef\u0434\u0430;;noun, hindi;;\u092c\u0943\u0939\u0926\u093e\u0928\u094d\u0924\u094d\u0930;;noun, dutch;;dikke darm;;noun, bulgarian;;\u0434\u0435\u0431\u0435\u0301\u043b\u043e \u0447\u0435\u0440\u0432\u043e\u0301;;noun, portuguese;;intestino grosso;;noun, malay;;usus besar;;noun, macedonian;;\u0434\u0435\u0431\u0435\u043b\u043e \u0446\u0440\u0435\u0432\u043e;;noun, urdu;;\u0628\u064e\u0691\u06cc \u0622\u0646\u0652\u062a;;noun, kyrgyz;;\u0436\u043e\u043e\u043d \u0438\u0447\u0435\u0433\u0438;;noun, swedish;;tjocktarm;;noun, vietnamese;;\u0111\u1ea1i tr\u00e0ng;;noun, greek;;\u03c0\u03b1\u03c7\u03cd \u03ad\u03bd\u03c4\u03b5\u03c1\u03bf;;noun, burmese;;\u1021\u1030\u1019\u1000\u103c\u102e\u1038;;noun, romanian;;intestin gros;;noun, serbo-croatian;;\u0434\u0435\u0431\u0435\u043b\u043e \u0446\u0440\u0438\u0458\u0435\u0432\u043e;;noun, japanese;;\u5927\u8178;;noun, arabic;;\u0623\u064e\u0645\u0652\u0639\u064e\u0627\u0621 \u063a\u064e\u0644\u0650\u064a\u0638\u064e\u0629;;noun, slovene;;debelo \u010drevo;;noun, italian;;intestino crasso;;noun, ukrainian;;\u0442\u043e\u0432\u0441\u0442\u0430\u0301 \u043a\u0438\u0301\u0448\u043a\u0430;;noun, serbo-croatian;;debelo crijevo;;noun, finnish;;paksusuoli;;noun, kazakh;;\u0436\u0443\u0430\u043d \u0456\u0448\u0435\u043a;;noun, belarusian;;\u0442\u043e\u0301\u045e\u0441\u0442\u0430\u044f \u043a\u0456\u0301\u0448\u043a\u0430;;noun, danish;;tyktarm;;noun, thai;;\u0e25\u0e33\u0e44\u0e2a\u0e49\u0e43\u0e2b\u0e0d\u0e48;;noun, hungarian;;vastagb\u00e9l;;noun, polish;;jelito grube;;noun, chinese mandarin;;\u5927\u8178 /\u5927\u80a0;;noun, spanish;;intestino grueso;;noun, swedish;;grovtarm;;noun", "to": "bowel;;(chiefly medicine) a part or division of the intestines, usually the large intestine.", "value": 50, "width": 50.0}, {"from": "colon;;(anatomy) part of the large intestine; the final segment of the digestive system, after (distal to) the ileum and before (proximal to) the rectum. (because the colon is the largest part of the large intestine (constituting most of it), it is often treated as synonymous therewith in broad or casual usage.)", "languages": "swedish;;tjocktarm;;noun, slovene;;debelo \u010drevo;;noun, korean;;\ud070\ucc3d\uc790;;noun, korean;;\ub300\uc7a5;;noun, slovak;;hrub\u00e9 \u010drevo;;noun, azerbaijani;;yo\u011fun ba\u011f\u0131rsaq;;noun, russian;;\u0442\u043e\u0301\u043b\u0441\u0442\u0430\u044f \u043a\u0438\u0448\u043a\u0430\u0301;;noun, danish;;tyktarm;;noun, japanese;;\u5927\u8178;;noun, hungarian;;vastagb\u00e9l;;noun, macedonian;;\u0434\u0435\u0431\u0435\u043b\u043e \u0446\u0440\u0435\u0432\u043e;;noun, swedish;;grovtarm;;noun", "to": "bowel;;(chiefly medicine) a part or division of the intestines, usually the large intestine.", "value": 12, "width": 12.0}]);
+
+                  nodeColors = {};
+                  allNodes = nodes.get({ returnType: "Object" });
+                  for (nodeId in allNodes) {
+                    nodeColors[nodeId] = allNodes[nodeId].color;
+                  }
+                  allEdges = edges.get({ returnType: "Object" });
+                  // adding nodes and edges to the graph
+                  data = {nodes: nodes, edges: edges};
+
+                  var options = {
+    "configure": {
+        "enabled": false
+    },
+    "edges": {
+        "color": {
+            "inherit": true
+        },
+        "smooth": {
+            "enabled": true,
+            "type": "dynamic"
+        }
+    },
+    "interaction": {
+        "dragNodes": true,
+        "hideEdgesOnDrag": false,
+        "hideNodesOnDrag": false
+    },
+    "physics": {
+        "enabled": true,
+        "stabilization": {
+            "enabled": true,
+            "fit": true,
+            "iterations": 1000,
+            "onlyDynamicEdges": false,
+            "updateInterval": 50
+        }
+    }
+};
+
+                  
+
+
+                  
+
+                  network = new vis.Network(container, data, options);
+
+                  
+
+                  
+
+                  
+
+
+                  
+
+                  return network;
+
+              }
+              drawGraph();
+        </script>
+    
+    <script>
+        // Function to update the legend
+        function updateLegend(content) {
+            const legend = document.getElementById('language-legend');
+            legend.innerHTML = content;
+        }
+
+        // Add event listeners to edges using vis.js API
+        network.on("hoverEdge", function (params) {
+            const edgeId = params.edge;
+            const edge = edges.get(edgeId);
+            if (edge && edge.languages) {
+                const languagesList = edge.languages.split(', ').map(lang => `<li>${lang}</li>`).join('');
+                const numLanguages = edge.languages.split(', ').length;
+                const nodePair = `${edge.from} - ${edge.to}`;
+                updateLegend(`<h3>Languages (${numLanguages}) for ${nodePair}:</h3><ul>${languagesList}</ul>`);
+            }
+        });
+
+        network.on("blurEdge", function () {
+            updateLegend('<h3>Languages:</h3><p>Hover over an edge to see languages.</p>');
+        });
+
+        network.on("click", function (params) {
+            if (params.edges && params.edges.length > 0) {
+                const edgeId = params.edges[0];
+                const edge = edges.get(edgeId);
+                if (edge && edge.languages) {
+                    const languagesList = edge.languages.split(', ').sort().map(lang => `<li>${lang.replaceAll(";;", " - ")}</li>`).join('');
+                    const numLanguages = edge.languages.split(', ').length;
+                    const title1 = edge.from.replaceAll(";;", "&#10;");
+                    const title2 = edge.to.replaceAll(";;", "&#10;");
+                    updateLegend(`<h2><div title="${title1}";>${edge.from.split(";;")[0]}</div><div title="${title2}";>${edge.to.split(";;")[0]}</div></h2><br><h3>Languages (${numLanguages})<br></h3><ul>${languagesList}</ul>`);
+                }
+            }
+        });
+    </script>
+    <style>
+        .container {
+            display: flex;
+            width: 100%;
+            margin-top: 48px;
+        }
+        #mynetwork {
+            flex: 3;
+            height: 750px;
+            width: 90%
+            background-color: #222222;
+            border: 1px solid lightgray;
+        }
+        #language-legend h2 {
+            display: flex; 
+            flex-direction: column;
+            font-weight: bold;
+        }
+        #language-legend h3 {
+             border-bottom: 1px solid black; 
+             padding-bottom: 8px
+        }
+        #language-legend {
+            flex: 1;
+            margin-left: 20px;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            background-color: #f9f9f9;
+            overflow-y: auto;
+            max-height: 750px;
+        }
+        #language-legend ul {
+            list-style-type: none;
+            padding: 0;
+        }
+        #language-legend li {
+            margin: 5px 0;
+            font-size: 1.2em;
+        }
+    </style>
+    </body>
+</html>

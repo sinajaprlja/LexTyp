@@ -1,0 +1,239 @@
+<html>
+    <head>
+        <meta charset="utf-8">
+        
+            <script src="lib/bindings/utils.js"></script>
+            <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/vis-network/9.1.2/dist/dist/vis-network.min.css" integrity="sha512-WgxfT5LWjfszlPHXRmBWHkV2eceiWTOBvrKCNbdgDYTHrT2AeLCGbF4sZlZw3UMN3WtL0tGUoIAKsu8mllg/XA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/vis-network/9.1.2/dist/vis-network.min.js" integrity="sha512-LnvoEWDFrqGHlHmDD2101OrLcbsfkrzoSpvtSQtxK3RMnRV0eOkhhBN2dXHKRrUU8p2DGRTk35n4O8nWSVe1mQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+            
+        
+<center>
+<h1></h1>
+</center>
+
+<!-- <link rel="stylesheet" href="../node_modules/vis/dist/vis.min.css" type="text/css" />
+<script type="text/javascript" src="../node_modules/vis/dist/vis.js"> </script>-->
+        <link
+          href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/css/bootstrap.min.css"
+          rel="stylesheet"
+          integrity="sha384-eOJMYsd53ii+scO/bJGFsiCZc+5NDVN2yr8+0RDqr0Ql0h+rP48ckxlpbzKgwra6"
+          crossorigin="anonymous"
+        />
+        <script
+          src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.bundle.min.js"
+          integrity="sha384-JEW9xMcG8R+pH31jmWH6WWP0WintQrMb4s7ZOdauHnUtxwoG2vI5DkLtS3qm9Ekf"
+          crossorigin="anonymous"
+        ></script>
+
+
+        <center>
+          <h1></h1>
+        </center>
+        <style type="text/css">
+
+             #mynetwork {
+                 width: 100%;
+                 height: 100vh;
+                 background-color: #222222;
+                 border: 1px solid lightgray;
+                 position: relative;
+                 float: left;
+             }
+
+             
+
+             
+
+             
+        </style>
+    </head>
+
+
+    <body>
+        <div class="card" style="width: 100%">
+            
+            
+            <div class="container"><div id="mynetwork" class="card-body"></div>
+    <div id="language-legend">
+        <h3>Languages:</h3>
+        <p>Click on an edge to see languages.</p>
+    </div>
+    </div>
+        </div>
+
+        
+        
+
+        <script type="text/javascript">
+
+              // initialize global variables.
+              var edges;
+              var nodes;
+              var allNodes;
+              var allEdges;
+              var nodeColors;
+              var originalNodes;
+              var network;
+              var container;
+              var options, data;
+              var filter = {
+                  item : '',
+                  property : '',
+                  value : []
+              };
+
+              
+
+              
+
+              // This method is responsible for drawing the graph, returns the drawn network
+              function drawGraph() {
+                  var container = document.getElementById('mynetwork');
+
+                  
+
+                  // parsing and collecting nodes and edges from the python
+                  nodes = new vis.DataSet([{"color": "#97c2fc", "font": {"color": "white"}, "id": "eggplant;;(canada, us, australia, new zealand, philippines) the edible fruit of the solanum melongena: an aubergine.", "label": "eggplant", "shape": "dot", "title": "eggplant;;(canada, us, australia, new zealand, philippines) the edible fruit of the solanum melongena: an aubergine."}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "eggplant;;(canada, us, australia, new zealand, philippines) the plant solanum melongena.", "label": "eggplant", "shape": "dot", "title": "eggplant;;(canada, us, australia, new zealand, philippines) the plant solanum melongena."}]);
+                  edges = new vis.DataSet([{"from": "eggplant;;(canada, us, australia, new zealand, philippines) the edible fruit of the solanum melongena: an aubergine.", "languages": "japanese;;\u30ca\u30b9;;noun, hungarian;;padlizs\u00e1n;;noun, tulu;;\u0c97\u0cc1\u0cb3\u0ccd\u0cb3;;noun, hakka chinese;;\u8304\u4ed4;;noun, afrikaans;;eiervrug;;noun, tatar;;\u0431\u0430\u0434\u044b\u043c\u0497\u0430\u043d;;noun, punjabi;;\u0a2c\u0a48\u0a02\u0a17\u0a23;;noun, cebuano;;talong;;noun, czech;;bakla\u017e\u00e1n;;noun, romanian;;v\u00e2n\u0103t\u0103;;noun, finnish;;munakoiso;;noun, basque;;alberjinia;;noun, middle armenian;;\u057a\u0561\u057f\u056b\u0576\u0573\u0561\u0576;;noun, latvian;;bakla\u017e\u0101ns;;noun, kalmyk;;\u0447\u0435\u0435\u0441;;noun, slovak;;bakla\u017e\u00e1n;;noun, georgian;;\u10d1\u10d0\u10d3\u10e0\u10d8\u10ef\u10d0\u10dc\u10d8;;noun, norman;;aub\u00e8rginne;;noun, serbo-croatian;;\u043f\u0430\u0442\u043b\u0438\u045f\u0430\u043d;;noun, belarusian;;\u0431\u0430\u043a\u043b\u0430\u0436\u0430\u0301\u043d;;noun, tajik;;\u0431\u043e\u049b\u043b\u0430\u04b7\u043e\u043d;;noun, bulgarian;;\u043f\u0430\u0442\u043b\u0430\u0434\u0436\u0430\u0301\u043d;;noun, latin;;melongena;;noun, lao;;\u0ec0\u0e82\u0eb7\u0ead\u0eab\u0eb3\u0ea1\u0ec9\u0eb2;;noun, tajik;;\u0431\u043e\u0434\u0438\u043d\u04b7\u043e\u043d;;noun, kannada;;\u0ca8\u0cc6\u0cb2\u0c97\u0cc1\u0cb3\u0ccd\u0cb3;;noun, hindi;;\u092c\u0948\u0902\u0917\u0928;;noun, faroese;;eggfrukt;;noun, dutch;;aubergine;;noun, venetan;;me\u019aansana;;noun, chinese cantonese;;\u8304\u5b50;;noun, bengali;;\u09ac\u09c7\u0997\u09c1\u09a8;;noun, albanian;;pat\u00ebllxhan;;noun, urdu;;\u0628\u06cc\u0646\u062c\u0646;;noun, swedish;;\u00e4ggplanta;;noun, yiddish;;\u05e4\u05bc\u05d0\u05b7\u05d8\u05dc\u05e2\u05d6\u05e9\u05d0\u05b7\u05df;;noun, estonian;;pommu;;noun, kamta;;\u09ac\u09be\u0987\u0997\u09a8;;noun, arabic;;\u0628\u064e\u0627\u0630\u0650\u0646\u0652\u062c\u064e\u0627\u0646;;noun, korean;;\uac00\uc9c0;;noun, persian;;\u0628\u0627\u062a\u0646\u06af\u0627\u0646;;noun, hindi;;\u092c\u0924\u093f\u092f\u093e;;noun, chinese cantonese;;\u77ee\u74dc;;noun, bikol central;;talong;;noun, german;;melanzani;;noun, maori;;otahua;;noun, serbo-croatian;;patlid\u017ean;;noun, dhivehi;;\u0784\u07a6\u0781\u07a8;;noun, kapampangan;;balasenas;;noun, ukrainian;;\u0431\u0430\u043a\u043b\u0430\u0436\u0430\u0301\u043d;;noun, nepali;;\u092c\u0948\u091c\u0928\u0940;;noun, armenian;;\u0562\u0561\u0564\u0580\u056b\u057b\u0561\u0576;;noun, russian;;\u0431\u0430\u043a\u043b\u0430\u0436\u0430\u0301\u043d;;noun, navajo;;ay\u0119\u0119zhii yilt\u02bc\u0105\u0105\u02bc\u00ed;;noun, japanese;;\u8304\u5b50;;noun, kyrgyz;;\u0431\u0430\u043a\u043b\u0430\u0436\u0430\u043d;;noun, lak;;\u0431\u0430\u0434\u0438\u0440\u0436\u0430\u043d;;noun, chinese;;\u8304;;noun, assamese;;\u09ac\u09c7\u0999\u09c7\u09a8\u09be;;noun, persian;;\u0628\u0627\u062f\u0646\u062c\u0627\u0646;;noun, odia;;\u0b2c\u0b3e\u0b07\u0b17\u0b23;;noun, irish;;ubhthoradh;;noun, arabic;;\u062f\u0646\u062c\u0627\u0646;;noun, urdu;;\u0628\u06cc\u0646\u06af\u0646;;noun, lithuanian;;bakla\u017eanas;;noun, portuguese;;berinjela;;noun, urdu;;\u0628\u06cc\u06af\u0646;;noun, telugu;;\u0c35\u0c02\u0c15\u0c3e\u0c2f;;noun, arabic;;\u0628\u062a\u0646\u062c\u0627\u0646;;noun, gujarati;;\u0ab0\u0ac0\u0a82\u0a97\u0aa3;;noun, hindi;;\u092d\u0923\u094d\u091f\u093e;;noun, malayalam;;\u0d35\u0d34\u0d41\u0d24\u0d28;;noun, german;;eierfrucht;;noun, arabic;;\u062f\u0646\u062c\u0627\u0644;;noun, turkmen;;badamjan;;noun, hebrew;;\u05d7\u05b8\u05e6\u05b4\u05d9\u05dc;;noun, danish;;aubergine;;noun, tagalog;;talong;;noun, swedish;;aubergine;;noun, turkish;;patl\u0131can;;noun, punjabi;;\u0a2c\u0a24\u0a3e\u0a0a\u0a02;;noun, esperanto;;melongeno;;noun, slovak;;\u013eu\u013eok;;noun, polish;;bak\u0142a\u017can;;noun, macedonian;;\u043f\u0430\u0442\u043b\u0438\u045f\u0430\u043d;;noun, chinese cantonese;;\u8304\u74dc;;noun, icelandic;;eggaldin;;noun, sylheti;;\ua81b\ua823\ua801\ua80b\ua809\ua818;;noun, italian;;melanzana;;noun, nepali;;\u092d\u0923\u094d\u091f\u093e;;noun, iraqi arabic;;\u0628\u064a\u062a\u0650\u0646\u0652\u062c\u0627\u0646;;noun, sicilian;;milinciana;;noun, french;;aubergine;;noun, polish;;ober\u017cyna;;noun, greek;;\u03bc\u03b5\u03bb\u03b9\u03c4\u03b6\u03ac\u03bd\u03b1;;noun, asturian;;berenxena;;noun, thai;;\u0e21\u0e30\u0e40\u0e02\u0e37\u0e2d;;noun, norwegian;;aubergine;;noun, spanish;;berenjena;;noun, persian;;\u0628\u0627\u062f\u0646\u06af\u0627\u0646;;noun, zazaki;;baincan;;noun, gujarati;;\u0ab5\u0ac7\u0a82\u0a97\u0aa3;;noun, german;;aubergine;;noun, slovene;;jaj\u010devec;;noun, l\u00fc;;\u1996\u19b1\u19c5\u19b5\u1983\u19b2;;noun, chinese mandarin;;\u8304\u5b50;;noun, estonian;;bakla\u017eaan;;noun, kashmiri;;\u0935\u093e\u0901\u0917\u0941\u0928;;noun, kashmiri;;\u0648\u0627\u0646\u065b\u06af\u064f\u0646;;noun, tigrinya;;\u1218\u1208\u1295\u12db\u1293;;noun, basque;;berenjena;;noun, armenian;;\u057d\u0574\u0562\u0578\u0582\u056f;;noun, telugu;;\u0c35\u0c02\u0c17;;noun, dutch;;eiervrucht;;noun", "to": "eggplant;;(canada, us, australia, new zealand, philippines) the plant solanum melongena.", "value": 114, "width": 1.0}]);
+
+                  nodeColors = {};
+                  allNodes = nodes.get({ returnType: "Object" });
+                  for (nodeId in allNodes) {
+                    nodeColors[nodeId] = allNodes[nodeId].color;
+                  }
+                  allEdges = edges.get({ returnType: "Object" });
+                  // adding nodes and edges to the graph
+                  data = {nodes: nodes, edges: edges};
+
+                  var options = {
+    "configure": {
+        "enabled": false
+    },
+    "edges": {
+        "color": {
+            "inherit": true
+        },
+        "smooth": {
+            "enabled": true,
+            "type": "dynamic"
+        }
+    },
+    "interaction": {
+        "dragNodes": true,
+        "hideEdgesOnDrag": false,
+        "hideNodesOnDrag": false
+    },
+    "physics": {
+        "enabled": true,
+        "stabilization": {
+            "enabled": true,
+            "fit": true,
+            "iterations": 1000,
+            "onlyDynamicEdges": false,
+            "updateInterval": 50
+        }
+    }
+};
+
+                  
+
+
+                  
+
+                  network = new vis.Network(container, data, options);
+
+                  
+
+                  
+
+                  
+
+
+                  
+
+                  return network;
+
+              }
+              drawGraph();
+        </script>
+    
+    <script>
+        // Function to update the legend
+        function updateLegend(content) {
+            const legend = document.getElementById('language-legend');
+            legend.innerHTML = content;
+        }
+
+        // Add event listeners to edges using vis.js API
+        network.on("hoverEdge", function (params) {
+            const edgeId = params.edge;
+            const edge = edges.get(edgeId);
+            if (edge && edge.languages) {
+                const languagesList = edge.languages.split(', ').map(lang => `<li>${lang}</li>`).join('');
+                const numLanguages = edge.languages.split(', ').length;
+                const nodePair = `${edge.from} - ${edge.to}`;
+                updateLegend(`<h3>Languages (${numLanguages}) for ${nodePair}:</h3><ul>${languagesList}</ul>`);
+            }
+        });
+
+        network.on("blurEdge", function () {
+            updateLegend('<h3>Languages:</h3><p>Hover over an edge to see languages.</p>');
+        });
+
+        network.on("click", function (params) {
+            if (params.edges && params.edges.length > 0) {
+                const edgeId = params.edges[0];
+                const edge = edges.get(edgeId);
+                if (edge && edge.languages) {
+                    const languagesList = edge.languages.split(', ').sort().map(lang => `<li>${lang.replaceAll(";;", " - ")}</li>`).join('');
+                    const numLanguages = edge.languages.split(', ').length;
+                    const title1 = edge.from.replaceAll(";;", "&#10;");
+                    const title2 = edge.to.replaceAll(";;", "&#10;");
+                    updateLegend(`<h2><div title="${title1}";>${edge.from.split(";;")[0]}</div><div title="${title2}";>${edge.to.split(";;")[0]}</div></h2><br><h3>Languages (${numLanguages})<br></h3><ul>${languagesList}</ul>`);
+                }
+            }
+        });
+    </script>
+    <style>
+        .container {
+            display: flex;
+            width: 100%;
+            margin-top: 48px;
+        }
+        #mynetwork {
+            flex: 3;
+            height: 750px;
+            width: 90%
+            background-color: #222222;
+            border: 1px solid lightgray;
+        }
+        #language-legend h2 {
+            display: flex; 
+            flex-direction: column;
+            font-weight: bold;
+        }
+        #language-legend h3 {
+             border-bottom: 1px solid black; 
+             padding-bottom: 8px
+        }
+        #language-legend {
+            flex: 1;
+            margin-left: 20px;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            background-color: #f9f9f9;
+            overflow-y: auto;
+            max-height: 750px;
+        }
+        #language-legend ul {
+            list-style-type: none;
+            padding: 0;
+        }
+        #language-legend li {
+            margin: 5px 0;
+            font-size: 1.2em;
+        }
+    </style>
+    </body>
+</html>

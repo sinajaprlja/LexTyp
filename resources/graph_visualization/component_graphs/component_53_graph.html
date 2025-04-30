@@ -1,0 +1,239 @@
+<html>
+    <head>
+        <meta charset="utf-8">
+        
+            <script src="lib/bindings/utils.js"></script>
+            <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/vis-network/9.1.2/dist/dist/vis-network.min.css" integrity="sha512-WgxfT5LWjfszlPHXRmBWHkV2eceiWTOBvrKCNbdgDYTHrT2AeLCGbF4sZlZw3UMN3WtL0tGUoIAKsu8mllg/XA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/vis-network/9.1.2/dist/vis-network.min.js" integrity="sha512-LnvoEWDFrqGHlHmDD2101OrLcbsfkrzoSpvtSQtxK3RMnRV0eOkhhBN2dXHKRrUU8p2DGRTk35n4O8nWSVe1mQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+            
+        
+<center>
+<h1></h1>
+</center>
+
+<!-- <link rel="stylesheet" href="../node_modules/vis/dist/vis.min.css" type="text/css" />
+<script type="text/javascript" src="../node_modules/vis/dist/vis.js"> </script>-->
+        <link
+          href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/css/bootstrap.min.css"
+          rel="stylesheet"
+          integrity="sha384-eOJMYsd53ii+scO/bJGFsiCZc+5NDVN2yr8+0RDqr0Ql0h+rP48ckxlpbzKgwra6"
+          crossorigin="anonymous"
+        />
+        <script
+          src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.bundle.min.js"
+          integrity="sha384-JEW9xMcG8R+pH31jmWH6WWP0WintQrMb4s7ZOdauHnUtxwoG2vI5DkLtS3qm9Ekf"
+          crossorigin="anonymous"
+        ></script>
+
+
+        <center>
+          <h1></h1>
+        </center>
+        <style type="text/css">
+
+             #mynetwork {
+                 width: 100%;
+                 height: 100vh;
+                 background-color: #222222;
+                 border: 1px solid lightgray;
+                 position: relative;
+                 float: left;
+             }
+
+             
+
+             
+
+             
+        </style>
+    </head>
+
+
+    <body>
+        <div class="card" style="width: 100%">
+            
+            
+            <div class="container"><div id="mynetwork" class="card-body"></div>
+    <div id="language-legend">
+        <h3>Languages:</h3>
+        <p>Click on an edge to see languages.</p>
+    </div>
+    </div>
+        </div>
+
+        
+        
+
+        <script type="text/javascript">
+
+              // initialize global variables.
+              var edges;
+              var nodes;
+              var allNodes;
+              var allEdges;
+              var nodeColors;
+              var originalNodes;
+              var network;
+              var container;
+              var options, data;
+              var filter = {
+                  item : '',
+                  property : '',
+                  value : []
+              };
+
+              
+
+              
+
+              // This method is responsible for drawing the graph, returns the drawn network
+              function drawGraph() {
+                  var container = document.getElementById('mynetwork');
+
+                  
+
+                  // parsing and collecting nodes and edges from the python
+                  nodes = new vis.DataSet([{"color": "#97c2fc", "font": {"color": "white"}, "id": "bottleneck;;(figurative) in traffic, any narrowing of the road, especially resulting in a delay.", "label": "bottleneck", "shape": "dot", "title": "bottleneck;;(figurative) in traffic, any narrowing of the road, especially resulting in a delay."}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "dale;;(chiefly british, slightly dated outside yorkshire etc.) a valley, often in an otherwise hilly area.", "label": "dale", "shape": "dot", "title": "dale;;(chiefly british, slightly dated outside yorkshire etc.) a valley, often in an otherwise hilly area."}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "isthmus;;(geography) a narrow strip of land, bordered on both sides by water, and connecting two larger landmasses.", "label": "isthmus", "shape": "dot", "title": "isthmus;;(geography) a narrow strip of land, bordered on both sides by water, and connecting two larger landmasses."}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "abyss;;(frequently figurative) a bottomless or unfathomed depth, gulf, or chasm; hence, any deep, immeasurable; any void space.", "label": "abyss", "shape": "dot", "title": "abyss;;(frequently figurative) a bottomless or unfathomed depth, gulf, or chasm; hence, any deep, immeasurable; any void space."}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "strait;;(geography) a narrow channel of water connecting two larger bodies of water.", "label": "strait", "shape": "dot", "title": "strait;;(geography) a narrow channel of water connecting two larger bodies of water."}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "neck;;(anatomy) the part of the body connecting the head and the trunk found in humans and some animals.", "label": "neck", "shape": "dot", "title": "neck;;(anatomy) the part of the body connecting the head and the trunk found in humans and some animals."}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "nape;;(anatomy) the back part of the neck.", "label": "nape", "shape": "dot", "title": "nape;;(anatomy) the back part of the neck."}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "chasm;;(geology, planetology) a deep, steep-sided rift, gap or fissure; a gorge or abyss.", "label": "chasm", "shape": "dot", "title": "chasm;;(geology, planetology) a deep, steep-sided rift, gap or fissure; a gorge or abyss."}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "gorge;;(geography) a deep, narrow passage with steep, rocky sides, particularly one with a stream running through it; a ravine.", "label": "gorge", "shape": "dot", "title": "gorge;;(geography) a deep, narrow passage with steep, rocky sides, particularly one with a stream running through it; a ravine."}]);
+                  edges = new vis.DataSet([{"from": "bottleneck;;(figurative) in traffic, any narrowing of the road, especially resulting in a delay.", "languages": "persian;;\u06af\u0644\u0648\u06af\u0627\u0647;;noun, spanish;;garganta;;noun", "to": "gorge;;(geography) a deep, narrow passage with steep, rocky sides, particularly one with a stream running through it; a ravine.", "value": 2, "width": 0.11764705882352941}, {"from": "dale;;(chiefly british, slightly dated outside yorkshire etc.) a valley, often in an otherwise hilly area.", "languages": "ottoman turkish;;\u062f\u0631\u0647;;noun, persian;;\u062f\u0631\u0647;;noun", "to": "gorge;;(geography) a deep, narrow passage with steep, rocky sides, particularly one with a stream running through it; a ravine.", "value": 2, "width": 0.11764705882352941}, {"from": "isthmus;;(geography) a narrow strip of land, bordered on both sides by water, and connecting two larger landmasses.", "languages": "maori;;k\u016bititanga;;noun, latvian;;\u0161aurums;;noun, hebrew;;\u05de\u05d9\u05e6\u05e8 \\ \u05de\u05b5\u05e6\u05b7\u05e8;;noun, slovene;;o\u017eina;;noun", "to": "strait;;(geography) a narrow channel of water connecting two larger bodies of water.", "value": 4, "width": 0.23529411764705882}, {"from": "isthmus;;(geography) a narrow strip of land, bordered on both sides by water, and connecting two larger landmasses.", "languages": "lao;;\u0e84\u0ecd;;noun, uyghur;;\u0628\u0648\u064a\u06c7\u0646;;noun, armenian;;\u057a\u0561\u0580\u0561\u0576\u0578\u0581;;noun, slovak;;\u0161ija;;noun, azerbaijani;;boyun;;noun, kyrgyz;;\u043c\u043e\u044e\u043d;;noun, czech;;\u0161\u00edje;;noun", "to": "neck;;(anatomy) the part of the body connecting the head and the trunk found in humans and some animals.", "value": 7, "width": 0.4117647058823529}, {"from": "isthmus;;(geography) a narrow strip of land, bordered on both sides by water, and connecting two larger landmasses.", "languages": "czech;;\u0161\u00edje;;noun, slovak;;\u0161ija;;noun", "to": "nape;;(anatomy) the back part of the neck.", "value": 2, "width": 0.11764705882352941}, {"from": "abyss;;(frequently figurative) a bottomless or unfathomed depth, gulf, or chasm; hence, any deep, immeasurable; any void space.", "languages": "russian;;\u0431\u0435\u0301\u0437\u0434\u043d\u0430;;noun, dutch;;afgrond;;noun, italian;;abisso;;noun, spanish;;sima;;noun, danish;;afgrund;;noun, russian;;\u043f\u0440\u043e\u0301\u043f\u0430\u0441\u0442\u044c;;noun, french;;gouffre;;noun, polish;;przepa\u015b\u0107;;noun, polish;;otch\u0142a\u0144;;noun, ukrainian;;\u043f\u0440\u0456\u0301\u0440\u0432\u0430;;noun, spanish;;abismo;;noun, czech;;propast;;noun, ottoman turkish;;\u062f\u0631\u06cc\u06ad\u0644\u0643;;noun, ukrainian;;\u0431\u0435\u0437\u043e\u0301\u0434\u043d\u044f;;noun, finnish;;kuilu;;noun, german;;abgrund;;noun, portuguese;;abismo;;noun", "to": "chasm;;(geology, planetology) a deep, steep-sided rift, gap or fissure; a gorge or abyss.", "value": 17, "width": 1.0}, {"from": "strait;;(geography) a narrow channel of water connecting two larger bodies of water.", "languages": "persian;;\u062a\u0646\u06af\u0647;;noun, ottoman turkish;;\u0628\u0648\u063a\u0627\u0632;;noun", "to": "gorge;;(geography) a deep, narrow passage with steep, rocky sides, particularly one with a stream running through it; a ravine.", "value": 2, "width": 0.11764705882352941}, {"from": "neck;;(anatomy) the part of the body connecting the head and the trunk found in humans and some animals.", "languages": "afrikaans;;nek;;noun, german;;nacken;;noun, coptic;;\u03e7\u2c81\u03e7;;noun, dutch;;nek;;noun, french;;nuque;;noun, mongolian;;\u0445\u04af\u0437\u04af\u04af;;noun, slovak;;\u0161ija;;noun, german;;genick;;noun, norwegian bokm\u00e5l;;hals;;noun, punjabi;;\u0a27\u0a4c\u0a23;;noun, czech;;\u0161\u00edje;;noun, polish;;kark;;noun, volap\u00fck;;n\u00fck;;noun", "to": "nape;;(anatomy) the back part of the neck.", "value": 13, "width": 0.7647058823529411}, {"from": "chasm;;(geology, planetology) a deep, steep-sided rift, gap or fissure; a gorge or abyss.", "languages": "javanese;;curah;;noun, javanese;;jurang;;noun, slovak;;roklina;;noun, spanish;;garganta;;noun, finnish;;rotko;;noun, dutch;;kloof;;noun", "to": "gorge;;(geography) a deep, narrow passage with steep, rocky sides, particularly one with a stream running through it; a ravine.", "value": 6, "width": 0.35294117647058826}]);
+
+                  nodeColors = {};
+                  allNodes = nodes.get({ returnType: "Object" });
+                  for (nodeId in allNodes) {
+                    nodeColors[nodeId] = allNodes[nodeId].color;
+                  }
+                  allEdges = edges.get({ returnType: "Object" });
+                  // adding nodes and edges to the graph
+                  data = {nodes: nodes, edges: edges};
+
+                  var options = {
+    "configure": {
+        "enabled": false
+    },
+    "edges": {
+        "color": {
+            "inherit": true
+        },
+        "smooth": {
+            "enabled": true,
+            "type": "dynamic"
+        }
+    },
+    "interaction": {
+        "dragNodes": true,
+        "hideEdgesOnDrag": false,
+        "hideNodesOnDrag": false
+    },
+    "physics": {
+        "enabled": true,
+        "stabilization": {
+            "enabled": true,
+            "fit": true,
+            "iterations": 1000,
+            "onlyDynamicEdges": false,
+            "updateInterval": 50
+        }
+    }
+};
+
+                  
+
+
+                  
+
+                  network = new vis.Network(container, data, options);
+
+                  
+
+                  
+
+                  
+
+
+                  
+
+                  return network;
+
+              }
+              drawGraph();
+        </script>
+    
+    <script>
+        // Function to update the legend
+        function updateLegend(content) {
+            const legend = document.getElementById('language-legend');
+            legend.innerHTML = content;
+        }
+
+        // Add event listeners to edges using vis.js API
+        network.on("hoverEdge", function (params) {
+            const edgeId = params.edge;
+            const edge = edges.get(edgeId);
+            if (edge && edge.languages) {
+                const languagesList = edge.languages.split(', ').map(lang => `<li>${lang}</li>`).join('');
+                const numLanguages = edge.languages.split(', ').length;
+                const nodePair = `${edge.from} - ${edge.to}`;
+                updateLegend(`<h3>Languages (${numLanguages}) for ${nodePair}:</h3><ul>${languagesList}</ul>`);
+            }
+        });
+
+        network.on("blurEdge", function () {
+            updateLegend('<h3>Languages:</h3><p>Hover over an edge to see languages.</p>');
+        });
+
+        network.on("click", function (params) {
+            if (params.edges && params.edges.length > 0) {
+                const edgeId = params.edges[0];
+                const edge = edges.get(edgeId);
+                if (edge && edge.languages) {
+                    const languagesList = edge.languages.split(', ').sort().map(lang => `<li>${lang.replaceAll(";;", " - ")}</li>`).join('');
+                    const numLanguages = edge.languages.split(', ').length;
+                    const title1 = edge.from.replaceAll(";;", "&#10;");
+                    const title2 = edge.to.replaceAll(";;", "&#10;");
+                    updateLegend(`<h2><div title="${title1}";>${edge.from.split(";;")[0]}</div><div title="${title2}";>${edge.to.split(";;")[0]}</div></h2><br><h3>Languages (${numLanguages})<br></h3><ul>${languagesList}</ul>`);
+                }
+            }
+        });
+    </script>
+    <style>
+        .container {
+            display: flex;
+            width: 100%;
+            margin-top: 48px;
+        }
+        #mynetwork {
+            flex: 3;
+            height: 750px;
+            width: 90%
+            background-color: #222222;
+            border: 1px solid lightgray;
+        }
+        #language-legend h2 {
+            display: flex; 
+            flex-direction: column;
+            font-weight: bold;
+        }
+        #language-legend h3 {
+             border-bottom: 1px solid black; 
+             padding-bottom: 8px
+        }
+        #language-legend {
+            flex: 1;
+            margin-left: 20px;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            background-color: #f9f9f9;
+            overflow-y: auto;
+            max-height: 750px;
+        }
+        #language-legend ul {
+            list-style-type: none;
+            padding: 0;
+        }
+        #language-legend li {
+            margin: 5px 0;
+            font-size: 1.2em;
+        }
+    </style>
+    </body>
+</html>

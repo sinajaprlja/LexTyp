@@ -1,0 +1,239 @@
+<html>
+    <head>
+        <meta charset="utf-8">
+        
+            <script src="lib/bindings/utils.js"></script>
+            <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/vis-network/9.1.2/dist/dist/vis-network.min.css" integrity="sha512-WgxfT5LWjfszlPHXRmBWHkV2eceiWTOBvrKCNbdgDYTHrT2AeLCGbF4sZlZw3UMN3WtL0tGUoIAKsu8mllg/XA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/vis-network/9.1.2/dist/vis-network.min.js" integrity="sha512-LnvoEWDFrqGHlHmDD2101OrLcbsfkrzoSpvtSQtxK3RMnRV0eOkhhBN2dXHKRrUU8p2DGRTk35n4O8nWSVe1mQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+            
+        
+<center>
+<h1></h1>
+</center>
+
+<!-- <link rel="stylesheet" href="../node_modules/vis/dist/vis.min.css" type="text/css" />
+<script type="text/javascript" src="../node_modules/vis/dist/vis.js"> </script>-->
+        <link
+          href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/css/bootstrap.min.css"
+          rel="stylesheet"
+          integrity="sha384-eOJMYsd53ii+scO/bJGFsiCZc+5NDVN2yr8+0RDqr0Ql0h+rP48ckxlpbzKgwra6"
+          crossorigin="anonymous"
+        />
+        <script
+          src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.bundle.min.js"
+          integrity="sha384-JEW9xMcG8R+pH31jmWH6WWP0WintQrMb4s7ZOdauHnUtxwoG2vI5DkLtS3qm9Ekf"
+          crossorigin="anonymous"
+        ></script>
+
+
+        <center>
+          <h1></h1>
+        </center>
+        <style type="text/css">
+
+             #mynetwork {
+                 width: 100%;
+                 height: 100vh;
+                 background-color: #222222;
+                 border: 1px solid lightgray;
+                 position: relative;
+                 float: left;
+             }
+
+             
+
+             
+
+             
+        </style>
+    </head>
+
+
+    <body>
+        <div class="card" style="width: 100%">
+            
+            
+            <div class="container"><div id="mynetwork" class="card-body"></div>
+    <div id="language-legend">
+        <h3>Languages:</h3>
+        <p>Click on an edge to see languages.</p>
+    </div>
+    </div>
+        </div>
+
+        
+        
+
+        <script type="text/javascript">
+
+              // initialize global variables.
+              var edges;
+              var nodes;
+              var allNodes;
+              var allEdges;
+              var nodeColors;
+              var originalNodes;
+              var network;
+              var container;
+              var options, data;
+              var filter = {
+                  item : '',
+                  property : '',
+                  value : []
+              };
+
+              
+
+              
+
+              // This method is responsible for drawing the graph, returns the drawn network
+              function drawGraph() {
+                  var container = document.getElementById('mynetwork');
+
+                  
+
+                  // parsing and collecting nodes and edges from the python
+                  nodes = new vis.DataSet([{"color": "#97c2fc", "font": {"color": "white"}, "id": "what\u0027s up;;(idiomatic, colloquial, chiefly us, with up in the sense of \"happening\") what\u0027s happening? what are you doing?", "label": "what\u0027s up", "shape": "dot", "title": "what\u0027s up;;(idiomatic, colloquial, chiefly us, with up in the sense of \"happening\") what\u0027s happening? what are you doing?"}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "how\u0027s it going;;(informal) how are you?", "label": "how\u0027s it going", "shape": "dot", "title": "how\u0027s it going;;(informal) how are you?"}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "good day;;(dated, formal) a somewhat formal greeting generally used between sunrise and sunset.", "label": "good day", "shape": "dot", "title": "good day;;(dated, formal) a somewhat formal greeting generally used between sunrise and sunset."}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "see you;;(informal) see you later.", "label": "see you", "shape": "dot", "title": "see you;;(informal) see you later."}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "how do you do;;(formal) a greeting used upon being introduced to someone. alternatives are how are you, pleased to meet you, and nice to meet you. (sometimes used as a rhetorical question among familiar parties, depending on the region).", "label": "how do you do", "shape": "dot", "title": "how do you do;;(formal) a greeting used upon being introduced to someone. alternatives are how are you, pleased to meet you, and nice to meet you. (sometimes used as a rhetorical question among familiar parties, depending on the region)."}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "good afternoon;;(rather formal in us, canada) a greeting or farewell said in the afternoon.", "label": "good afternoon", "shape": "dot", "title": "good afternoon;;(rather formal in us, canada) a greeting or farewell said in the afternoon."}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "how are you;;(idiomatic) an informal greeting, not requiring a literal response. in form a question, and thus followed by a question mark. typical responses include:", "label": "how are you", "shape": "dot", "title": "how are you;;(idiomatic) an informal greeting, not requiring a literal response. in form a question, and thus followed by a question mark. typical responses include:"}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "see you later;;(idiomatic) a phrase used at parting, and not necessarily implying that the person being addressed will be seen later by the speaker.", "label": "see you later", "shape": "dot", "title": "see you later;;(idiomatic) a phrase used at parting, and not necessarily implying that the person being addressed will be seen later by the speaker."}]);
+                  edges = new vis.DataSet([{"from": "what\u0027s up;;(idiomatic, colloquial, chiefly us, with up in the sense of \"happening\") what\u0027s happening? what are you doing?", "languages": "tagalog;;kumusta;;phrase, polish;;jak tam;;phrase, polish;;jak si\u0119 masz;;phrase, polish;;jak leci;;phrase, italian;;come va;;phrase, dutch;;hoe gaat het;;phrase", "to": "how do you do;;(formal) a greeting used upon being introduced to someone. alternatives are how are you, pleased to meet you, and nice to meet you. (sometimes used as a rhetorical question among familiar parties, depending on the region).", "value": 6, "width": 1.5}, {"from": "what\u0027s up;;(idiomatic, colloquial, chiefly us, with up in the sense of \"happening\") what\u0027s happening? what are you doing?", "languages": "finnish;;miten menee;;phrase, polish;;jak tam;;phrase, tagalog;;kumusta;;phrase, spanish;;qu\u00e9 tal;;phrase, polish;;co tam;;phrase, polish;;jak si\u0119 masz;;phrase, tagalog;;ano\u0027ng balita;;phrase, polish;;jak leci;;phrase, italian;;come va;;phrase, portuguese;;tudo bem;;phrase, russian;;\u043a\u0430\u043a \u0434\u0435\u043b\u0430\u0301;;phrase, dutch;;hoe gaat het;;phrase, chinese mandarin;;\u600e\u9ebc\u6a23 /\u600e\u4e48\u6837;;phrase, german;;wie geht\u0027s;;phrase, polish;;co s\u0142ycha\u0107;;phrase", "to": "how\u0027s it going;;(informal) how are you?", "value": 15, "width": 3.75}, {"from": "how\u0027s it going;;(informal) how are you?", "languages": "tagalog;;kumusta;;phrase, polish;;jak tam;;phrase, polish;;jak si\u0119 masz;;phrase, polish;;jak leci;;phrase, italian;;come va;;phrase, dutch;;hoe gaat het;;phrase", "to": "how do you do;;(formal) a greeting used upon being introduced to someone. alternatives are how are you, pleased to meet you, and nice to meet you. (sometimes used as a rhetorical question among familiar parties, depending on the region).", "value": 6, "width": 1.5}, {"from": "how\u0027s it going;;(informal) how are you?", "languages": "french;;comment \u00e7a va;;phrase, thai;;\u0e2a\u0e1a\u0e32\u0e22\u0e14\u0e35\u0e44\u0e2b\u0e21;;phrase, macanese;;como t\u00e1 vai?;;phrase, french;;\u00e7a va;;phrase", "to": "how are you;;(idiomatic) an informal greeting, not requiring a literal response. in form a question, and thus followed by a question mark. typical responses include:", "value": 4, "width": 1.0}, {"from": "good day;;(dated, formal) a somewhat formal greeting generally used between sunrise and sunset.", "languages": "danish;;goddag;;phrase, finnish;;hyv\u00e4\u00e4 p\u00e4iv\u00e4\u00e4;;phrase, korean;;\uc548\ub155\ud558\uc2ed\ub2c8\uae4c;;phrase", "to": "how do you do;;(formal) a greeting used upon being introduced to someone. alternatives are how are you, pleased to meet you, and nice to meet you. (sometimes used as a rhetorical question among familiar parties, depending on the region).", "value": 3, "width": 0.75}, {"from": "good day;;(dated, formal) a somewhat formal greeting generally used between sunrise and sunset.", "languages": "russian;;\u0434\u043e\u0301\u0431\u0440\u044b\u0439 \u0434\u0435\u043d\u044c;;phrase, ingrian;;tere p\u00e4iv\u00e4\u00e4;;phrase, korean;;\uc548\ub155;;phrase, romanian;;bun\u0103 ziua;;phrase, albanian;;mir\u00ebdita;;phrase, german;;guten tag;;phrase, serbo-croatian;;\u0434\u043e\u030f\u0431\u0430\u0440 \u0434\u0430\u0311\u043d;;phrase, slovak;;dobr\u00fd de\u0148;;phrase, zulu;;sawubona;;phrase, japanese;;\u4eca\u65e5\u306f;;phrase, korean;;\uc548\ub155\ud558\uc2ed\ub2c8\uae4c;;phrase, polish;;dzie\u0144 dobry;;phrase, macedonian;;\u0434\u043e\u0431\u0430\u0440 \u0434\u0435\u043d;;phrase, belarusian;;\u0434\u043e\u0301\u0431\u0440\u044b \u0434\u0437\u0435\u043d\u044c;;phrase, chinese mandarin;;\u4f60\u597d;;phrase, ingrian;;hyvv\u00e4\u00e4 p\u00e4iv\u00e4\u00e4;;phrase, serbo-croatian;;d\u020dbar d\u0203n;;phrase, greek;;\u03ba\u03b1\u03bb\u03b7\u03bc\u03ad\u03c1\u03b1;;phrase, french;;bonjour;;phrase, dutch;;goedendag;;phrase, faroese;;g\u00f3\u00f0an dag;;phrase, ukrainian;;\u0434\u043e\u0301\u0431\u0440\u0438\u0439 \u0434\u0435\u043d\u044c;;phrase, armenian;;\u0562\u0561\u0580\u056b \u0585\u0580;;phrase, japanese;;\u3053\u3093\u306b\u3061\u306f;;phrase, swedish;;god dag;;phrase, zulu;;sanibonani;;phrase, indonesian;;selamat sore;;phrase, indonesian;;selamat siang;;phrase, hindi;;\u0928\u092e\u0938\u094d\u0924\u0947;;phrase, estonian;;tere p\u00e4evast;;phrase, thai;;\u0e2a\u0e27\u0e31\u0e2a\u0e14\u0e35;;phrase, finnish;;hyv\u00e4\u00e4 p\u00e4iv\u00e4\u00e4;;phrase, italian;;buongiorno;;phrase, turkish;;iyi g\u00fcnler;;phrase, hungarian;;j\u00f3 napot k\u00edv\u00e1nok;;phrase, bulgarian;;\u0434\u043e\u0431\u044a\u0301\u0440 \u0434\u0435\u043d;;phrase, javanese;;sugeng siang;;phrase, hungarian;;j\u00f3 napot;;phrase, korean;;\uc548\ub155\ud558\uc138\uc694;;phrase, icelandic;;g\u00f3\u00f0an dag;;phrase, czech;;dobr\u00fd den;;phrase, chechen;;\u0434\u0435 \u0434\u0438\u043a\u0430 \u0434\u043e\u0439\u043b\u0430;;phrase", "to": "good afternoon;;(rather formal in us, canada) a greeting or farewell said in the afternoon.", "value": 42, "width": 10.5}, {"from": "good day;;(dated, formal) a somewhat formal greeting generally used between sunrise and sunset.", "languages": "korean;;\uc548\ub155;;phrase, korean;;\uc548\ub155\ud558\uc138\uc694;;phrase, thai;;\u0e2a\u0e27\u0e31\u0e2a\u0e14\u0e35;;phrase", "to": "see you later;;(idiomatic) a phrase used at parting, and not necessarily implying that the person being addressed will be seen later by the speaker.", "value": 3, "width": 0.75}, {"from": "see you;;(informal) see you later.", "languages": "polish;;pa pa;;phrase, polish;;na razie;;phrase, korean;;\uc548\ub155;;phrase, jamaican creole;;likkle more;;phrase, polish;;pa;;phrase, greek;;\u03c4\u03b1 \u03bb\u03ad\u03bc\u03b5;;phrase, swedish;;vi ses;;phrase, georgian;;\u10dc\u10d0\u10ee\u10d5\u10d0\u10db\u10d3\u10d8\u10e1;;phrase, chinese mandarin;;\u62dc\u62dc;;phrase, spanish;;nos veremos;;phrase, turkish;;g\u00f6r\u00fc\u015f\u00fcr\u00fcz;;phrase, hungarian;;viszl\u00e1t;;phrase, japanese;;\u307e\u305f\u306d;;phrase, romanian;;pe mai t\u00e2rziu;;phrase, portuguese;;at\u00e9 mais;;phrase, khmer;;\u179b\u17b6\u17a0\u17be\u1799;;phrase, polish;;do zobaczenia;;phrase, japanese;;\u30d0\u30a4\u30d0\u30a4;;phrase, polish;;nara;;phrase, slovak;;ahoj;;phrase, vietnamese;;h\u1eb9n g\u1eb7p l\u1ea1i;;phrase, danish;;vi ses;;phrase, khmer;;\u179b\u17b6\u179f\u17b7\u1793\u17a0\u17be\u1799;;phrase, russian;;\u0434\u043e \u0432\u0441\u0442\u0440\u0435\u0301\u0447\u0438;;phrase, polish;;cze\u015b\u0107;;phrase, galician;;a m\u00e1is ver;;phrase, portuguese;;falou;;phrase, dutch;;later;;phrase, northern sami;;oaidnaleapm\u00e1i;;phrase, finnish;;n\u00e4kemiin;;phrase, russian;;\u043f\u043e\u043a\u0430\u0301;;phrase, arabic;;\u0625\u0650\u0644\u064e\u0649 \u0627\u0644\u0644\u0650\u0651\u0642\u064e\u0627\u0621 \u0642\u064e\u0631\u0650\u064a\u0628\u064b\u0627;;phrase, georgian;;\u10e8\u10d4\u10ee\u10d5\u10d4\u10d3\u10e0\u10d0\u10db\u10d3\u10d4;;phrase, spanish;;nos vemos;;phrase, chinese mandarin;;\u518d\u6703 /\u518d\u4f1a;;phrase, chinese mandarin;;\u56de\u898b /\u56de\u89c1;;phrase, german;;tsch\u00fcss;;phrase, czech;;ahoj;;phrase", "to": "see you later;;(idiomatic) a phrase used at parting, and not necessarily implying that the person being addressed will be seen later by the speaker.", "value": 38, "width": 9.5}, {"from": "how do you do;;(formal) a greeting used upon being introduced to someone. alternatives are how are you, pleased to meet you, and nice to meet you. (sometimes used as a rhetorical question among familiar parties, depending on the region).", "languages": "russian;;\u043a\u0430\u043a \u0434\u0435\u043b\u0430\u0301?;;phrase, latin;;quid agis?;;phrase", "to": "how are you;;(idiomatic) an informal greeting, not requiring a literal response. in form a question, and thus followed by a question mark. typical responses include:", "value": 2, "width": 0.5}, {"from": "how do you do;;(formal) a greeting used upon being introduced to someone. alternatives are how are you, pleased to meet you, and nice to meet you. (sometimes used as a rhetorical question among familiar parties, depending on the region).", "languages": "finnish;;hyv\u00e4\u00e4 p\u00e4iv\u00e4\u00e4;;phrase, korean;;\uc548\ub155\ud558\uc2ed\ub2c8\uae4c;;phrase", "to": "good afternoon;;(rather formal in us, canada) a greeting or farewell said in the afternoon.", "value": 2, "width": 0.5}, {"from": "good afternoon;;(rather formal in us, canada) a greeting or farewell said in the afternoon.", "languages": "thai;;\u0e2a\u0e27\u0e31\u0e2a\u0e14\u0e35;;phrase, lao;;\u0eaa\u0eb0\u0e9a\u0eb2\u0e8d\u0e94\u0eb5;;phrase, korean;;\uc548\ub155\ud558\uc138\uc694;;phrase, korean;;\uc548\ub155;;phrase", "to": "see you later;;(idiomatic) a phrase used at parting, and not necessarily implying that the person being addressed will be seen later by the speaker.", "value": 4, "width": 1.0}]);
+
+                  nodeColors = {};
+                  allNodes = nodes.get({ returnType: "Object" });
+                  for (nodeId in allNodes) {
+                    nodeColors[nodeId] = allNodes[nodeId].color;
+                  }
+                  allEdges = edges.get({ returnType: "Object" });
+                  // adding nodes and edges to the graph
+                  data = {nodes: nodes, edges: edges};
+
+                  var options = {
+    "configure": {
+        "enabled": false
+    },
+    "edges": {
+        "color": {
+            "inherit": true
+        },
+        "smooth": {
+            "enabled": true,
+            "type": "dynamic"
+        }
+    },
+    "interaction": {
+        "dragNodes": true,
+        "hideEdgesOnDrag": false,
+        "hideNodesOnDrag": false
+    },
+    "physics": {
+        "enabled": true,
+        "stabilization": {
+            "enabled": true,
+            "fit": true,
+            "iterations": 1000,
+            "onlyDynamicEdges": false,
+            "updateInterval": 50
+        }
+    }
+};
+
+                  
+
+
+                  
+
+                  network = new vis.Network(container, data, options);
+
+                  
+
+                  
+
+                  
+
+
+                  
+
+                  return network;
+
+              }
+              drawGraph();
+        </script>
+    
+    <script>
+        // Function to update the legend
+        function updateLegend(content) {
+            const legend = document.getElementById('language-legend');
+            legend.innerHTML = content;
+        }
+
+        // Add event listeners to edges using vis.js API
+        network.on("hoverEdge", function (params) {
+            const edgeId = params.edge;
+            const edge = edges.get(edgeId);
+            if (edge && edge.languages) {
+                const languagesList = edge.languages.split(', ').map(lang => `<li>${lang}</li>`).join('');
+                const numLanguages = edge.languages.split(', ').length;
+                const nodePair = `${edge.from} - ${edge.to}`;
+                updateLegend(`<h3>Languages (${numLanguages}) for ${nodePair}:</h3><ul>${languagesList}</ul>`);
+            }
+        });
+
+        network.on("blurEdge", function () {
+            updateLegend('<h3>Languages:</h3><p>Hover over an edge to see languages.</p>');
+        });
+
+        network.on("click", function (params) {
+            if (params.edges && params.edges.length > 0) {
+                const edgeId = params.edges[0];
+                const edge = edges.get(edgeId);
+                if (edge && edge.languages) {
+                    const languagesList = edge.languages.split(', ').sort().map(lang => `<li>${lang.replaceAll(";;", " - ")}</li>`).join('');
+                    const numLanguages = edge.languages.split(', ').length;
+                    const title1 = edge.from.replaceAll(";;", "&#10;");
+                    const title2 = edge.to.replaceAll(";;", "&#10;");
+                    updateLegend(`<h2><div title="${title1}";>${edge.from.split(";;")[0]}</div><div title="${title2}";>${edge.to.split(";;")[0]}</div></h2><br><h3>Languages (${numLanguages})<br></h3><ul>${languagesList}</ul>`);
+                }
+            }
+        });
+    </script>
+    <style>
+        .container {
+            display: flex;
+            width: 100%;
+            margin-top: 48px;
+        }
+        #mynetwork {
+            flex: 3;
+            height: 750px;
+            width: 90%
+            background-color: #222222;
+            border: 1px solid lightgray;
+        }
+        #language-legend h2 {
+            display: flex; 
+            flex-direction: column;
+            font-weight: bold;
+        }
+        #language-legend h3 {
+             border-bottom: 1px solid black; 
+             padding-bottom: 8px
+        }
+        #language-legend {
+            flex: 1;
+            margin-left: 20px;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            background-color: #f9f9f9;
+            overflow-y: auto;
+            max-height: 750px;
+        }
+        #language-legend ul {
+            list-style-type: none;
+            padding: 0;
+        }
+        #language-legend li {
+            margin: 5px 0;
+            font-size: 1.2em;
+        }
+    </style>
+    </body>
+</html>

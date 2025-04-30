@@ -1,0 +1,239 @@
+<html>
+    <head>
+        <meta charset="utf-8">
+        
+            <script src="lib/bindings/utils.js"></script>
+            <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/vis-network/9.1.2/dist/dist/vis-network.min.css" integrity="sha512-WgxfT5LWjfszlPHXRmBWHkV2eceiWTOBvrKCNbdgDYTHrT2AeLCGbF4sZlZw3UMN3WtL0tGUoIAKsu8mllg/XA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/vis-network/9.1.2/dist/vis-network.min.js" integrity="sha512-LnvoEWDFrqGHlHmDD2101OrLcbsfkrzoSpvtSQtxK3RMnRV0eOkhhBN2dXHKRrUU8p2DGRTk35n4O8nWSVe1mQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+            
+        
+<center>
+<h1></h1>
+</center>
+
+<!-- <link rel="stylesheet" href="../node_modules/vis/dist/vis.min.css" type="text/css" />
+<script type="text/javascript" src="../node_modules/vis/dist/vis.js"> </script>-->
+        <link
+          href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/css/bootstrap.min.css"
+          rel="stylesheet"
+          integrity="sha384-eOJMYsd53ii+scO/bJGFsiCZc+5NDVN2yr8+0RDqr0Ql0h+rP48ckxlpbzKgwra6"
+          crossorigin="anonymous"
+        />
+        <script
+          src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.bundle.min.js"
+          integrity="sha384-JEW9xMcG8R+pH31jmWH6WWP0WintQrMb4s7ZOdauHnUtxwoG2vI5DkLtS3qm9Ekf"
+          crossorigin="anonymous"
+        ></script>
+
+
+        <center>
+          <h1></h1>
+        </center>
+        <style type="text/css">
+
+             #mynetwork {
+                 width: 100%;
+                 height: 100vh;
+                 background-color: #222222;
+                 border: 1px solid lightgray;
+                 position: relative;
+                 float: left;
+             }
+
+             
+
+             
+
+             
+        </style>
+    </head>
+
+
+    <body>
+        <div class="card" style="width: 100%">
+            
+            
+            <div class="container"><div id="mynetwork" class="card-body"></div>
+    <div id="language-legend">
+        <h3>Languages:</h3>
+        <p>Click on an edge to see languages.</p>
+    </div>
+    </div>
+        </div>
+
+        
+        
+
+        <script type="text/javascript">
+
+              // initialize global variables.
+              var edges;
+              var nodes;
+              var allNodes;
+              var allEdges;
+              var nodeColors;
+              var originalNodes;
+              var network;
+              var container;
+              var options, data;
+              var filter = {
+                  item : '',
+                  property : '',
+                  value : []
+              };
+
+              
+
+              
+
+              // This method is responsible for drawing the graph, returns the drawn network
+              function drawGraph() {
+                  var container = document.getElementById('mynetwork');
+
+                  
+
+                  // parsing and collecting nodes and edges from the python
+                  nodes = new vis.DataSet([{"color": "#97c2fc", "font": {"color": "white"}, "id": "calf;;(anatomy) the back of the leg below the knee.", "label": "calf", "shape": "dot", "title": "calf;;(anatomy) the back of the leg below the knee."}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "newspaper;;(countable) a publication, usually published daily or weekly and usually printed on cheap, low-quality paper, containing news and other articles.", "label": "newspaper", "shape": "dot", "title": "newspaper;;(countable) a publication, usually published daily or weekly and usually printed on cheap, low-quality paper, containing news and other articles."}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "printer;;(computer hardware) a device, usually attached to a computer, used to print text or images onto paper; an analogous device capable of producing three-dimensional objects.", "label": "printer", "shape": "dot", "title": "printer;;(computer hardware) a device, usually attached to a computer, used to print text or images onto paper; an analogous device capable of producing three-dimensional objects."}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "average;;(mathematics) the arithmetic mean.", "label": "average", "shape": "dot", "title": "average;;(mathematics) the arithmetic mean."}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "media;;(often treated as uncountable) means and institutions for publishing and broadcasting information.", "label": "media", "shape": "dot", "title": "media;;(often treated as uncountable) means and institutions for publishing and broadcasting information."}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "leaf;;(publishing, bookbinding, advertising) a sheet of a book, magazine, etc. (consisting of two pages, one on each face of the leaf).", "label": "leaf", "shape": "dot", "title": "leaf;;(publishing, bookbinding, advertising) a sheet of a book, magazine, etc. (consisting of two pages, one on each face of the leaf)."}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "typesetter;;(historical) a person who sets type; an employee in a printshop who manually selected pieces of movable type and assembled them for printing.", "label": "typesetter", "shape": "dot", "title": "typesetter;;(historical) a person who sets type; an employee in a printshop who manually selected pieces of movable type and assembled them for printing."}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "press;;(countable) a device used to apply pressure to an item.", "label": "press", "shape": "dot", "title": "press;;(countable) a device used to apply pressure to an item."}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "printer;;(printing) the operator of a printing press or the owner of a printing business; (metonymically) any printing business.", "label": "printer", "shape": "dot", "title": "printer;;(printing) the operator of a printing press or the owner of a printing business; (metonymically) any printing business."}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "printing press;;(metonymically) synonym of printing house (\u201can institutional or commercial publisher\u201d).", "label": "printing press", "shape": "dot", "title": "printing press;;(metonymically) synonym of printing house (\u201can institutional or commercial publisher\u201d)."}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "media;;(usually with a definite article; often treated as uncountable) the journalists and other professionals who comprise the mass communication industry.", "label": "media", "shape": "dot", "title": "media;;(usually with a definite article; often treated as uncountable) the journalists and other professionals who comprise the mass communication industry."}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "press;;(uncountable, collective) the print-based media (both the people and the newspapers).", "label": "press", "shape": "dot", "title": "press;;(uncountable, collective) the print-based media (both the people and the newspapers)."}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "newspaper;;(uncountable, countable) a quantity of or one of the types of paper on which newspapers are printed.", "label": "newspaper", "shape": "dot", "title": "newspaper;;(uncountable, countable) a quantity of or one of the types of paper on which newspapers are printed."}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "diameter;;(geometry) the length of such a line.", "label": "diameter", "shape": "dot", "title": "diameter;;(geometry) the length of such a line."}]);
+                  edges = new vis.DataSet([{"from": "calf;;(anatomy) the back of the leg below the knee.", "languages": "macedonian;;\u043b\u0438\u0441\u0442;;noun, serbo-croatian;;list;;noun, serbo-croatian;;\u043b\u0438\u0441\u0442;;noun", "to": "leaf;;(publishing, bookbinding, advertising) a sheet of a book, magazine, etc. (consisting of two pages, one on each face of the leaf).", "value": 3, "width": 0.12}, {"from": "newspaper;;(countable) a publication, usually published daily or weekly and usually printed on cheap, low-quality paper, containing news and other articles.", "languages": "thai;;\u0e2b\u0e19\u0e31\u0e07\u0e2a\u0e37\u0e2d\u0e1e\u0e34\u0e21\u0e1e\u0e4c;;noun, vietnamese;;b\u00e1o ch\u00ed;;noun", "to": "press;;(uncountable, collective) the print-based media (both the people and the newspapers).", "value": 2, "width": 0.08}, {"from": "newspaper;;(countable) a publication, usually published daily or weekly and usually printed on cheap, low-quality paper, containing news and other articles.", "languages": "polish;;gazeta;;noun, hakka chinese;;\u5831\u7d19 /\u62a5\u7eb8;;noun, maltese;;gazzetta;;noun, hakka chinese;;\u65b0\u805e\u7d19 /\u65b0\u95fb\u7eb8;;noun, tamil;;\u0b9a\u0bc6\u0baf\u0bcd\u0ba4\u0bbf\u0ba4\u0bcd\u0ba4\u0bbe\u0bb3\u0bcd;;noun, swahili;;gazeti;;noun, thai;;\u0e2b\u0e19\u0e31\u0e07\u0e2a\u0e37\u0e2d\u0e1e\u0e34\u0e21\u0e1e\u0e4c;;noun, armenian;;\u0569\u0565\u0580\u0569;;noun, scottish gaelic;;p\u00e0ipear-naidheachd;;noun, tagalog;;dyariyo;;noun, latvian;;av\u012bze;;noun, tagalog;;pahayagan;;noun", "to": "newspaper;;(uncountable, countable) a quantity of or one of the types of paper on which newspapers are printed.", "value": 12, "width": 0.48}, {"from": "newspaper;;(countable) a publication, usually published daily or weekly and usually printed on cheap, low-quality paper, containing news and other articles.", "languages": "finnish;;lehti;;noun, arabic;;\u0635\u064e\u062d\u0650\u064a\u0641\u064e\u0629;;noun", "to": "leaf;;(publishing, bookbinding, advertising) a sheet of a book, magazine, etc. (consisting of two pages, one on each face of the leaf).", "value": 2, "width": 0.08}, {"from": "printer;;(computer hardware) a device, usually attached to a computer, used to print text or images onto paper; an analogous device capable of producing three-dimensional objects.", "languages": "japanese;;\u5370\u5237\u6a5f;;noun, czech;;tisk\u00e1rna;;noun, slovak;;tla\u010diare\u0148;;noun", "to": "printing press;;(metonymically) synonym of printing house (\u201can institutional or commercial publisher\u201d).", "value": 3, "width": 0.12}, {"from": "printer;;(computer hardware) a device, usually attached to a computer, used to print text or images onto paper; an analogous device capable of producing three-dimensional objects.", "languages": "icelandic;;prentari;;noun, indonesian;;pencetak;;noun, faroese;;prentari;;noun, yiddish;;\u05d3\u05e8\u05d5\u05e7\u05e2\u05e8;;noun, macedonian;;\u043f\u0435\u0447\u0430\u0442\u0430\u0440;;noun, assyrian neo-aramaic;;\u071b\u0735\u0712\u0742\u0718\u073f\u0725\u072c\u0735\u0710;;noun, macedonian;;\u043f\u0435\u0447\u0430\u0442\u0430\u0447;;noun, polish;;drukarka;;noun, german;;drucker;;noun", "to": "printer;;(printing) the operator of a printing press or the owner of a printing business; (metonymically) any printing business.", "value": 9, "width": 0.36}, {"from": "average;;(mathematics) the arithmetic mean.", "languages": "portuguese;;m\u00e9dia;;noun, italian;;media;;noun", "to": "media;;(often treated as uncountable) means and institutions for publishing and broadcasting information.", "value": 2, "width": 0.08}, {"from": "average;;(mathematics) the arithmetic mean.", "languages": "slovak;;priemer;;noun, czech;;pr\u016fm\u011br;;noun", "to": "diameter;;(geometry) the length of such a line.", "value": 2, "width": 0.08}, {"from": "media;;(often treated as uncountable) means and institutions for publishing and broadcasting information.", "languages": "korean;;\ubbf8\ub514\uc5b4;;noun, chinese mandarin;;\u5a92\u9ad4 /\u5a92\u4f53;;noun", "to": "press;;(uncountable, collective) the print-based media (both the people and the newspapers).", "value": 2, "width": 0.08}, {"from": "media;;(often treated as uncountable) means and institutions for publishing and broadcasting information.", "languages": "macedonian;;\u043c\u0435\u0434\u0438\u0301\u0443\u043c\u0438;;noun, russian;;\u043c\u0435\u0301\u0434\u0438\u0430;;noun, portuguese;;m\u00eddia;;noun, dutch;;media;;noun, korean;;\uc5b8\ub860;;noun, turkish;;medya;;noun, iranian persian;;\u0645\u0650\u062f\u0650\u06cc\u0627;;noun, chinese mandarin;;\u5a92\u9ad4 /\u5a92\u4f53;;noun, iranian persian;;\u0631\u064e\u0633\u0627\u0646\u0650\u0647;;noun, swedish;;media;;noun, pashto;;\u0631\u0633\u0646\u06cd;;noun, ukrainian;;\u043c\u0435\u0301\u0434\u0456\u0430;;noun, spanish;;medios;;noun, estonian;;meedia;;noun, belarusian;;\u043c\u044d\u0301\u0434\u044b\u044f;;noun, portuguese;;media;;noun, korean;;\ubbf8\ub514\uc5b4;;noun, portuguese;;m\u00e9dia;;noun, icelandic;;mi\u00f0ill;;noun, bulgarian;;\u043c\u0435\u0301\u0434\u0438\u044f;;noun, finnish;;media;;noun, belarusian;;\u043c\u0435\u0301\u0434\u044b\u044f;;noun, korean;;\ub9e4\uccb4;;noun, arabic;;\u0648\u064e\u0633\u064e\u0627\u0626\u0650\u0644 \u0627\u0644\u0652\u0625\u0650\u0639\u0652\u0644\u064e\u0627\u0645;;noun, arabic;;\u0625\u0650\u0639\u0652\u0644\u064e\u0627\u0645;;noun", "to": "media;;(usually with a definite article; often treated as uncountable) the journalists and other professionals who comprise the mass communication industry.", "value": 25, "width": 1.0}, {"from": "typesetter;;(historical) a person who sets type; an employee in a printshop who manually selected pieces of movable type and assembled them for printing.", "languages": "russian;;\u043f\u0435\u0447\u0430\u0301\u0442\u043d\u0438\u043a;;noun, romanian;;tipograf;;noun, russian;;\u0442\u0438\u043f\u043e\u0301\u0433\u0440\u0430\u0444;;noun, greek;;\u03c4\u03c5\u03c0\u03bf\u03b3\u03c1\u03ac\u03c6\u03bf\u03c2;;noun", "to": "printer;;(printing) the operator of a printing press or the owner of a printing business; (metonymically) any printing business.", "value": 4, "width": 0.16}, {"from": "press;;(countable) a device used to apply pressure to an item.", "languages": "portuguese;;imprensa;;noun, swedish;;press;;noun, danish;;presse;;noun, galician;;prensa;;noun, irish;;preas;;noun, hungarian;;sajt\u00f3;;noun, spanish;;prensa;;noun, german;;presse;;noun, polish;;prasa;;noun, macedonian;;\u043f\u0440\u0435\u0301\u0441\u0430;;noun, catalan;;premsa;;noun, bulgarian;;\u043f\u0440\u0435\u0301\u0441\u0430;;noun", "to": "press;;(uncountable, collective) the print-based media (both the people and the newspapers).", "value": 12, "width": 0.48}, {"from": "press;;(countable) a device used to apply pressure to an item.", "languages": "spanish;;prensa;;noun, swedish;;press;;noun", "to": "media;;(usually with a definite article; often treated as uncountable) the journalists and other professionals who comprise the mass communication industry.", "value": 2, "width": 0.08}, {"from": "press;;(countable) a device used to apply pressure to an item.", "languages": "italian;;torchio;;noun, portuguese;;imprensa;;noun", "to": "printing press;;(metonymically) synonym of printing house (\u201can institutional or commercial publisher\u201d).", "value": 2, "width": 0.08}, {"from": "printing press;;(metonymically) synonym of printing house (\u201can institutional or commercial publisher\u201d).", "languages": "french;;presse;;noun, portuguese;;imprensa;;noun", "to": "press;;(uncountable, collective) the print-based media (both the people and the newspapers).", "value": 2, "width": 0.08}, {"from": "media;;(usually with a definite article; often treated as uncountable) the journalists and other professionals who comprise the mass communication industry.", "languages": "swedish;;press;;noun, chinese mandarin;;\u5a92\u9ad4 /\u5a92\u4f53;;noun, spanish;;prensa;;noun, korean;;\ubbf8\ub514\uc5b4;;noun, japanese;;\u30e1\u30c7\u30a3\u30a2;;noun", "to": "press;;(uncountable, collective) the print-based media (both the people and the newspapers).", "value": 5, "width": 0.2}]);
+
+                  nodeColors = {};
+                  allNodes = nodes.get({ returnType: "Object" });
+                  for (nodeId in allNodes) {
+                    nodeColors[nodeId] = allNodes[nodeId].color;
+                  }
+                  allEdges = edges.get({ returnType: "Object" });
+                  // adding nodes and edges to the graph
+                  data = {nodes: nodes, edges: edges};
+
+                  var options = {
+    "configure": {
+        "enabled": false
+    },
+    "edges": {
+        "color": {
+            "inherit": true
+        },
+        "smooth": {
+            "enabled": true,
+            "type": "dynamic"
+        }
+    },
+    "interaction": {
+        "dragNodes": true,
+        "hideEdgesOnDrag": false,
+        "hideNodesOnDrag": false
+    },
+    "physics": {
+        "enabled": true,
+        "stabilization": {
+            "enabled": true,
+            "fit": true,
+            "iterations": 1000,
+            "onlyDynamicEdges": false,
+            "updateInterval": 50
+        }
+    }
+};
+
+                  
+
+
+                  
+
+                  network = new vis.Network(container, data, options);
+
+                  
+
+                  
+
+                  
+
+
+                  
+
+                  return network;
+
+              }
+              drawGraph();
+        </script>
+    
+    <script>
+        // Function to update the legend
+        function updateLegend(content) {
+            const legend = document.getElementById('language-legend');
+            legend.innerHTML = content;
+        }
+
+        // Add event listeners to edges using vis.js API
+        network.on("hoverEdge", function (params) {
+            const edgeId = params.edge;
+            const edge = edges.get(edgeId);
+            if (edge && edge.languages) {
+                const languagesList = edge.languages.split(', ').map(lang => `<li>${lang}</li>`).join('');
+                const numLanguages = edge.languages.split(', ').length;
+                const nodePair = `${edge.from} - ${edge.to}`;
+                updateLegend(`<h3>Languages (${numLanguages}) for ${nodePair}:</h3><ul>${languagesList}</ul>`);
+            }
+        });
+
+        network.on("blurEdge", function () {
+            updateLegend('<h3>Languages:</h3><p>Hover over an edge to see languages.</p>');
+        });
+
+        network.on("click", function (params) {
+            if (params.edges && params.edges.length > 0) {
+                const edgeId = params.edges[0];
+                const edge = edges.get(edgeId);
+                if (edge && edge.languages) {
+                    const languagesList = edge.languages.split(', ').sort().map(lang => `<li>${lang.replaceAll(";;", " - ")}</li>`).join('');
+                    const numLanguages = edge.languages.split(', ').length;
+                    const title1 = edge.from.replaceAll(";;", "&#10;");
+                    const title2 = edge.to.replaceAll(";;", "&#10;");
+                    updateLegend(`<h2><div title="${title1}";>${edge.from.split(";;")[0]}</div><div title="${title2}";>${edge.to.split(";;")[0]}</div></h2><br><h3>Languages (${numLanguages})<br></h3><ul>${languagesList}</ul>`);
+                }
+            }
+        });
+    </script>
+    <style>
+        .container {
+            display: flex;
+            width: 100%;
+            margin-top: 48px;
+        }
+        #mynetwork {
+            flex: 3;
+            height: 750px;
+            width: 90%
+            background-color: #222222;
+            border: 1px solid lightgray;
+        }
+        #language-legend h2 {
+            display: flex; 
+            flex-direction: column;
+            font-weight: bold;
+        }
+        #language-legend h3 {
+             border-bottom: 1px solid black; 
+             padding-bottom: 8px
+        }
+        #language-legend {
+            flex: 1;
+            margin-left: 20px;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            background-color: #f9f9f9;
+            overflow-y: auto;
+            max-height: 750px;
+        }
+        #language-legend ul {
+            list-style-type: none;
+            padding: 0;
+        }
+        #language-legend li {
+            margin: 5px 0;
+            font-size: 1.2em;
+        }
+    </style>
+    </body>
+</html>

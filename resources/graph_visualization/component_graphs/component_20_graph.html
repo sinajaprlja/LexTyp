@@ -1,0 +1,239 @@
+<html>
+    <head>
+        <meta charset="utf-8">
+        
+            <script src="lib/bindings/utils.js"></script>
+            <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/vis-network/9.1.2/dist/dist/vis-network.min.css" integrity="sha512-WgxfT5LWjfszlPHXRmBWHkV2eceiWTOBvrKCNbdgDYTHrT2AeLCGbF4sZlZw3UMN3WtL0tGUoIAKsu8mllg/XA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/vis-network/9.1.2/dist/vis-network.min.js" integrity="sha512-LnvoEWDFrqGHlHmDD2101OrLcbsfkrzoSpvtSQtxK3RMnRV0eOkhhBN2dXHKRrUU8p2DGRTk35n4O8nWSVe1mQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+            
+        
+<center>
+<h1></h1>
+</center>
+
+<!-- <link rel="stylesheet" href="../node_modules/vis/dist/vis.min.css" type="text/css" />
+<script type="text/javascript" src="../node_modules/vis/dist/vis.js"> </script>-->
+        <link
+          href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/css/bootstrap.min.css"
+          rel="stylesheet"
+          integrity="sha384-eOJMYsd53ii+scO/bJGFsiCZc+5NDVN2yr8+0RDqr0Ql0h+rP48ckxlpbzKgwra6"
+          crossorigin="anonymous"
+        />
+        <script
+          src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.bundle.min.js"
+          integrity="sha384-JEW9xMcG8R+pH31jmWH6WWP0WintQrMb4s7ZOdauHnUtxwoG2vI5DkLtS3qm9Ekf"
+          crossorigin="anonymous"
+        ></script>
+
+
+        <center>
+          <h1></h1>
+        </center>
+        <style type="text/css">
+
+             #mynetwork {
+                 width: 100%;
+                 height: 100vh;
+                 background-color: #222222;
+                 border: 1px solid lightgray;
+                 position: relative;
+                 float: left;
+             }
+
+             
+
+             
+
+             
+        </style>
+    </head>
+
+
+    <body>
+        <div class="card" style="width: 100%">
+            
+            
+            <div class="container"><div id="mynetwork" class="card-body"></div>
+    <div id="language-legend">
+        <h3>Languages:</h3>
+        <p>Click on an edge to see languages.</p>
+    </div>
+    </div>
+        </div>
+
+        
+        
+
+        <script type="text/javascript">
+
+              // initialize global variables.
+              var edges;
+              var nodes;
+              var allNodes;
+              var allEdges;
+              var nodeColors;
+              var originalNodes;
+              var network;
+              var container;
+              var options, data;
+              var filter = {
+                  item : '',
+                  property : '',
+                  value : []
+              };
+
+              
+
+              
+
+              // This method is responsible for drawing the graph, returns the drawn network
+              function drawGraph() {
+                  var container = document.getElementById('mynetwork');
+
+                  
+
+                  // parsing and collecting nodes and edges from the python
+                  nodes = new vis.DataSet([{"color": "#97c2fc", "font": {"color": "white"}, "id": "bloody;;(informal, british, ireland, commonwealth, hawaii, mildly vulgar) used as an intensifier.", "label": "bloody", "shape": "dot", "title": "bloody;;(informal, british, ireland, commonwealth, hawaii, mildly vulgar) used as an intensifier."}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "abysmal;;(figurative) extremely bad; terrible.", "label": "abysmal", "shape": "dot", "title": "abysmal;;(figurative) extremely bad; terrible."}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "fucking;;(vulgar, attributive) an intensifier, often applying more to the whole utterance than to the specific word it grammatically modifies.", "label": "fucking", "shape": "dot", "title": "fucking;;(vulgar, attributive) an intensifier, often applying more to the whole utterance than to the specific word it grammatically modifies."}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "damn;;(sometimes vulgar) generic intensifier. fucking; bloody.", "label": "damn", "shape": "dot", "title": "damn;;(sometimes vulgar) generic intensifier. fucking; bloody."}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "fucking;;(vulgar, attributive) offensive, annoying or worthless.", "label": "fucking", "shape": "dot", "title": "fucking;;(vulgar, attributive) offensive, annoying or worthless."}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "gross;;(informal, canada, us, australia) causing disgust.", "label": "gross", "shape": "dot", "title": "gross;;(informal, canada, us, australia) causing disgust."}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "goddamn;;(vulgar, sometimes offensive) used as an intensifier.", "label": "goddamn", "shape": "dot", "title": "goddamn;;(vulgar, sometimes offensive) used as an intensifier."}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "shitty;;(vulgar, colloquial) very bad; unpleasant; miserable; insignificant.", "label": "shitty", "shape": "dot", "title": "shitty;;(vulgar, colloquial) very bad; unpleasant; miserable; insignificant."}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "lousy;;(colloquial) remarkably bad; of poor quality.", "label": "lousy", "shape": "dot", "title": "lousy;;(colloquial) remarkably bad; of poor quality."}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "awful;;(dated) causing fear or horror; appalling, terrible.", "label": "awful", "shape": "dot", "title": "awful;;(dated) causing fear or horror; appalling, terrible."}]);
+                  edges = new vis.DataSet([{"from": "bloody;;(informal, british, ireland, commonwealth, hawaii, mildly vulgar) used as an intensifier.", "languages": "spanish;;maldito;;adj, macedonian;;\u0435\u0301\u0431\u0430\u043d;;adj, russian;;\u0451\u0431\u0430\u043d\u044b\u0439;;adj, turkish;;kahrolas\u0131ca;;adj, polish;;cholerny;;adj, norwegian;;j\u00e6vla;;adj, belarusian;;\u044f\u0431\u0430\u0301\u043d\u044b;;adj, turkish;;lanet;;adj, italian;;fottuto;;adj, spanish;;jodido;;adj, polish;;kurewski;;adj, polish;;jebany;;adj, ukrainian;;\u0457\u0301\u0431\u0430\u043d\u0438\u0439;;adj, thai;;\u0e42\u0e04\u0e15\u0e23;;adj", "to": "fucking;;(vulgar, attributive) an intensifier, often applying more to the whole utterance than to the specific word it grammatically modifies.", "value": 14, "width": 0.5833333333333334}, {"from": "bloody;;(informal, british, ireland, commonwealth, hawaii, mildly vulgar) used as an intensifier.", "languages": "spanish;;maldito;;adj, macedonian;;\u0435\u0301\u0431\u0430\u043d;;adj, russian;;\u0451\u0431\u0430\u043d\u044b\u0439;;adj, swedish;;satans;;adj, french;;foutu;;adj, turkish;;lanet olas\u0131;;adj, spanish;;jodido;;adj, polish;;kurewski;;adj, polish;;jebany;;adj, indonesian;;bedebah;;adj, thai;;\u0e42\u0e04\u0e15\u0e23;;adj", "to": "fucking;;(vulgar, attributive) offensive, annoying or worthless.", "value": 11, "width": 0.4583333333333333}, {"from": "bloody;;(informal, british, ireland, commonwealth, hawaii, mildly vulgar) used as an intensifier.", "languages": "german;;verflucht;;adj, spanish;;maldito;;adj, turkish;;kahrolas\u0131ca;;adj, polish;;cholerny;;adj, macedonian;;\u043f\u0440\u043e\u0301\u043a\u043b\u0435\u0442;;adj, german;;verdammt;;adj, norwegian;;j\u00e6vla;;adj, french;;foutu;;adj, swedish;;f\u00f6rbannad;;adj, czech;;zatracen\u00fd;;adj, indonesian;;berengsek;;adj, italian;;fottuto;;adj, swedish;;dj\u00e4vla;;adj, swedish;;sabla;;adj, indonesian;;bedebah;;adj, catalan;;male\u00eft;;adj, portuguese;;maldito;;adj, italian;;maledetto;;adj", "to": "damn;;(sometimes vulgar) generic intensifier. fucking; bloody.", "value": 18, "width": 0.75}, {"from": "bloody;;(informal, british, ireland, commonwealth, hawaii, mildly vulgar) used as an intensifier.", "languages": "german;;verflucht;;adj, swedish;;satans;;adj, german;;verdammt;;adj, french;;foutu;;adj, portuguese;;maldito;;adj", "to": "goddamn;;(vulgar, sometimes offensive) used as an intensifier.", "value": 5, "width": 0.20833333333333334}, {"from": "abysmal;;(figurative) extremely bad; terrible.", "languages": "hungarian;;rettenetes;;adj, french;;terrible;;adj, hungarian;;r\u00e9mes;;adj, finnish;;kauhea;;adj, hungarian;;borzalmas;;adj, spanish;;atroz;;adj, finnish;;hirvitt\u00e4v\u00e4;;adj, hungarian;;sz\u00f6rny\u0171;;adj, french;;\u00e9pouvantable;;adj", "to": "awful;;(dated) causing fear or horror; appalling, terrible.", "value": 9, "width": 0.375}, {"from": "fucking;;(vulgar, attributive) an intensifier, often applying more to the whole utterance than to the specific word it grammatically modifies.", "languages": "turkish;;boktan;;adj, russian;;\u0441\u0440\u0430\u0301\u043d\u044b\u0439;;adj, german;;schei\u00df-;;adj, polish;;zasrany;;adj", "to": "shitty;;(vulgar, colloquial) very bad; unpleasant; miserable; insignificant.", "value": 4, "width": 0.16666666666666666}, {"from": "fucking;;(vulgar, attributive) an intensifier, often applying more to the whole utterance than to the specific word it grammatically modifies.", "languages": "estonian;;kuradima;;adj, finnish;;saatanan;;adj, macedonian;;\u0435\u0301\u0431\u0430\u043d;;adj, russian;;\u0451\u0431\u0430\u043d\u044b\u0439;;adj, hungarian;;baszott;;adj, russian;;\u0441\u0440\u0430\u0301\u043d\u044b\u0439;;adj, finnish;;helvetin;;adj, hungarian;;kibaszott;;adj, spanish;;maldito;;adj, turkish;;boktan;;adj, polish;;pierdolony;;adj, polish;;jebany;;adj, german;;schei\u00df-;;adj, thai;;\u0e42\u0e04\u0e15\u0e23;;adj, finnish;;vitun;;adj, northern sami;;helveha;;adj, spanish;;puto;;adj, swedish;;j\u00e4vla;;adj, italian;;cazzo di;;adj, spanish;;jodido;;adj, finnish;;perkeleen;;adj, greek;;\u03b3\u03b1\u03bc\u03b7\u03bc\u03ad\u03bd\u03bf\u03c2;;adj, polish;;kurewski;;adj, spanish;;pinche;;adj", "to": "fucking;;(vulgar, attributive) offensive, annoying or worthless.", "value": 24, "width": 1.0}, {"from": "fucking;;(vulgar, attributive) an intensifier, often applying more to the whole utterance than to the specific word it grammatically modifies.", "languages": "spanish;;puto;;adj, spanish;;maldito;;adj, turkish;;kahrolas\u0131ca;;adj, polish;;cholerny;;adj, norwegian;;j\u00e6vla;;adj, italian;;fottuto;;adj", "to": "damn;;(sometimes vulgar) generic intensifier. fucking; bloody.", "value": 6, "width": 0.25}, {"from": "fucking;;(vulgar, attributive) an intensifier, often applying more to the whole utterance than to the specific word it grammatically modifies.", "languages": "greenlandic;;-palaarsuaq;;adj, northern sami;;helveha;;adj, swedish;;j\u00e4vla;;adj, estonian;;kuradima;;adj, spanish;;puto;;adj, finnish;;perkeleen;;adj, danish;;satans;;adj, finnish;;saatanan;;adj, hungarian;;kibaszott;;adj, french;;putain de;;adj, danish;;helvedes;;adj, finnish;;helvetin;;adj", "to": "goddamn;;(vulgar, sometimes offensive) used as an intensifier.", "value": 12, "width": 0.5}, {"from": "damn;;(sometimes vulgar) generic intensifier. fucking; bloody.", "languages": "spanish;;puto;;adj, spanish;;maldito;;adj, indonesian;;sialan;;adj, french;;foutu;;adj, japanese;;\u7cde;;adj, indonesian;;bedebah;;adj, indonesian;;keparat;;adj", "to": "fucking;;(vulgar, attributive) offensive, annoying or worthless.", "value": 7, "width": 0.2916666666666667}, {"from": "damn;;(sometimes vulgar) generic intensifier. fucking; bloody.", "languages": "spanish;;puto;;adj, russian;;\u043f\u0440\u043e\u0301\u043a\u043b\u044f\u0442\u044b\u0439;;adj, indonesian;;sialan;;adj, hungarian;;rohadt;;adj, german;;verflucht;;adj, hungarian;;\u00e1tkozott;;adj, russian;;\u043f\u0440\u043e\u043a\u043b\u044f\u0301\u0442\u044b\u0439;;adj, german;;verdammt;;adj, dutch;;vervloekt;;adj, french;;foutu;;adj, bulgarian;;\u043f\u0440\u043e\u043a\u043b\u0435\u0442;;adj, indonesian;;keparat;;adj, russian;;\u0447\u0451\u0440\u0442\u043e\u0432;;adj, dutch;;verdomd;;adj, portuguese;;maldito;;adj", "to": "goddamn;;(vulgar, sometimes offensive) used as an intensifier.", "value": 15, "width": 0.625}, {"from": "fucking;;(vulgar, attributive) offensive, annoying or worthless.", "languages": "russian;;\u0445\u0443\u0451\u0432\u044b\u0439;;adj, turkish;;boktan;;adj, esperanto;;a\u0109a;;adj, russian;;\u0441\u0440\u0430\u0301\u043d\u044b\u0439;;adj, german;;schei\u00df-;;adj", "to": "shitty;;(vulgar, colloquial) very bad; unpleasant; miserable; insignificant.", "value": 5, "width": 0.20833333333333334}, {"from": "fucking;;(vulgar, attributive) offensive, annoying or worthless.", "languages": "estonian;;kuradima;;adj, northern sami;;helveha;;adj, swedish;;j\u00e4vla;;adj, spanish;;puto;;adj, indonesian;;sialan;;adj, finnish;;perkeleen;;adj, finnish;;saatanan;;adj, hungarian;;kibaszott;;adj, swedish;;satans;;adj, french;;foutu;;adj, indonesian;;keparat;;adj, indonesian;;brengsek;;adj, finnish;;helvetin;;adj", "to": "goddamn;;(vulgar, sometimes offensive) used as an intensifier.", "value": 13, "width": 0.5416666666666666}, {"from": "gross;;(informal, canada, us, australia) causing disgust.", "languages": "russian;;\u043e\u0442\u0432\u0440\u0430\u0442\u0438\u0301\u0442\u0435\u043b\u044c\u043d\u044b\u0439;;adj, bulgarian;;\u043f\u0440\u043e\u0442\u0438\u0432\u0435\u043d;;adj", "to": "lousy;;(colloquial) remarkably bad; of poor quality.", "value": 2, "width": 0.08333333333333333}, {"from": "shitty;;(vulgar, colloquial) very bad; unpleasant; miserable; insignificant.", "languages": "french;;de merde;;adj, esperanto;;a\u0109a;;adj", "to": "lousy;;(colloquial) remarkably bad; of poor quality.", "value": 2, "width": 0.08333333333333333}, {"from": "lousy;;(colloquial) remarkably bad; of poor quality.", "languages": "esperanto;;a\u0109a;;adj, portuguese;;horr\u00edvel;;adj", "to": "awful;;(dated) causing fear or horror; appalling, terrible.", "value": 2, "width": 0.08333333333333333}]);
+
+                  nodeColors = {};
+                  allNodes = nodes.get({ returnType: "Object" });
+                  for (nodeId in allNodes) {
+                    nodeColors[nodeId] = allNodes[nodeId].color;
+                  }
+                  allEdges = edges.get({ returnType: "Object" });
+                  // adding nodes and edges to the graph
+                  data = {nodes: nodes, edges: edges};
+
+                  var options = {
+    "configure": {
+        "enabled": false
+    },
+    "edges": {
+        "color": {
+            "inherit": true
+        },
+        "smooth": {
+            "enabled": true,
+            "type": "dynamic"
+        }
+    },
+    "interaction": {
+        "dragNodes": true,
+        "hideEdgesOnDrag": false,
+        "hideNodesOnDrag": false
+    },
+    "physics": {
+        "enabled": true,
+        "stabilization": {
+            "enabled": true,
+            "fit": true,
+            "iterations": 1000,
+            "onlyDynamicEdges": false,
+            "updateInterval": 50
+        }
+    }
+};
+
+                  
+
+
+                  
+
+                  network = new vis.Network(container, data, options);
+
+                  
+
+                  
+
+                  
+
+
+                  
+
+                  return network;
+
+              }
+              drawGraph();
+        </script>
+    
+    <script>
+        // Function to update the legend
+        function updateLegend(content) {
+            const legend = document.getElementById('language-legend');
+            legend.innerHTML = content;
+        }
+
+        // Add event listeners to edges using vis.js API
+        network.on("hoverEdge", function (params) {
+            const edgeId = params.edge;
+            const edge = edges.get(edgeId);
+            if (edge && edge.languages) {
+                const languagesList = edge.languages.split(', ').map(lang => `<li>${lang}</li>`).join('');
+                const numLanguages = edge.languages.split(', ').length;
+                const nodePair = `${edge.from} - ${edge.to}`;
+                updateLegend(`<h3>Languages (${numLanguages}) for ${nodePair}:</h3><ul>${languagesList}</ul>`);
+            }
+        });
+
+        network.on("blurEdge", function () {
+            updateLegend('<h3>Languages:</h3><p>Hover over an edge to see languages.</p>');
+        });
+
+        network.on("click", function (params) {
+            if (params.edges && params.edges.length > 0) {
+                const edgeId = params.edges[0];
+                const edge = edges.get(edgeId);
+                if (edge && edge.languages) {
+                    const languagesList = edge.languages.split(', ').sort().map(lang => `<li>${lang.replaceAll(";;", " - ")}</li>`).join('');
+                    const numLanguages = edge.languages.split(', ').length;
+                    const title1 = edge.from.replaceAll(";;", "&#10;");
+                    const title2 = edge.to.replaceAll(";;", "&#10;");
+                    updateLegend(`<h2><div title="${title1}";>${edge.from.split(";;")[0]}</div><div title="${title2}";>${edge.to.split(";;")[0]}</div></h2><br><h3>Languages (${numLanguages})<br></h3><ul>${languagesList}</ul>`);
+                }
+            }
+        });
+    </script>
+    <style>
+        .container {
+            display: flex;
+            width: 100%;
+            margin-top: 48px;
+        }
+        #mynetwork {
+            flex: 3;
+            height: 750px;
+            width: 90%
+            background-color: #222222;
+            border: 1px solid lightgray;
+        }
+        #language-legend h2 {
+            display: flex; 
+            flex-direction: column;
+            font-weight: bold;
+        }
+        #language-legend h3 {
+             border-bottom: 1px solid black; 
+             padding-bottom: 8px
+        }
+        #language-legend {
+            flex: 1;
+            margin-left: 20px;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            background-color: #f9f9f9;
+            overflow-y: auto;
+            max-height: 750px;
+        }
+        #language-legend ul {
+            list-style-type: none;
+            padding: 0;
+        }
+        #language-legend li {
+            margin: 5px 0;
+            font-size: 1.2em;
+        }
+    </style>
+    </body>
+</html>

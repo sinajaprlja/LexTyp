@@ -1,0 +1,239 @@
+<html>
+    <head>
+        <meta charset="utf-8">
+        
+            <script src="lib/bindings/utils.js"></script>
+            <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/vis-network/9.1.2/dist/dist/vis-network.min.css" integrity="sha512-WgxfT5LWjfszlPHXRmBWHkV2eceiWTOBvrKCNbdgDYTHrT2AeLCGbF4sZlZw3UMN3WtL0tGUoIAKsu8mllg/XA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/vis-network/9.1.2/dist/vis-network.min.js" integrity="sha512-LnvoEWDFrqGHlHmDD2101OrLcbsfkrzoSpvtSQtxK3RMnRV0eOkhhBN2dXHKRrUU8p2DGRTk35n4O8nWSVe1mQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+            
+        
+<center>
+<h1></h1>
+</center>
+
+<!-- <link rel="stylesheet" href="../node_modules/vis/dist/vis.min.css" type="text/css" />
+<script type="text/javascript" src="../node_modules/vis/dist/vis.js"> </script>-->
+        <link
+          href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/css/bootstrap.min.css"
+          rel="stylesheet"
+          integrity="sha384-eOJMYsd53ii+scO/bJGFsiCZc+5NDVN2yr8+0RDqr0Ql0h+rP48ckxlpbzKgwra6"
+          crossorigin="anonymous"
+        />
+        <script
+          src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.bundle.min.js"
+          integrity="sha384-JEW9xMcG8R+pH31jmWH6WWP0WintQrMb4s7ZOdauHnUtxwoG2vI5DkLtS3qm9Ekf"
+          crossorigin="anonymous"
+        ></script>
+
+
+        <center>
+          <h1></h1>
+        </center>
+        <style type="text/css">
+
+             #mynetwork {
+                 width: 100%;
+                 height: 100vh;
+                 background-color: #222222;
+                 border: 1px solid lightgray;
+                 position: relative;
+                 float: left;
+             }
+
+             
+
+             
+
+             
+        </style>
+    </head>
+
+
+    <body>
+        <div class="card" style="width: 100%">
+            
+            
+            <div class="container"><div id="mynetwork" class="card-body"></div>
+    <div id="language-legend">
+        <h3>Languages:</h3>
+        <p>Click on an edge to see languages.</p>
+    </div>
+    </div>
+        </div>
+
+        
+        
+
+        <script type="text/javascript">
+
+              // initialize global variables.
+              var edges;
+              var nodes;
+              var allNodes;
+              var allEdges;
+              var nodeColors;
+              var originalNodes;
+              var network;
+              var container;
+              var options, data;
+              var filter = {
+                  item : '',
+                  property : '',
+                  value : []
+              };
+
+              
+
+              
+
+              // This method is responsible for drawing the graph, returns the drawn network
+              function drawGraph() {
+                  var container = document.getElementById('mynetwork');
+
+                  
+
+                  // parsing and collecting nodes and edges from the python
+                  nodes = new vis.DataSet([{"color": "#97c2fc", "font": {"color": "white"}, "id": "orthography;;(linguistics);;(uncountable) correct spelling according to established usage; also (obsolete) pronunciation according to the spelling of a word.", "label": "orthography", "shape": "dot", "title": "orthography;;(linguistics);;(uncountable) correct spelling according to established usage; also (obsolete) pronunciation according to the spelling of a word."}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "orthography;;(linguistics);;(uncountable) the aspect of language study concerned with letters and their sequences in words; the study of spelling.", "label": "orthography", "shape": "dot", "title": "orthography;;(linguistics);;(uncountable) the aspect of language study concerned with letters and their sequences in words; the study of spelling."}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "spelling;;(uncountable) the act, practice, ability, or subject of forming words with letters, or of reading the letters of words; orthography.", "label": "spelling", "shape": "dot", "title": "spelling;;(uncountable) the act, practice, ability, or subject of forming words with letters, or of reading the letters of words; orthography."}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "spelling;;(countable) a specific spelling of a word.", "label": "spelling", "shape": "dot", "title": "spelling;;(countable) a specific spelling of a word."}]);
+                  edges = new vis.DataSet([{"from": "orthography;;(linguistics);;(uncountable) correct spelling according to established usage; also (obsolete) pronunciation according to the spelling of a word.", "languages": "hungarian;;helyes\u00edr\u00e1s;;noun, scottish gaelic;;litreachadh;;noun, japanese;;\u30b9\u30da\u30ea\u30f3\u30b0;;noun, russian;;\u043f\u0440\u0430\u0432\u043e\u043f\u0438\u0441\u0430\u0301\u043d\u0438\u0435;;noun, russian;;\u0441\u043f\u0435\u0301\u043b\u043b\u0438\u043d\u0433;;noun, japanese;;\u30b9\u30da\u30eb;;noun, swahili;;tahajia;;noun, finnish;;ortografia;;noun, german;;orthografie;;noun, slovak;;pravopis;;noun, dutch;;spelling;;noun, swahili;;otografia;;noun, korean;;\ub9de\ucda4\ubc95;;noun, belarusian;;\u043f\u0440\u0430\u0301\u0432\u0430\u043f\u0456\u0441;;noun, portuguese;;ortografia;;noun, arabic;;\u0647\u0650\u062c\u064e\u0627\u0621;;noun, german;;rechtschreibung;;noun, french;;orthographe;;noun, bulgarian;;\u043f\u0440\u0430\u0432\u043e\u043f\u0438\u0301\u0441;;noun, ukrainian;;\u043f\u0440\u0430\u0432\u043e\u0301\u043f\u0438\u0441;;noun, polish;;ortografia;;noun, korean;;\ucca0\uc790\ubc95;;noun, slovene;;pravop\u00eds;;noun, chinese mandarin;;\u5beb\u6cd5 /\u5199\u6cd5;;noun, czech;;pravopis;;noun, japanese;;\u7db4\u308a\u5b57;;noun, swedish;;ortografi;;noun, malay;;ortografi;;noun, spanish;;ortograf\u00eda;;noun, catalan;;ortografia;;noun, russian;;\u043e\u0440\u0444\u043e\u0433\u0440\u0430\u0301\u0444\u0438\u044f;;noun, chinese mandarin;;\u62fc\u5b57;;noun, swedish;;r\u00e4ttstavning;;noun, malay;;ejaan;;noun, finnish;;oikeinkirjoitus;;noun, japanese;;\u7db4\u308a;;noun, galician;;ortograf\u00eda;;noun", "to": "spelling;;(uncountable) the act, practice, ability, or subject of forming words with letters, or of reading the letters of words; orthography.", "value": 37, "width": 0.9736842105263158}, {"from": "orthography;;(linguistics);;(uncountable) correct spelling according to established usage; also (obsolete) pronunciation according to the spelling of a word.", "languages": "scottish gaelic;;litreachadh;;noun, russian;;\u043f\u0440\u0430\u0432\u043e\u043f\u0438\u0441\u0430\u0301\u043d\u0438\u0435;;noun, yiddish;;\u05d0\u05b8\u05e8\u05d8\u05d0\u05b8\u05d2\u05e8\u05d0\u05b7\u05e4\u05bf\u05d9\u05e2;;noun, russian;;\u0441\u043f\u0435\u0301\u043b\u043b\u0438\u043d\u0433;;noun, japanese;;\u30b9\u30da\u30eb;;noun, swahili;;tahajia;;noun, dutch;;spelling;;noun, ukrainian;;\u043e\u0440\u0444\u043e\u0433\u0440\u0430\u0301\u0444\u0456\u044f;;noun, belarusian;;\u043f\u0440\u0430\u0301\u0432\u0430\u043f\u0456\u0441;;noun, portuguese;;ortografia;;noun, arabic;;\u0647\u0650\u062c\u064e\u0627\u0621;;noun, french;;orthographe;;noun, bulgarian;;\u043f\u0440\u0430\u0432\u043e\u043f\u0438\u0301\u0441;;noun, ukrainian;;\u043f\u0440\u0430\u0432\u043e\u0301\u043f\u0438\u0441;;noun, belarusian;;\u0430\u0440\u0444\u0430\u0433\u0440\u0430\u0301\u0444\u0456\u044f;;noun, chinese mandarin;;\u6b63\u5b57\u6cd5;;noun, polish;;pisownia;;noun, chinese mandarin;;\u62fc\u5beb /\u62fc\u5199;;noun, czech;;pravopis;;noun, japanese;;\u6b63\u5b57\u6cd5;;noun, chinese mandarin;;\u6b63\u8a5e\u6cd5 /\u6b63\u8bcd\u6cd5;;noun, russian;;\u043e\u0440\u0444\u043e\u0433\u0440\u0430\u0301\u0444\u0438\u044f;;noun, chinese mandarin;;\u62fc\u5beb\u6cd5 /\u62fc\u5199\u6cd5;;noun, chinese mandarin;;\u62fc\u5b57;;noun, bulgarian;;\u043e\u0440\u0442\u043e\u0433\u0440\u0430\u0301\u0444\u0438\u044f;;noun, hindi;;\u0935\u0930\u094d\u0924\u0928\u0940;;noun, malay;;ejaan;;noun, arabic;;\u062a\u064e\u0647\u0652\u062c\u0650\u0626\u064e\u0629;;noun, japanese;;\u7db4\u308a;;noun", "to": "spelling;;(countable) a specific spelling of a word.", "value": 29, "width": 0.7631578947368421}, {"from": "orthography;;(linguistics);;(uncountable) correct spelling according to established usage; also (obsolete) pronunciation according to the spelling of a word.", "languages": "scottish gaelic;;litreachadh;;noun, arabic;;\u0625\u0650\u0645\u0652\u0644\u064e\u0627\u0621;;noun, russian;;\u043f\u0440\u0430\u0432\u043e\u043f\u0438\u0441\u0430\u0301\u043d\u0438\u0435;;noun, norwegian nynorsk;;ortografi;;noun, russian;;\u0441\u043f\u0435\u0301\u043b\u043b\u0438\u043d\u0433;;noun, serbo-croatian;;\u043e\u0440\u0442\u043e\u0433\u0440\u0430\u0300\u0444\u0438\u0458\u0430;;noun, danish;;retskrivning;;noun, macedonian;;\u043f\u0440\u0430\u0432\u043e\u043f\u0438\u0441;;noun, cebuano;;ortograpiya;;noun, finnish;;ortografia;;noun, latvian;;ortogr\u0101fija;;noun, irish;;ortagrafa\u00edocht;;noun, latvian;;pareizrakst\u012bba;;noun, georgian;;\u10db\u10d0\u10e0\u10d7\u10da\u10ec\u10d4\u10e0\u10d0;;noun, georgian;;\u10dd\u10e0\u10d7\u10dd\u10d2\u10e0\u10d0\u10e4\u10d8\u10d0;;noun, dutch;;spelling;;noun, serbo-croatian;;\u043f\u0440\u0430\u030f\u0432\u043e\u043f\u04e3\u0441;;noun, danish;;ortografi;;noun, norwegian nynorsk;;rettskriving;;noun, portuguese;;ortografia;;noun, french;;orthographe;;noun, serbo-croatian;;ortogr\u00e0fija;;noun, norwegian bokm\u00e5l;;rettskrivning;;noun, polish;;ortografia;;noun, finnish;;oikeinkirjoitusoppi;;noun, norwegian bokm\u00e5l;;ortografi;;noun, norwegian bokm\u00e5l;;rettskriving;;noun, macedonian;;\u043e\u0440\u0442\u043e\u0433\u0440\u0430\u0444\u0438\u0458\u0430;;noun, swedish;;ortografi;;noun, spanish;;ortograf\u00eda;;noun, catalan;;ortografia;;noun, russian;;\u043e\u0440\u0444\u043e\u0433\u0440\u0430\u0301\u0444\u0438\u044f;;noun, chinese mandarin;;\u62fc\u5beb\u6cd5 /\u62fc\u5199\u6cd5;;noun, chinese mandarin;;\u62fc\u5b57;;noun, greek;;\u03bf\u03c1\u03b8\u03bf\u03b3\u03c1\u03b1\u03c6\u03af\u03b1;;noun, armenian;;\u0578\u0582\u0572\u0572\u0561\u0563\u0580\u0578\u0582\u0569\u0575\u0578\u0582\u0576;;noun, serbo-croatian;;pr\u0201vop\u012bs;;noun, galician;;ortograf\u00eda;;noun", "to": "orthography;;(linguistics);;(uncountable) the aspect of language study concerned with letters and their sequences in words; the study of spelling.", "value": 38, "width": 1.0}, {"from": "orthography;;(linguistics);;(uncountable) the aspect of language study concerned with letters and their sequences in words; the study of spelling.", "languages": "dutch;;spelling;;noun, scottish gaelic;;litreachadh;;noun, swedish;;ortografi;;noun, polish;;ortografia;;noun, russian;;\u043f\u0440\u0430\u0432\u043e\u043f\u0438\u0441\u0430\u0301\u043d\u0438\u0435;;noun, spanish;;ortograf\u00eda;;noun, russian;;\u0441\u043f\u0435\u0301\u043b\u043b\u0438\u043d\u0433;;noun, catalan;;ortografia;;noun, russian;;\u043e\u0440\u0444\u043e\u0433\u0440\u0430\u0301\u0444\u0438\u044f;;noun, portuguese;;ortografia;;noun, chinese mandarin;;\u62fc\u5b57;;noun, finnish;;ortografia;;noun, french;;orthographe;;noun, galician;;ortograf\u00eda;;noun", "to": "spelling;;(uncountable) the act, practice, ability, or subject of forming words with letters, or of reading the letters of words; orthography.", "value": 14, "width": 0.3684210526315789}, {"from": "orthography;;(linguistics);;(uncountable) the aspect of language study concerned with letters and their sequences in words; the study of spelling.", "languages": "dutch;;spelling;;noun, scottish gaelic;;litreachadh;;noun, russian;;\u043f\u0440\u0430\u0432\u043e\u043f\u0438\u0441\u0430\u0301\u043d\u0438\u0435;;noun, russian;;\u0441\u043f\u0435\u0301\u043b\u043b\u0438\u043d\u0433;;noun, russian;;\u043e\u0440\u0444\u043e\u0433\u0440\u0430\u0301\u0444\u0438\u044f;;noun, chinese mandarin;;\u62fc\u5beb\u6cd5 /\u62fc\u5199\u6cd5;;noun, portuguese;;ortografia;;noun, chinese mandarin;;\u62fc\u5b57;;noun, french;;orthographe;;noun", "to": "spelling;;(countable) a specific spelling of a word.", "value": 9, "width": 0.23684210526315788}, {"from": "spelling;;(uncountable) the act, practice, ability, or subject of forming words with letters, or of reading the letters of words; orthography.", "languages": "scottish gaelic;;litreachadh;;noun, scots;;spellin;;noun, russian;;\u043f\u0440\u0430\u0432\u043e\u043f\u0438\u0441\u0430\u0301\u043d\u0438\u0435;;noun, russian;;\u0441\u043f\u0435\u0301\u043b\u043b\u0438\u043d\u0433;;noun, japanese;;\u30b9\u30da\u30eb;;noun, swahili;;tahajia;;noun, cebuano;;espeling;;noun, spanish;;espeleo;;noun, irish;;litri\u00fa;;noun, swahili;;imla;;noun, dutch;;spelling;;noun, belarusian;;\u043f\u0440\u0430\u0301\u0432\u0430\u043f\u0456\u0441;;noun, portuguese;;ortografia;;noun, arabic;;\u0647\u0650\u062c\u064e\u0627\u0621;;noun, french;;orthographe;;noun, arabic;;\u0639\u0650\u0644\u0652\u0645 \u0627\u064e\u0644\u0652\u0625\u0650\u0645\u0652\u0644\u064e\u0627\u0621;;noun, bulgarian;;\u043f\u0440\u0430\u0432\u043e\u043f\u0438\u0301\u0441;;noun, ukrainian;;\u043f\u0440\u0430\u0432\u043e\u0301\u043f\u0438\u0441;;noun, czech;;pravopis;;noun, maori;;t\u0101takinga;;noun, russian;;\u043e\u0440\u0444\u043e\u0433\u0440\u0430\u0301\u0444\u0438\u044f;;noun, tagalog;;ispeling;;noun, serbo-croatian;;pravopis;;noun, chinese mandarin;;\u62fc\u5b57;;noun, tagalog;;pagbabaybay;;noun, malay;;ejaan;;noun, japanese;;\u7db4\u308a;;noun", "to": "spelling;;(countable) a specific spelling of a word.", "value": 27, "width": 0.7105263157894737}]);
+
+                  nodeColors = {};
+                  allNodes = nodes.get({ returnType: "Object" });
+                  for (nodeId in allNodes) {
+                    nodeColors[nodeId] = allNodes[nodeId].color;
+                  }
+                  allEdges = edges.get({ returnType: "Object" });
+                  // adding nodes and edges to the graph
+                  data = {nodes: nodes, edges: edges};
+
+                  var options = {
+    "configure": {
+        "enabled": false
+    },
+    "edges": {
+        "color": {
+            "inherit": true
+        },
+        "smooth": {
+            "enabled": true,
+            "type": "dynamic"
+        }
+    },
+    "interaction": {
+        "dragNodes": true,
+        "hideEdgesOnDrag": false,
+        "hideNodesOnDrag": false
+    },
+    "physics": {
+        "enabled": true,
+        "stabilization": {
+            "enabled": true,
+            "fit": true,
+            "iterations": 1000,
+            "onlyDynamicEdges": false,
+            "updateInterval": 50
+        }
+    }
+};
+
+                  
+
+
+                  
+
+                  network = new vis.Network(container, data, options);
+
+                  
+
+                  
+
+                  
+
+
+                  
+
+                  return network;
+
+              }
+              drawGraph();
+        </script>
+    
+    <script>
+        // Function to update the legend
+        function updateLegend(content) {
+            const legend = document.getElementById('language-legend');
+            legend.innerHTML = content;
+        }
+
+        // Add event listeners to edges using vis.js API
+        network.on("hoverEdge", function (params) {
+            const edgeId = params.edge;
+            const edge = edges.get(edgeId);
+            if (edge && edge.languages) {
+                const languagesList = edge.languages.split(', ').map(lang => `<li>${lang}</li>`).join('');
+                const numLanguages = edge.languages.split(', ').length;
+                const nodePair = `${edge.from} - ${edge.to}`;
+                updateLegend(`<h3>Languages (${numLanguages}) for ${nodePair}:</h3><ul>${languagesList}</ul>`);
+            }
+        });
+
+        network.on("blurEdge", function () {
+            updateLegend('<h3>Languages:</h3><p>Hover over an edge to see languages.</p>');
+        });
+
+        network.on("click", function (params) {
+            if (params.edges && params.edges.length > 0) {
+                const edgeId = params.edges[0];
+                const edge = edges.get(edgeId);
+                if (edge && edge.languages) {
+                    const languagesList = edge.languages.split(', ').sort().map(lang => `<li>${lang.replaceAll(";;", " - ")}</li>`).join('');
+                    const numLanguages = edge.languages.split(', ').length;
+                    const title1 = edge.from.replaceAll(";;", "&#10;");
+                    const title2 = edge.to.replaceAll(";;", "&#10;");
+                    updateLegend(`<h2><div title="${title1}";>${edge.from.split(";;")[0]}</div><div title="${title2}";>${edge.to.split(";;")[0]}</div></h2><br><h3>Languages (${numLanguages})<br></h3><ul>${languagesList}</ul>`);
+                }
+            }
+        });
+    </script>
+    <style>
+        .container {
+            display: flex;
+            width: 100%;
+            margin-top: 48px;
+        }
+        #mynetwork {
+            flex: 3;
+            height: 750px;
+            width: 90%
+            background-color: #222222;
+            border: 1px solid lightgray;
+        }
+        #language-legend h2 {
+            display: flex; 
+            flex-direction: column;
+            font-weight: bold;
+        }
+        #language-legend h3 {
+             border-bottom: 1px solid black; 
+             padding-bottom: 8px
+        }
+        #language-legend {
+            flex: 1;
+            margin-left: 20px;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            background-color: #f9f9f9;
+            overflow-y: auto;
+            max-height: 750px;
+        }
+        #language-legend ul {
+            list-style-type: none;
+            padding: 0;
+        }
+        #language-legend li {
+            margin: 5px 0;
+            font-size: 1.2em;
+        }
+    </style>
+    </body>
+</html>

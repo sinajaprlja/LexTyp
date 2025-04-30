@@ -1,0 +1,239 @@
+<html>
+    <head>
+        <meta charset="utf-8">
+        
+            <script src="lib/bindings/utils.js"></script>
+            <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/vis-network/9.1.2/dist/dist/vis-network.min.css" integrity="sha512-WgxfT5LWjfszlPHXRmBWHkV2eceiWTOBvrKCNbdgDYTHrT2AeLCGbF4sZlZw3UMN3WtL0tGUoIAKsu8mllg/XA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/vis-network/9.1.2/dist/vis-network.min.js" integrity="sha512-LnvoEWDFrqGHlHmDD2101OrLcbsfkrzoSpvtSQtxK3RMnRV0eOkhhBN2dXHKRrUU8p2DGRTk35n4O8nWSVe1mQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+            
+        
+<center>
+<h1></h1>
+</center>
+
+<!-- <link rel="stylesheet" href="../node_modules/vis/dist/vis.min.css" type="text/css" />
+<script type="text/javascript" src="../node_modules/vis/dist/vis.js"> </script>-->
+        <link
+          href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/css/bootstrap.min.css"
+          rel="stylesheet"
+          integrity="sha384-eOJMYsd53ii+scO/bJGFsiCZc+5NDVN2yr8+0RDqr0Ql0h+rP48ckxlpbzKgwra6"
+          crossorigin="anonymous"
+        />
+        <script
+          src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.bundle.min.js"
+          integrity="sha384-JEW9xMcG8R+pH31jmWH6WWP0WintQrMb4s7ZOdauHnUtxwoG2vI5DkLtS3qm9Ekf"
+          crossorigin="anonymous"
+        ></script>
+
+
+        <center>
+          <h1></h1>
+        </center>
+        <style type="text/css">
+
+             #mynetwork {
+                 width: 100%;
+                 height: 100vh;
+                 background-color: #222222;
+                 border: 1px solid lightgray;
+                 position: relative;
+                 float: left;
+             }
+
+             
+
+             
+
+             
+        </style>
+    </head>
+
+
+    <body>
+        <div class="card" style="width: 100%">
+            
+            
+            <div class="container"><div id="mynetwork" class="card-body"></div>
+    <div id="language-legend">
+        <h3>Languages:</h3>
+        <p>Click on an edge to see languages.</p>
+    </div>
+    </div>
+        </div>
+
+        
+        
+
+        <script type="text/javascript">
+
+              // initialize global variables.
+              var edges;
+              var nodes;
+              var allNodes;
+              var allEdges;
+              var nodeColors;
+              var originalNodes;
+              var network;
+              var container;
+              var options, data;
+              var filter = {
+                  item : '',
+                  property : '',
+                  value : []
+              };
+
+              
+
+              
+
+              // This method is responsible for drawing the graph, returns the drawn network
+              function drawGraph() {
+                  var container = document.getElementById('mynetwork');
+
+                  
+
+                  // parsing and collecting nodes and edges from the python
+                  nodes = new vis.DataSet([{"color": "#97c2fc", "font": {"color": "white"}, "id": "what for;;(colloquial) for what reason; why.", "label": "what for", "shape": "dot", "title": "what for;;(colloquial) for what reason; why."}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "how;;(interrogative) in what state or condition.", "label": "how", "shape": "dot", "title": "how;;(interrogative) in what state or condition."}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "where;;(interrogative) in, at or to what place.", "label": "where", "shape": "dot", "title": "where;;(interrogative) in, at or to what place."}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "how come;;(idiomatic, informal) why; why is it; for what reason or purpose; due to what cause?", "label": "how come", "shape": "dot", "title": "how come;;(idiomatic, informal) why; why is it; for what reason or purpose; due to what cause?"}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "how;;(exclamative) used as a modifier to indicate surprise, delight, or other strong feelings in an exclamation.", "label": "how", "shape": "dot", "title": "how;;(exclamative) used as a modifier to indicate surprise, delight, or other strong feelings in an exclamation."}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "where;;(fused relative) the place in, at or to which.", "label": "where", "shape": "dot", "title": "where;;(fused relative) the place in, at or to which."}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "whence;;(archaic, formal or literary) from where; from which place or source.", "label": "whence", "shape": "dot", "title": "whence;;(archaic, formal or literary) from where; from which place or source."}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "how;;(interrogative) to what degree or extent.", "label": "how", "shape": "dot", "title": "how;;(interrogative) to what degree or extent."}]);
+                  edges = new vis.DataSet([{"from": "what for;;(colloquial) for what reason; why.", "languages": "french;;pourquoi;;adv, chinese mandarin;;\u70ba\u4ec0\u9ebc /\u4e3a\u4ec0\u4e48;;adv, polish;;dlaczego;;adv, finnish;;mink\u00e4 takia;;adv, swedish;;varf\u00f6r;;adv, finnish;;miksi;;adv", "to": "how come;;(idiomatic, informal) why; why is it; for what reason or purpose; due to what cause?", "value": 6, "width": 0.21428571428571427}, {"from": "how;;(interrogative) in what state or condition.", "languages": "portuguese;;como;;adv, chinese mandarin;;\u600e\u9ebc /\u600e\u4e48;;adv", "to": "how come;;(idiomatic, informal) why; why is it; for what reason or purpose; due to what cause?", "value": 2, "width": 0.07142857142857142}, {"from": "how;;(interrogative) in what state or condition.", "languages": "finnish;;kuinka;;adv, bulgarian;;\u043a\u0430\u043a;;adv, asturian;;c\u00f3mo;;adv, manchu;;\u1820\u182a\u1830\u1873;;adv, assyrian neo-aramaic;;\u0715\u0735\u0710\u071f\u0742\u071d\u073c;;adv, japanese;;\u3069\u3046;;adv, german;;wie;;adv, gothic;;\ud800\udf48\ud800\udf30\ud800\udf39\ud800\udf45\ud800\udf30;;adv, arabic;;\u0643\u064e\u064a\u0652\u0641\u064e;;adv, french;;comment;;adv, occitan;;coss\u00ed;;adv, russian;;\u043a\u0430\u043a;;adv, iraqi arabic;;\u0634\u0644\u0648\u0646;;adv, czech;;jak;;adv, arabic;;\u0643\u064a\u0641;;adv, arabic;;\u0643\u064a\u0641\u0627\u0634;;adv, m\u00f2cheno;;bia;;adv, arabic;;\u0634\u0644\u0648\u0646;;adv, dutch;;hoe;;adv, ukrainian;;\u044f\u043a;;adv, polish;;jak;;adv, kyrgyz;;\u043a\u0430\u043d\u0434\u0430\u0439;;adv, arabic;;\u0627\u0632\u0627\u064a;;adv, southern altai;;\u043a\u0430\u043d\u0434\u044b\u0439;;adv, old english;;h\u016b;;adv, bulgarian;;\u043a\u043e\u0301\u043b\u043a\u043e;;adv, hungarian;;milyen;;adv, turkish;;nas\u0131l;;adv", "to": "how;;(interrogative) to what degree or extent.", "value": 28, "width": 1.0}, {"from": "how;;(interrogative) in what state or condition.", "languages": "polish;;jak;;adv, finnish;;kuinka;;adv, kyrgyz;;\u043a\u0430\u043d\u0434\u0430\u0439;;adv, czech;;jak;;adv, bulgarian;;\u043a\u0430\u043a;;adv, finnish;;miten;;adv, spanish;;c\u00f3mo;;adv, german;;wie;;adv, portuguese;;como;;adv, assyrian neo-aramaic;;\u0715\u0735\u0710\u071f\u0742\u071d\u073c;;adv, manchu;;\u1820\u182a\u1830\u1873;;adv, southern altai;;\u043a\u0430\u043d\u0434\u044b\u0439;;adv, russian;;\u043a\u0430\u043a;;adv, bulgarian;;\u043a\u043e\u0301\u043b\u043a\u043e;;adv, old english;;h\u016b;;adv, dutch;;hoe;;adv, hungarian;;milyen;;adv, turkish;;nas\u0131l;;adv", "to": "how;;(exclamative) used as a modifier to indicate surprise, delight, or other strong feelings in an exclamation.", "value": 18, "width": 0.6428571428571429}, {"from": "where;;(interrogative) in, at or to what place.", "languages": "danish;;hvor;;adv, norwegian bokm\u00e5l;;hvor;;adv, norwegian nynorsk;;kor;;adv", "to": "how;;(interrogative) to what degree or extent.", "value": 3, "width": 0.10714285714285714}, {"from": "where;;(interrogative) in, at or to what place.", "languages": "portuguese;;onde;;adv, dutch;;waar;;adv, esperanto;;kie;;adv, dutch;;waarheen;;adv, scots;;whaur;;adv, galician;;onde;;adv, french;;o\u00f9;;adv, turkish;;nerede;;adv, macedonian;;\u043a\u0430\u0434\u0435;;adv, latvian;;kur;;adv, russian;;\u0433\u0434\u0435;;adv, malay;;dari mana;;adv, gothic;;\ud800\udf48\ud800\udf30\ud800\udf42;;adv, german;;wo;;adv, danish;;hvor;;adv, czech;;kde;;adv, italian;;dove;;adv, latin;;ubi;;adv, norwegian nynorsk;;kvar;;adv, norwegian bokm\u00e5l;;hvor;;adv, norwegian nynorsk;;kor;;adv", "to": "where;;(fused relative) the place in, at or to which.", "value": 21, "width": 0.75}, {"from": "where;;(interrogative) in, at or to what place.", "languages": "belarusian;;\u0430\u0434\u043a\u0443\u0301\u043b\u044c;;adv, slovak;;odkia\u013e;;adv, czech;;odkud;;adv, latin;;unde;;adv, gothic;;\ud800\udf48\ud800\udf30\ud800\udf38\ud800\udf42\ud800\udf49;;adv, georgian;;\u10e1\u10d0\u10d8\u10d3\u10d0\u10dc;;adv, ukrainian;;\u0437\u0432\u0456\u0301\u0434\u043a\u0438;;adv, bulgarian;;\u043e\u0442\u043a\u044a\u0434\u0435\u0301;;adv, russian;;\u043e\u0442\u043a\u0443\u0301\u0434\u0430;;adv, polish;;sk\u0105d;;adv, hebrew;;\u05de\u05b5\u05d0\u05b7\u05d9\u05b4\u05df;;adv, esperanto;;de kie;;adv", "to": "whence;;(archaic, formal or literary) from where; from which place or source.", "value": 12, "width": 0.42857142857142855}, {"from": "how;;(exclamative) used as a modifier to indicate surprise, delight, or other strong feelings in an exclamation.", "languages": "finnish;;kuinka;;adv, hungarian;;mennyire;;adv, bulgarian;;\u043a\u0430\u043a;;adv, chinese mandarin;;\u591a;;adv, manchu;;\u1820\u182a\u1830\u1873;;adv, assyrian neo-aramaic;;\u0715\u0735\u0710\u071f\u0742\u071d\u073c;;adv, albanian;;si;;adv, greek;;\u03c0\u03cc\u03c3\u03bf;;adv, german;;wie;;adv, russian;;\u043a\u0430\u043a;;adv, serbo-croatian;;kako;;adv, czech;;jak;;adv, persian;;\u0686\u0642\u062f\u0631;;adv, afrikaans;;hoe;;adv, vietnamese;;l\u00e0m sao;;adv, dutch;;hoe;;adv, danish;;hvor;;adv, vietnamese;;sao;;adv, polish;;jak;;adv, kyrgyz;;\u043a\u0430\u043d\u0434\u0430\u0439;;adv, southern altai;;\u043a\u0430\u043d\u0434\u044b\u0439;;adv, slovene;;kak\u00f3;;adv, old english;;h\u016b;;adv, bulgarian;;\u043a\u043e\u0301\u043b\u043a\u043e;;adv, hungarian;;milyen;;adv, turkish;;nas\u0131l;;adv", "to": "how;;(interrogative) to what degree or extent.", "value": 26, "width": 0.9285714285714286}, {"from": "where;;(fused relative) the place in, at or to which.", "languages": "danish;;hvor;;adv, norwegian bokm\u00e5l;;hvor;;adv, norwegian nynorsk;;kor;;adv", "to": "how;;(interrogative) to what degree or extent.", "value": 3, "width": 0.10714285714285714}, {"from": "where;;(fused relative) the place in, at or to which.", "languages": "hindi;;\u091c\u0939\u093e\u0901;;adv, dutch;;waarvandaan;;adv", "to": "whence;;(archaic, formal or literary) from where; from which place or source.", "value": 2, "width": 0.07142857142857142}]);
+
+                  nodeColors = {};
+                  allNodes = nodes.get({ returnType: "Object" });
+                  for (nodeId in allNodes) {
+                    nodeColors[nodeId] = allNodes[nodeId].color;
+                  }
+                  allEdges = edges.get({ returnType: "Object" });
+                  // adding nodes and edges to the graph
+                  data = {nodes: nodes, edges: edges};
+
+                  var options = {
+    "configure": {
+        "enabled": false
+    },
+    "edges": {
+        "color": {
+            "inherit": true
+        },
+        "smooth": {
+            "enabled": true,
+            "type": "dynamic"
+        }
+    },
+    "interaction": {
+        "dragNodes": true,
+        "hideEdgesOnDrag": false,
+        "hideNodesOnDrag": false
+    },
+    "physics": {
+        "enabled": true,
+        "stabilization": {
+            "enabled": true,
+            "fit": true,
+            "iterations": 1000,
+            "onlyDynamicEdges": false,
+            "updateInterval": 50
+        }
+    }
+};
+
+                  
+
+
+                  
+
+                  network = new vis.Network(container, data, options);
+
+                  
+
+                  
+
+                  
+
+
+                  
+
+                  return network;
+
+              }
+              drawGraph();
+        </script>
+    
+    <script>
+        // Function to update the legend
+        function updateLegend(content) {
+            const legend = document.getElementById('language-legend');
+            legend.innerHTML = content;
+        }
+
+        // Add event listeners to edges using vis.js API
+        network.on("hoverEdge", function (params) {
+            const edgeId = params.edge;
+            const edge = edges.get(edgeId);
+            if (edge && edge.languages) {
+                const languagesList = edge.languages.split(', ').map(lang => `<li>${lang}</li>`).join('');
+                const numLanguages = edge.languages.split(', ').length;
+                const nodePair = `${edge.from} - ${edge.to}`;
+                updateLegend(`<h3>Languages (${numLanguages}) for ${nodePair}:</h3><ul>${languagesList}</ul>`);
+            }
+        });
+
+        network.on("blurEdge", function () {
+            updateLegend('<h3>Languages:</h3><p>Hover over an edge to see languages.</p>');
+        });
+
+        network.on("click", function (params) {
+            if (params.edges && params.edges.length > 0) {
+                const edgeId = params.edges[0];
+                const edge = edges.get(edgeId);
+                if (edge && edge.languages) {
+                    const languagesList = edge.languages.split(', ').sort().map(lang => `<li>${lang.replaceAll(";;", " - ")}</li>`).join('');
+                    const numLanguages = edge.languages.split(', ').length;
+                    const title1 = edge.from.replaceAll(";;", "&#10;");
+                    const title2 = edge.to.replaceAll(";;", "&#10;");
+                    updateLegend(`<h2><div title="${title1}";>${edge.from.split(";;")[0]}</div><div title="${title2}";>${edge.to.split(";;")[0]}</div></h2><br><h3>Languages (${numLanguages})<br></h3><ul>${languagesList}</ul>`);
+                }
+            }
+        });
+    </script>
+    <style>
+        .container {
+            display: flex;
+            width: 100%;
+            margin-top: 48px;
+        }
+        #mynetwork {
+            flex: 3;
+            height: 750px;
+            width: 90%
+            background-color: #222222;
+            border: 1px solid lightgray;
+        }
+        #language-legend h2 {
+            display: flex; 
+            flex-direction: column;
+            font-weight: bold;
+        }
+        #language-legend h3 {
+             border-bottom: 1px solid black; 
+             padding-bottom: 8px
+        }
+        #language-legend {
+            flex: 1;
+            margin-left: 20px;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            background-color: #f9f9f9;
+            overflow-y: auto;
+            max-height: 750px;
+        }
+        #language-legend ul {
+            list-style-type: none;
+            padding: 0;
+        }
+        #language-legend li {
+            margin: 5px 0;
+            font-size: 1.2em;
+        }
+    </style>
+    </body>
+</html>

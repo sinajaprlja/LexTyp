@@ -1,0 +1,239 @@
+<html>
+    <head>
+        <meta charset="utf-8">
+        
+            <script src="lib/bindings/utils.js"></script>
+            <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/vis-network/9.1.2/dist/dist/vis-network.min.css" integrity="sha512-WgxfT5LWjfszlPHXRmBWHkV2eceiWTOBvrKCNbdgDYTHrT2AeLCGbF4sZlZw3UMN3WtL0tGUoIAKsu8mllg/XA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/vis-network/9.1.2/dist/vis-network.min.js" integrity="sha512-LnvoEWDFrqGHlHmDD2101OrLcbsfkrzoSpvtSQtxK3RMnRV0eOkhhBN2dXHKRrUU8p2DGRTk35n4O8nWSVe1mQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+            
+        
+<center>
+<h1></h1>
+</center>
+
+<!-- <link rel="stylesheet" href="../node_modules/vis/dist/vis.min.css" type="text/css" />
+<script type="text/javascript" src="../node_modules/vis/dist/vis.js"> </script>-->
+        <link
+          href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/css/bootstrap.min.css"
+          rel="stylesheet"
+          integrity="sha384-eOJMYsd53ii+scO/bJGFsiCZc+5NDVN2yr8+0RDqr0Ql0h+rP48ckxlpbzKgwra6"
+          crossorigin="anonymous"
+        />
+        <script
+          src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.bundle.min.js"
+          integrity="sha384-JEW9xMcG8R+pH31jmWH6WWP0WintQrMb4s7ZOdauHnUtxwoG2vI5DkLtS3qm9Ekf"
+          crossorigin="anonymous"
+        ></script>
+
+
+        <center>
+          <h1></h1>
+        </center>
+        <style type="text/css">
+
+             #mynetwork {
+                 width: 100%;
+                 height: 100vh;
+                 background-color: #222222;
+                 border: 1px solid lightgray;
+                 position: relative;
+                 float: left;
+             }
+
+             
+
+             
+
+             
+        </style>
+    </head>
+
+
+    <body>
+        <div class="card" style="width: 100%">
+            
+            
+            <div class="container"><div id="mynetwork" class="card-body"></div>
+    <div id="language-legend">
+        <h3>Languages:</h3>
+        <p>Click on an edge to see languages.</p>
+    </div>
+    </div>
+        </div>
+
+        
+        
+
+        <script type="text/javascript">
+
+              // initialize global variables.
+              var edges;
+              var nodes;
+              var allNodes;
+              var allEdges;
+              var nodeColors;
+              var originalNodes;
+              var network;
+              var container;
+              var options, data;
+              var filter = {
+                  item : '',
+                  property : '',
+                  value : []
+              };
+
+              
+
+              
+
+              // This method is responsible for drawing the graph, returns the drawn network
+              function drawGraph() {
+                  var container = document.getElementById('mynetwork');
+
+                  
+
+                  // parsing and collecting nodes and edges from the python
+                  nodes = new vis.DataSet([{"color": "#97c2fc", "font": {"color": "white"}, "id": "alcohol;;(uncountable) beverages containing ethanol, collectively.", "label": "alcohol", "shape": "dot", "title": "alcohol;;(uncountable) beverages containing ethanol, collectively."}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "spirit;;(usually in the plural) a volatile liquid, such as alcohol. the plural form spirits is a generic term for distilled alcoholic beverages.", "label": "spirit", "shape": "dot", "title": "spirit;;(usually in the plural) a volatile liquid, such as alcohol. the plural form spirits is a generic term for distilled alcoholic beverages."}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "beer;;(countable) a glass, bottle, or can of any of the above beverages.", "label": "beer", "shape": "dot", "title": "beer;;(countable) a glass, bottle, or can of any of the above beverages."}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "sak\u00e9;;(alcoholic beverages) rice wine; a drink made from filtered fermented rice.", "label": "sak\u00e9", "shape": "dot", "title": "sak\u00e9;;(alcoholic beverages) rice wine; a drink made from filtered fermented rice."}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "beverage;;(chiefly canada, us) a liquid to consume; a drink, such as tea, coffee, liquor, beer, milk, juice, or a soft drink, usually excluding water.", "label": "beverage", "shape": "dot", "title": "beverage;;(chiefly canada, us) a liquid to consume; a drink, such as tea, coffee, liquor, beer, milk, juice, or a soft drink, usually excluding water."}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "whiskey;;(ireland, us, england) a drink of whiskey.", "label": "whiskey", "shape": "dot", "title": "whiskey;;(ireland, us, england) a drink of whiskey."}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "liquor;;(chiefly us, canada, australia) strong alcoholic drink derived from fermentation and distillation; more broadly, any alcoholic drink.", "label": "liquor", "shape": "dot", "title": "liquor;;(chiefly us, canada, australia) strong alcoholic drink derived from fermentation and distillation; more broadly, any alcoholic drink."}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "brandy;;(uncountable) an alcoholic liquor distilled from wine or fermented fruit juice.", "label": "brandy", "shape": "dot", "title": "brandy;;(uncountable) an alcoholic liquor distilled from wine or fermented fruit juice."}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "booze;;(colloquial, uncountable) any alcoholic beverage (especially beer or hard liquor).", "label": "booze", "shape": "dot", "title": "booze;;(colloquial, uncountable) any alcoholic beverage (especially beer or hard liquor)."}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "beer;;(uncountable) an alcoholic drink fermented from starch material, commonly barley malt; often with hops or some other substance (like gruit) to impart a bitter flavor.", "label": "beer", "shape": "dot", "title": "beer;;(uncountable) an alcoholic drink fermented from starch material, commonly barley malt; often with hops or some other substance (like gruit) to impart a bitter flavor."}]);
+                  edges = new vis.DataSet([{"from": "alcohol;;(uncountable) beverages containing ethanol, collectively.", "languages": "urdu;;\u0634\u064e\u0631\u0627\u0628;;noun, hindi;;\u0936\u0930\u093e\u092c;;noun, hindi;;\u092e\u0926\u093f\u0930\u093e;;noun, vietnamese;;r\u01b0\u1ee3u;;noun", "to": "beer;;(uncountable) an alcoholic drink fermented from starch material, commonly barley malt; often with hops or some other substance (like gruit) to impart a bitter flavor.", "value": 4, "width": 0.11428571428571428}, {"from": "alcohol;;(uncountable) beverages containing ethanol, collectively.", "languages": "finnish;;alkoholi;;noun, ukrainian;;\u0430\u043b\u043a\u043e\u0433\u043e\u0301\u043b\u044c;;noun, armenian;;\u057d\u057a\u056b\u0580\u057f;;noun, latin;;ebriamen;;noun, japanese;;\u30a2\u30eb\u30b3\u30fc\u30eb;;noun, russian;;\u0441\u043f\u0438\u0440\u0442;;noun, bulgarian;;\u0441\u043f\u0438\u0440\u0442;;noun, greek;;\u03bf\u03b9\u03bd\u03cc\u03c0\u03bd\u03b5\u03c5\u03bc\u03b1;;noun, chinese mandarin;;\u9152;;noun, hungarian;;alkohol;;noun, latin;;t\u0113m\u0113tum;;noun, tocharian b;;mot;;noun, russian;;\u0430\u043b\u043a\u043e\u0433\u043e\u0301\u043b\u044c;;noun, korean;;\uc54c\ucf54\uc62c;;noun, swedish;;sprit;;noun, irish;;alc\u00f3l;;noun, german;;alkohol;;noun, belarusian;;\u0441\u043f\u0456\u0440\u0442;;noun, spanish;;alcohol;;noun, japanese;;\u9152;;noun, portuguese;;\u00e1lcool;;noun, georgian;;\u10e1\u10de\u10d8\u10e0\u10e2\u10d8;;noun, ingrian;;pirttu;;noun, danish;;alkohol;;noun, ukrainian;;\u0441\u043f\u0438\u0440\u0442;;noun, swedish;;alkohol;;noun, hungarian;;szeszes ital;;noun, vietnamese;;r\u01b0\u1ee3u;;noun, bulgarian;;\u0430\u043b\u043a\u043e\u0445\u043e\u0301\u043b;;noun, belarusian;;\u0430\u043b\u043a\u0430\u0433\u043e\u0301\u043b\u044c;;noun, polish;;alkohol;;noun", "to": "spirit;;(usually in the plural) a volatile liquid, such as alcohol. the plural form spirits is a generic term for distilled alcoholic beverages.", "value": 31, "width": 0.8857142857142857}, {"from": "alcohol;;(uncountable) beverages containing ethanol, collectively.", "languages": "hindi;;\u0936\u0930\u093e\u092c;;noun, hindi;;\u092e\u0926\u093f\u0930\u093e;;noun", "to": "whiskey;;(ireland, us, england) a drink of whiskey.", "value": 2, "width": 0.05714285714285714}, {"from": "alcohol;;(uncountable) beverages containing ethanol, collectively.", "languages": "bulgarian;;\u0441\u043f\u0438\u0301\u0440\u0442\u043d\u0430 \u043d\u0430\u043f\u0438\u0301\u0442\u043a\u0430;;noun, lao;;\u0eaa\u0eb8\u0ea5\u0eb2;;noun, ukrainian;;\u0430\u043b\u043a\u043e\u0433\u043e\u0301\u043b\u044c;;noun, arabic;;\u0643\u064f\u062d\u064f\u0648\u0644;;noun, latin;;ebriamen;;noun, russian;;\u043a\u0440\u0435\u0301\u043f\u043a\u0438\u0439 \u043d\u0430\u043f\u0438\u0301\u0442\u043e\u043a;;noun, irish;;deoch mheisci\u00fail;;noun, burmese;;\u1021\u101b\u1000\u103a;;noun, malay;;arak;;noun, macedonian;;\u0436\u0435\u0441\u0442\u043e\u043a \u043f\u0438\u0458\u0430\u043b\u043e\u043a;;noun, lao;;\u0eaa\u0eb8\u0ea3\u0eb2;;noun, russian;;\u0441\u043f\u0438\u0440\u0442;;noun, korean;;\uc220;;noun, latin;;t\u0113m\u0113tum;;noun, russian;;\u0430\u043b\u043a\u043e\u0433\u043e\u0301\u043b\u044c;;noun, russian;;\u0430\u043b\u043a\u043e\u0433\u043e\u0301\u043b\u044c\u043d\u044b\u0439 \u043d\u0430\u043f\u0438\u0301\u0442\u043e\u043a;;noun, swedish;;sprit;;noun, chinese mandarin;;\u84b8\u993e\u9152 /\u84b8\u998f\u9152;;noun, malay;;minuman keras;;noun, khmer;;\u179f\u17bb\u179a\u17b6;;noun, malayalam;;\u0d2e\u0d26\u0d4d\u0d2f\u0d02;;noun, iranian persian;;\u0639\u064e\u0631\u064e\u0642;;noun, khmer;;\u179f\u17d2\u179a\u17b6;;noun, malayalam;;\u0d15\u0d33\u0d4d\u0d33\u0d4d;;noun, thai;;\u0e40\u0e2b\u0e25\u0e49\u0e32;;noun, hindi;;\u092e\u0926\u093f\u0930\u093e;;noun, chinese mandarin;;\u70c8\u9152;;noun, hindi;;\u0936\u0930\u093e\u092c;;noun, scottish gaelic;;deoch l\u00e0idir;;noun, urdu;;\u0634\u064e\u0631\u0627\u0628;;noun, thai;;\u0e2a\u0e38\u0e23\u0e32;;noun, dutch;;sterke drank;;noun, belarusian;;\u0430\u043b\u043a\u0430\u0433\u043e\u0301\u043b\u044c;;noun, russian;;\u0441\u043f\u0438\u0440\u0442\u043d\u043e\u0301\u0439 \u043d\u0430\u043f\u0438\u0301\u0442\u043e\u043a;;noun, maori;;waipiro;;noun", "to": "liquor;;(chiefly us, canada, australia) strong alcoholic drink derived from fermentation and distillation; more broadly, any alcoholic drink.", "value": 35, "width": 1.0}, {"from": "alcohol;;(uncountable) beverages containing ethanol, collectively.", "languages": "latin;;t\u0113m\u0113tum;;noun, arabic;;\u0643\u064f\u062d\u064f\u0648\u0644;;noun, latin;;ebriamen;;noun, thai;;\u0e40\u0e2b\u0e25\u0e49\u0e32;;noun, german;;alkohol;;noun, chinese mandarin;;\u9152;;noun", "to": "booze;;(colloquial, uncountable) any alcoholic beverage (especially beer or hard liquor).", "value": 6, "width": 0.17142857142857143}, {"from": "alcohol;;(uncountable) beverages containing ethanol, collectively.", "languages": "japanese;;\u9152;;noun, korean;;\uc220;;noun", "to": "sak\u00e9;;(alcoholic beverages) rice wine; a drink made from filtered fermented rice.", "value": 2, "width": 0.05714285714285714}, {"from": "spirit;;(usually in the plural) a volatile liquid, such as alcohol. the plural form spirits is a generic term for distilled alcoholic beverages.", "languages": "hindi;;\u092e\u0926\u094d\u092f;;noun, vietnamese;;r\u01b0\u1ee3u;;noun", "to": "beer;;(uncountable) an alcoholic drink fermented from starch material, commonly barley malt; often with hops or some other substance (like gruit) to impart a bitter flavor.", "value": 2, "width": 0.05714285714285714}, {"from": "spirit;;(usually in the plural) a volatile liquid, such as alcohol. the plural form spirits is a generic term for distilled alcoholic beverages.", "languages": "latin;;t\u0113m\u0113tum;;noun, ukrainian;;\u0430\u043b\u043a\u043e\u0433\u043e\u0301\u043b\u044c;;noun, russian;;\u0430\u043b\u043a\u043e\u0433\u043e\u0301\u043b\u044c;;noun, french;;spiritueux;;noun, latin;;ebriamen;;noun, welsh;;gwirod;;noun, scottish gaelic;;spiorad;;noun, finnish;;viina;;noun, swedish;;sprit;;noun, belarusian;;\u0430\u043b\u043a\u0430\u0433\u043e\u0301\u043b\u044c;;noun, russian;;\u0441\u043f\u0438\u0440\u0442;;noun, danish;;spiritus;;noun, norwegian bokm\u00e5l;;sprit;;noun", "to": "liquor;;(chiefly us, canada, australia) strong alcoholic drink derived from fermentation and distillation; more broadly, any alcoholic drink.", "value": 13, "width": 0.37142857142857144}, {"from": "spirit;;(usually in the plural) a volatile liquid, such as alcohol. the plural form spirits is a generic term for distilled alcoholic beverages.", "languages": "latin;;t\u0113m\u0113tum;;noun, german;;schnaps;;noun, latin;;ebriamen;;noun, finnish;;viina;;noun, german;;alkohol;;noun, chinese mandarin;;\u9152;;noun", "to": "booze;;(colloquial, uncountable) any alcoholic beverage (especially beer or hard liquor).", "value": 6, "width": 0.17142857142857143}, {"from": "beer;;(countable) a glass, bottle, or can of any of the above beverages.", "languages": "swahili;;pombe;;noun, icelandic;;\u00f6l;;noun, faroese;;\u00f8l;;noun, danish;;\u00f8l;;noun, czech;;pivo;;noun, greek;;\u03bc\u03c0\u03af\u03c1\u03b1;;noun, spanish;;cerveza;;noun, catalan;;cervesa;;noun, welsh;;cwrw;;noun, swedish;;\u00f6l;;noun, french;;bi\u00e8re;;noun, italian;;birra;;noun, ukrainian;;\u043f\u0438\u0301\u0432\u043e;;noun, icelandic;;bj\u00f3r;;noun, central kurdish;;\u0628\u06cc\u0631\u06d5;;noun, finnish;;olut;;noun, romanian;;bere;;noun, portuguese;;cerveja;;noun, german;;bier;;noun, norwegian nynorsk;;\u00f8l;;noun, scottish gaelic;;leann;;noun, albanian;;birr\u00eb;;noun, norwegian bokm\u00e5l;;\u00f8l;;noun, slovene;;pivo;;noun, slovak;;pivo;;noun, hebrew;;\u05d1\u05b4\u05bc\u05d9\u05e8\u05b8\u05d4;;noun, estonian;;\u00f5lu;;noun", "to": "beer;;(uncountable) an alcoholic drink fermented from starch material, commonly barley malt; often with hops or some other substance (like gruit) to impart a bitter flavor.", "value": 27, "width": 0.7714285714285715}, {"from": "beverage;;(chiefly canada, us) a liquid to consume; a drink, such as tea, coffee, liquor, beer, milk, juice, or a soft drink, usually excluding water.", "languages": "romanian;;b\u0103utur\u0103;;noun, portuguese;;bebida;;noun, dutch;;drank;;noun, spanish;;trago;;noun, georgian;;\u10e1\u10d0\u10e1\u10db\u10d4\u10da\u10d8;;noun", "to": "booze;;(colloquial, uncountable) any alcoholic beverage (especially beer or hard liquor).", "value": 5, "width": 0.14285714285714285}, {"from": "whiskey;;(ireland, us, england) a drink of whiskey.", "languages": "hindi;;\u0936\u0930\u093e\u092c;;noun, hindi;;\u092e\u0926\u093f\u0930\u093e;;noun", "to": "beer;;(uncountable) an alcoholic drink fermented from starch material, commonly barley malt; often with hops or some other substance (like gruit) to impart a bitter flavor.", "value": 2, "width": 0.05714285714285714}, {"from": "whiskey;;(ireland, us, england) a drink of whiskey.", "languages": "hindi;;\u0936\u0930\u093e\u092c;;noun, hindi;;\u092e\u0926\u093f\u0930\u093e;;noun", "to": "liquor;;(chiefly us, canada, australia) strong alcoholic drink derived from fermentation and distillation; more broadly, any alcoholic drink.", "value": 2, "width": 0.05714285714285714}, {"from": "liquor;;(chiefly us, canada, australia) strong alcoholic drink derived from fermentation and distillation; more broadly, any alcoholic drink.", "languages": "urdu;;\u0634\u064e\u0631\u0627\u0628;;noun, hindi;;\u0936\u0930\u093e\u092c;;noun, hindi;;\u092e\u0926\u093f\u0930\u093e;;noun", "to": "beer;;(uncountable) an alcoholic drink fermented from starch material, commonly barley malt; often with hops or some other substance (like gruit) to impart a bitter flavor.", "value": 3, "width": 0.08571428571428572}, {"from": "liquor;;(chiefly us, canada, australia) strong alcoholic drink derived from fermentation and distillation; more broadly, any alcoholic drink.", "languages": "latin;;t\u0113m\u0113tum;;noun, arabic;;\u0643\u064f\u062d\u064f\u0648\u0644;;noun, polish;;trunek;;noun, latin;;ebriamen;;noun, estonian;;naps;;noun, finnish;;viina;;noun, thai;;\u0e40\u0e2b\u0e25\u0e49\u0e32;;noun, arabic;;\u062e\u064e\u0645\u0652\u0631;;noun", "to": "booze;;(colloquial, uncountable) any alcoholic beverage (especially beer or hard liquor).", "value": 8, "width": 0.22857142857142856}, {"from": "liquor;;(chiefly us, canada, australia) strong alcoholic drink derived from fermentation and distillation; more broadly, any alcoholic drink.", "languages": "german;;branntwein;;noun, finnish;;viina;;noun", "to": "brandy;;(uncountable) an alcoholic liquor distilled from wine or fermented fruit juice.", "value": 2, "width": 0.05714285714285714}]);
+
+                  nodeColors = {};
+                  allNodes = nodes.get({ returnType: "Object" });
+                  for (nodeId in allNodes) {
+                    nodeColors[nodeId] = allNodes[nodeId].color;
+                  }
+                  allEdges = edges.get({ returnType: "Object" });
+                  // adding nodes and edges to the graph
+                  data = {nodes: nodes, edges: edges};
+
+                  var options = {
+    "configure": {
+        "enabled": false
+    },
+    "edges": {
+        "color": {
+            "inherit": true
+        },
+        "smooth": {
+            "enabled": true,
+            "type": "dynamic"
+        }
+    },
+    "interaction": {
+        "dragNodes": true,
+        "hideEdgesOnDrag": false,
+        "hideNodesOnDrag": false
+    },
+    "physics": {
+        "enabled": true,
+        "stabilization": {
+            "enabled": true,
+            "fit": true,
+            "iterations": 1000,
+            "onlyDynamicEdges": false,
+            "updateInterval": 50
+        }
+    }
+};
+
+                  
+
+
+                  
+
+                  network = new vis.Network(container, data, options);
+
+                  
+
+                  
+
+                  
+
+
+                  
+
+                  return network;
+
+              }
+              drawGraph();
+        </script>
+    
+    <script>
+        // Function to update the legend
+        function updateLegend(content) {
+            const legend = document.getElementById('language-legend');
+            legend.innerHTML = content;
+        }
+
+        // Add event listeners to edges using vis.js API
+        network.on("hoverEdge", function (params) {
+            const edgeId = params.edge;
+            const edge = edges.get(edgeId);
+            if (edge && edge.languages) {
+                const languagesList = edge.languages.split(', ').map(lang => `<li>${lang}</li>`).join('');
+                const numLanguages = edge.languages.split(', ').length;
+                const nodePair = `${edge.from} - ${edge.to}`;
+                updateLegend(`<h3>Languages (${numLanguages}) for ${nodePair}:</h3><ul>${languagesList}</ul>`);
+            }
+        });
+
+        network.on("blurEdge", function () {
+            updateLegend('<h3>Languages:</h3><p>Hover over an edge to see languages.</p>');
+        });
+
+        network.on("click", function (params) {
+            if (params.edges && params.edges.length > 0) {
+                const edgeId = params.edges[0];
+                const edge = edges.get(edgeId);
+                if (edge && edge.languages) {
+                    const languagesList = edge.languages.split(', ').sort().map(lang => `<li>${lang.replaceAll(";;", " - ")}</li>`).join('');
+                    const numLanguages = edge.languages.split(', ').length;
+                    const title1 = edge.from.replaceAll(";;", "&#10;");
+                    const title2 = edge.to.replaceAll(";;", "&#10;");
+                    updateLegend(`<h2><div title="${title1}";>${edge.from.split(";;")[0]}</div><div title="${title2}";>${edge.to.split(";;")[0]}</div></h2><br><h3>Languages (${numLanguages})<br></h3><ul>${languagesList}</ul>`);
+                }
+            }
+        });
+    </script>
+    <style>
+        .container {
+            display: flex;
+            width: 100%;
+            margin-top: 48px;
+        }
+        #mynetwork {
+            flex: 3;
+            height: 750px;
+            width: 90%
+            background-color: #222222;
+            border: 1px solid lightgray;
+        }
+        #language-legend h2 {
+            display: flex; 
+            flex-direction: column;
+            font-weight: bold;
+        }
+        #language-legend h3 {
+             border-bottom: 1px solid black; 
+             padding-bottom: 8px
+        }
+        #language-legend {
+            flex: 1;
+            margin-left: 20px;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            background-color: #f9f9f9;
+            overflow-y: auto;
+            max-height: 750px;
+        }
+        #language-legend ul {
+            list-style-type: none;
+            padding: 0;
+        }
+        #language-legend li {
+            margin: 5px 0;
+            font-size: 1.2em;
+        }
+    </style>
+    </body>
+</html>

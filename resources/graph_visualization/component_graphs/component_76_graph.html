@@ -1,0 +1,239 @@
+<html>
+    <head>
+        <meta charset="utf-8">
+        
+            <script src="lib/bindings/utils.js"></script>
+            <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/vis-network/9.1.2/dist/dist/vis-network.min.css" integrity="sha512-WgxfT5LWjfszlPHXRmBWHkV2eceiWTOBvrKCNbdgDYTHrT2AeLCGbF4sZlZw3UMN3WtL0tGUoIAKsu8mllg/XA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/vis-network/9.1.2/dist/vis-network.min.js" integrity="sha512-LnvoEWDFrqGHlHmDD2101OrLcbsfkrzoSpvtSQtxK3RMnRV0eOkhhBN2dXHKRrUU8p2DGRTk35n4O8nWSVe1mQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+            
+        
+<center>
+<h1></h1>
+</center>
+
+<!-- <link rel="stylesheet" href="../node_modules/vis/dist/vis.min.css" type="text/css" />
+<script type="text/javascript" src="../node_modules/vis/dist/vis.js"> </script>-->
+        <link
+          href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/css/bootstrap.min.css"
+          rel="stylesheet"
+          integrity="sha384-eOJMYsd53ii+scO/bJGFsiCZc+5NDVN2yr8+0RDqr0Ql0h+rP48ckxlpbzKgwra6"
+          crossorigin="anonymous"
+        />
+        <script
+          src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.bundle.min.js"
+          integrity="sha384-JEW9xMcG8R+pH31jmWH6WWP0WintQrMb4s7ZOdauHnUtxwoG2vI5DkLtS3qm9Ekf"
+          crossorigin="anonymous"
+        ></script>
+
+
+        <center>
+          <h1></h1>
+        </center>
+        <style type="text/css">
+
+             #mynetwork {
+                 width: 100%;
+                 height: 100vh;
+                 background-color: #222222;
+                 border: 1px solid lightgray;
+                 position: relative;
+                 float: left;
+             }
+
+             
+
+             
+
+             
+        </style>
+    </head>
+
+
+    <body>
+        <div class="card" style="width: 100%">
+            
+            
+            <div class="container"><div id="mynetwork" class="card-body"></div>
+    <div id="language-legend">
+        <h3>Languages:</h3>
+        <p>Click on an edge to see languages.</p>
+    </div>
+    </div>
+        </div>
+
+        
+        
+
+        <script type="text/javascript">
+
+              // initialize global variables.
+              var edges;
+              var nodes;
+              var allNodes;
+              var allEdges;
+              var nodeColors;
+              var originalNodes;
+              var network;
+              var container;
+              var options, data;
+              var filter = {
+                  item : '',
+                  property : '',
+                  value : []
+              };
+
+              
+
+              
+
+              // This method is responsible for drawing the graph, returns the drawn network
+              function drawGraph() {
+                  var container = document.getElementById('mynetwork');
+
+                  
+
+                  // parsing and collecting nodes and edges from the python
+                  nodes = new vis.DataSet([{"color": "#97c2fc", "font": {"color": "white"}, "id": "column;;(by extension) a recurring feature in a periodical, especially an opinion piece, especially by a single author or small rotating group of authors, or on a single theme.", "label": "column", "shape": "dot", "title": "column;;(by extension) a recurring feature in a periodical, especially an opinion piece, especially by a single author or small rotating group of authors, or on a single theme."}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "fulcrum;;(mechanics) the support about which a lever pivots.", "label": "fulcrum", "shape": "dot", "title": "fulcrum;;(mechanics) the support about which a lever pivots."}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "pillar;;(architecture) a large post, often used as supporting architecture.", "label": "pillar", "shape": "dot", "title": "pillar;;(architecture) a large post, often used as supporting architecture."}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "bastion;;(architecture) a projecting part of a rampart or other fortification.", "label": "bastion", "shape": "dot", "title": "bastion;;(architecture) a projecting part of a rampart or other fortification."}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "strut;;(chiefly construction) a beam or rod providing support.", "label": "strut", "shape": "dot", "title": "strut;;(chiefly construction) a beam or rod providing support."}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "beam;;(structural) any large piece of timber or iron long in proportion to its thickness, and prepared for use.", "label": "beam", "shape": "dot", "title": "beam;;(structural) any large piece of timber or iron long in proportion to its thickness, and prepared for use."}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "rafter;;(architecture) one of a series of sloped beams that extend from the ridge or hip to the downslope perimeter or eave, designed to support the roof deck and its associated loads.", "label": "rafter", "shape": "dot", "title": "rafter;;(architecture) one of a series of sloped beams that extend from the ridge or hip to the downslope perimeter or eave, designed to support the roof deck and its associated loads."}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "column;;(architecture) a solid upright structure designed usually to support a larger structure above it, such as a roof or horizontal beam, but sometimes for decoration.", "label": "column", "shape": "dot", "title": "column;;(architecture) a solid upright structure designed usually to support a larger structure above it, such as a roof or horizontal beam, but sometimes for decoration."}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "support;;(sometimes attributive) something which supports.", "label": "support", "shape": "dot", "title": "support;;(sometimes attributive) something which supports."}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "buttress;;(architecture) a brick, concrete or stone structure built against another structure to support it.", "label": "buttress", "shape": "dot", "title": "buttress;;(architecture) a brick, concrete or stone structure built against another structure to support it."}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "mast;;(nautical, communication, aviation) a tall, slim post or tower, usually tapering upward, used to support, for example, sails or observation platforms on a ship, the main rotor of a helicopter, flags, floodlights, meteorological instruments, or communications equipment, such as an aerial, usually supported by guy-wires (except in the case of a helicopter).", "label": "mast", "shape": "dot", "title": "mast;;(nautical, communication, aviation) a tall, slim post or tower, usually tapering upward, used to support, for example, sails or observation platforms on a ship, the main rotor of a helicopter, flags, floodlights, meteorological instruments, or communications equipment, such as an aerial, usually supported by guy-wires (except in the case of a helicopter)."}]);
+                  edges = new vis.DataSet([{"from": "column;;(by extension) a recurring feature in a periodical, especially an opinion piece, especially by a single author or small rotating group of authors, or on a single theme.", "languages": "scottish gaelic;;colbh;;noun, portuguese;;coluna;;noun, catalan;;columna;;noun, iranian persian;;\u0633\u064f\u062a\u0648\u0646;;noun, irish;;col\u00fan;;noun, bashkir;;\u0431\u0430\u0493\u0430\u043d\u0430;;noun, bulgarian;;\u043a\u043e\u043b\u043e\u0301\u043d\u0430;;noun, italian;;colonna;;noun, greek;;\u03c3\u03c4\u03ae\u03bb\u03b7;;noun, polish;;kolumna;;noun, arabic;;\u0639\u064e\u0645\u064f\u0648\u062f;;noun, romanian;;coloan\u0103;;noun, spanish;;columna;;noun", "to": "column;;(architecture) a solid upright structure designed usually to support a larger structure above it, such as a roof or horizontal beam, but sometimes for decoration.", "value": 13, "width": 1.625}, {"from": "column;;(by extension) a recurring feature in a periodical, especially an opinion piece, especially by a single author or small rotating group of authors, or on a single theme.", "languages": "bashkir;;\u0431\u0430\u0493\u0430\u043d\u0430;;noun, scottish gaelic;;colbh;;noun", "to": "pillar;;(architecture) a large post, often used as supporting architecture.", "value": 2, "width": 0.25}, {"from": "fulcrum;;(mechanics) the support about which a lever pivots.", "languages": "german;;st\u00fctze;;noun, turkish;;destek;;noun", "to": "support;;(sometimes attributive) something which supports.", "value": 2, "width": 0.25}, {"from": "pillar;;(architecture) a large post, often used as supporting architecture.", "languages": "scottish gaelic;;colbh;;noun, german;;s\u00e4ule;;noun, hungarian;;oszlop;;noun, bashkir;;\u0431\u0430\u0493\u0430\u043d;;noun, chinese mandarin;;\u67f1\u5b50;;noun, vietnamese;;c\u1ed9t;;noun, korean;;\uae30\ub465;;noun, finnish;;pylv\u00e4s;;noun, old armenian;;\u057d\u056b\u0582\u0576;;noun, egyptian;;aa:z1:m3;;noun, azerbaijani;;s\u00fctun;;noun, lower sorbian;;s\u0142up;;noun, egyptian;;iwn;;noun, khmer;;\u179f\u179f\u179a;;noun, ottoman turkish;;\u062f\u06cc\u0631\u0643;;noun, danish;;s\u00f8jle;;noun, swedish;;kolonn;;noun, latin;;columna;;noun, gothic;;\ud800\udf43\ud800\udf30\ud800\udf3f\ud800\udf3b\ud800\udf43;;noun, thai;;\u0e40\u0e2a\u0e32;;noun, ancient greek;;\u03c3\u03c4\u1fe6\u03bb\u03bf\u03c2;;noun, russian;;\u0441\u0442\u043e\u043b\u0431;;noun, norwegian nynorsk;;s\u00f8yle;;noun, swedish;;pelare;;noun, arabic;;\u0639\u0645\u0648\u062f;;noun, dalmatian;;chilauna;;noun, ancient greek;;\u03ba\u03af\u03c9\u03bd;;noun, japanese;;\u67f1;;noun, romanian;;st\u00e2lp;;noun, georgian;;\u10e1\u10d5\u10d4\u10e2\u10d8;;noun, russian;;\u043a\u043e\u043b\u043e\u0301\u043d\u043d\u0430;;noun, etruscan;;\ud800\udf1a\ud800\udf00\ud800\udf0b\ud800\udf00 class inanimate;;noun, bulgarian;;\u0441\u0442\u044a\u043b\u0431;;noun, bashkir;;\u0431\u0430\u0493\u0430\u043d\u0430;;noun, armenian;;\u057d\u0575\u0578\u0582\u0576;;noun, egyptian;;w-xa-a-xt;;noun, mongolian;;\u0431\u0430\u0433\u0430\u043d\u0430;;noun, maori;;pou;;noun, turkish;;s\u00fctun;;noun, hindi;;\u0938\u094d\u0924\u0902\u092d;;noun, slovene;;steber;;noun, norwegian bokm\u00e5l;;s\u00f8yle;;noun", "to": "column;;(architecture) a solid upright structure designed usually to support a larger structure above it, such as a roof or horizontal beam, but sometimes for decoration.", "value": 42, "width": 5.25}, {"from": "pillar;;(architecture) a large post, often used as supporting architecture.", "languages": "azerbaijani;;dir\u0259k;;noun, turkish;;direk;;noun, ottoman turkish;;\u062f\u06cc\u0631\u0643;;noun, malay;;tiang;;noun, hawaiian;;kia;;noun", "to": "mast;;(nautical, communication, aviation) a tall, slim post or tower, usually tapering upward, used to support, for example, sails or observation platforms on a ship, the main rotor of a helicopter, flags, floodlights, meteorological instruments, or communications equipment, such as an aerial, usually supported by guy-wires (except in the case of a helicopter).", "value": 5, "width": 0.625}, {"from": "pillar;;(architecture) a large post, often used as supporting architecture.", "languages": "tahitian;;turu;;noun, ottoman turkish;;\u062f\u06cc\u0631\u0643;;noun", "to": "support;;(sometimes attributive) something which supports.", "value": 2, "width": 0.25}, {"from": "pillar;;(architecture) a large post, often used as supporting architecture.", "languages": "azerbaijani;;dir\u0259k;;noun, ottoman turkish;;\u062f\u06cc\u0631\u0643;;noun", "to": "beam;;(structural) any large piece of timber or iron long in proportion to its thickness, and prepared for use.", "value": 2, "width": 0.25}, {"from": "pillar;;(architecture) a large post, often used as supporting architecture.", "languages": "ottoman turkish;;\u067e\u0627\u06cc\u0646\u062f\u0647;;noun, ottoman turkish;;\u062f\u0633\u062a\u0643;;noun", "to": "strut;;(chiefly construction) a beam or rod providing support.", "value": 2, "width": 0.25}, {"from": "pillar;;(architecture) a large post, often used as supporting architecture.", "languages": "german;;pfeiler;;noun, ottoman turkish;;\u067e\u0627\u06cc\u0646\u062f\u0647;;noun", "to": "buttress;;(architecture) a brick, concrete or stone structure built against another structure to support it.", "value": 2, "width": 0.25}, {"from": "bastion;;(architecture) a projecting part of a rampart or other fortification.", "languages": "serbo-croatian;;\u0443\u0300\u043f\u043e\u0440\u04e3\u0448\u0442\u0435;;noun, serbo-croatian;;\u00f9por\u012b\u0161te;;noun", "to": "support;;(sometimes attributive) something which supports.", "value": 2, "width": 0.25}, {"from": "strut;;(chiefly construction) a beam or rod providing support.", "languages": "finnish;;p\u00f6nkk\u00e4;;noun, dutch;;steun;;noun, finnish;;tuki;;noun", "to": "support;;(sometimes attributive) something which supports.", "value": 3, "width": 0.375}, {"from": "strut;;(chiefly construction) a beam or rod providing support.", "languages": "dutch;;steun;;noun, dutch;;stut;;noun, ottoman turkish;;\u067e\u0627\u06cc\u0646\u062f\u0647;;noun, serbo-croatian;;potporanj;;noun", "to": "buttress;;(architecture) a brick, concrete or stone structure built against another structure to support it.", "value": 4, "width": 0.5}, {"from": "beam;;(structural) any large piece of timber or iron long in proportion to its thickness, and prepared for use.", "languages": "azerbaijani;;dir\u0259k;;noun, ottoman turkish;;\u062f\u06cc\u0631\u0643;;noun", "to": "mast;;(nautical, communication, aviation) a tall, slim post or tower, usually tapering upward, used to support, for example, sails or observation platforms on a ship, the main rotor of a helicopter, flags, floodlights, meteorological instruments, or communications equipment, such as an aerial, usually supported by guy-wires (except in the case of a helicopter).", "value": 2, "width": 0.25}, {"from": "beam;;(structural) any large piece of timber or iron long in proportion to its thickness, and prepared for use.", "languages": "italian;;trave;;noun, ottoman turkish;;\u0645\u0631\u062a\u0643;;noun, russian;;\u0431\u0430\u0301\u043b\u043a\u0430;;noun, portuguese;;viga;;noun, spanish;;viga;;noun, portuguese;;trave;;noun, latin;;trabs;;noun, dalmatian;;trua;;noun", "to": "rafter;;(architecture) one of a series of sloped beams that extend from the ridge or hip to the downslope perimeter or eave, designed to support the roof deck and its associated loads.", "value": 8, "width": 1.0}, {"from": "column;;(architecture) a solid upright structure designed usually to support a larger structure above it, such as a roof or horizontal beam, but sometimes for decoration.", "languages": "kazakh;;\u0442\u0456\u0440\u0435\u043a;;noun, ottoman turkish;;\u062f\u06cc\u0631\u0643;;noun", "to": "mast;;(nautical, communication, aviation) a tall, slim post or tower, usually tapering upward, used to support, for example, sails or observation platforms on a ship, the main rotor of a helicopter, flags, floodlights, meteorological instruments, or communications equipment, such as an aerial, usually supported by guy-wires (except in the case of a helicopter).", "value": 2, "width": 0.25}]);
+
+                  nodeColors = {};
+                  allNodes = nodes.get({ returnType: "Object" });
+                  for (nodeId in allNodes) {
+                    nodeColors[nodeId] = allNodes[nodeId].color;
+                  }
+                  allEdges = edges.get({ returnType: "Object" });
+                  // adding nodes and edges to the graph
+                  data = {nodes: nodes, edges: edges};
+
+                  var options = {
+    "configure": {
+        "enabled": false
+    },
+    "edges": {
+        "color": {
+            "inherit": true
+        },
+        "smooth": {
+            "enabled": true,
+            "type": "dynamic"
+        }
+    },
+    "interaction": {
+        "dragNodes": true,
+        "hideEdgesOnDrag": false,
+        "hideNodesOnDrag": false
+    },
+    "physics": {
+        "enabled": true,
+        "stabilization": {
+            "enabled": true,
+            "fit": true,
+            "iterations": 1000,
+            "onlyDynamicEdges": false,
+            "updateInterval": 50
+        }
+    }
+};
+
+                  
+
+
+                  
+
+                  network = new vis.Network(container, data, options);
+
+                  
+
+                  
+
+                  
+
+
+                  
+
+                  return network;
+
+              }
+              drawGraph();
+        </script>
+    
+    <script>
+        // Function to update the legend
+        function updateLegend(content) {
+            const legend = document.getElementById('language-legend');
+            legend.innerHTML = content;
+        }
+
+        // Add event listeners to edges using vis.js API
+        network.on("hoverEdge", function (params) {
+            const edgeId = params.edge;
+            const edge = edges.get(edgeId);
+            if (edge && edge.languages) {
+                const languagesList = edge.languages.split(', ').map(lang => `<li>${lang}</li>`).join('');
+                const numLanguages = edge.languages.split(', ').length;
+                const nodePair = `${edge.from} - ${edge.to}`;
+                updateLegend(`<h3>Languages (${numLanguages}) for ${nodePair}:</h3><ul>${languagesList}</ul>`);
+            }
+        });
+
+        network.on("blurEdge", function () {
+            updateLegend('<h3>Languages:</h3><p>Hover over an edge to see languages.</p>');
+        });
+
+        network.on("click", function (params) {
+            if (params.edges && params.edges.length > 0) {
+                const edgeId = params.edges[0];
+                const edge = edges.get(edgeId);
+                if (edge && edge.languages) {
+                    const languagesList = edge.languages.split(', ').sort().map(lang => `<li>${lang.replaceAll(";;", " - ")}</li>`).join('');
+                    const numLanguages = edge.languages.split(', ').length;
+                    const title1 = edge.from.replaceAll(";;", "&#10;");
+                    const title2 = edge.to.replaceAll(";;", "&#10;");
+                    updateLegend(`<h2><div title="${title1}";>${edge.from.split(";;")[0]}</div><div title="${title2}";>${edge.to.split(";;")[0]}</div></h2><br><h3>Languages (${numLanguages})<br></h3><ul>${languagesList}</ul>`);
+                }
+            }
+        });
+    </script>
+    <style>
+        .container {
+            display: flex;
+            width: 100%;
+            margin-top: 48px;
+        }
+        #mynetwork {
+            flex: 3;
+            height: 750px;
+            width: 90%
+            background-color: #222222;
+            border: 1px solid lightgray;
+        }
+        #language-legend h2 {
+            display: flex; 
+            flex-direction: column;
+            font-weight: bold;
+        }
+        #language-legend h3 {
+             border-bottom: 1px solid black; 
+             padding-bottom: 8px
+        }
+        #language-legend {
+            flex: 1;
+            margin-left: 20px;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            background-color: #f9f9f9;
+            overflow-y: auto;
+            max-height: 750px;
+        }
+        #language-legend ul {
+            list-style-type: none;
+            padding: 0;
+        }
+        #language-legend li {
+            margin: 5px 0;
+            font-size: 1.2em;
+        }
+    </style>
+    </body>
+</html>

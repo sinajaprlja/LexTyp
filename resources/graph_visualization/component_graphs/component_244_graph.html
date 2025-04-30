@@ -1,0 +1,239 @@
+<html>
+    <head>
+        <meta charset="utf-8">
+        
+            <script src="lib/bindings/utils.js"></script>
+            <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/vis-network/9.1.2/dist/dist/vis-network.min.css" integrity="sha512-WgxfT5LWjfszlPHXRmBWHkV2eceiWTOBvrKCNbdgDYTHrT2AeLCGbF4sZlZw3UMN3WtL0tGUoIAKsu8mllg/XA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/vis-network/9.1.2/dist/vis-network.min.js" integrity="sha512-LnvoEWDFrqGHlHmDD2101OrLcbsfkrzoSpvtSQtxK3RMnRV0eOkhhBN2dXHKRrUU8p2DGRTk35n4O8nWSVe1mQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+            
+        
+<center>
+<h1></h1>
+</center>
+
+<!-- <link rel="stylesheet" href="../node_modules/vis/dist/vis.min.css" type="text/css" />
+<script type="text/javascript" src="../node_modules/vis/dist/vis.js"> </script>-->
+        <link
+          href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/css/bootstrap.min.css"
+          rel="stylesheet"
+          integrity="sha384-eOJMYsd53ii+scO/bJGFsiCZc+5NDVN2yr8+0RDqr0Ql0h+rP48ckxlpbzKgwra6"
+          crossorigin="anonymous"
+        />
+        <script
+          src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.bundle.min.js"
+          integrity="sha384-JEW9xMcG8R+pH31jmWH6WWP0WintQrMb4s7ZOdauHnUtxwoG2vI5DkLtS3qm9Ekf"
+          crossorigin="anonymous"
+        ></script>
+
+
+        <center>
+          <h1></h1>
+        </center>
+        <style type="text/css">
+
+             #mynetwork {
+                 width: 100%;
+                 height: 100vh;
+                 background-color: #222222;
+                 border: 1px solid lightgray;
+                 position: relative;
+                 float: left;
+             }
+
+             
+
+             
+
+             
+        </style>
+    </head>
+
+
+    <body>
+        <div class="card" style="width: 100%">
+            
+            
+            <div class="container"><div id="mynetwork" class="card-body"></div>
+    <div id="language-legend">
+        <h3>Languages:</h3>
+        <p>Click on an edge to see languages.</p>
+    </div>
+    </div>
+        </div>
+
+        
+        
+
+        <script type="text/javascript">
+
+              // initialize global variables.
+              var edges;
+              var nodes;
+              var allNodes;
+              var allEdges;
+              var nodeColors;
+              var originalNodes;
+              var network;
+              var container;
+              var options, data;
+              var filter = {
+                  item : '',
+                  property : '',
+                  value : []
+              };
+
+              
+
+              
+
+              // This method is responsible for drawing the graph, returns the drawn network
+              function drawGraph() {
+                  var container = document.getElementById('mynetwork');
+
+                  
+
+                  // parsing and collecting nodes and edges from the python
+                  nodes = new vis.DataSet([{"color": "#97c2fc", "font": {"color": "white"}, "id": "chronology;;(uncountable) the science of determining the order in which events occurred.", "label": "chronology", "shape": "dot", "title": "chronology;;(uncountable) the science of determining the order in which events occurred."}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "chronology;;(countable) an arrangement of events into chronological order; called a timeline when involving graphical elements.", "label": "chronology", "shape": "dot", "title": "chronology;;(countable) an arrangement of events into chronological order; called a timeline when involving graphical elements."}]);
+                  edges = new vis.DataSet([{"from": "chronology;;(uncountable) the science of determining the order in which events occurred.", "languages": "hindi;;\u0924\u0948\u0925\u093f\u0915\u0940;;noun, hebrew;;\u05db\u05b0\u05e8\u05d5\u05b9\u05e0\u05d5\u05b9\u05dc\u05d5\u05b9\u05d2\u05b0\u05d9\u05b8\u05d4;;noun, albanian;;kronologjia;;noun, ukrainian;;\u0445\u0440\u043e\u043d\u043e\u043b\u043e\u0301\u0433\u0456\u044f;;noun, latvian;;hronolo\u0123ija;;noun, polish;;chronologia;;noun, german;;chronologie;;noun, italian;;cronologia;;noun, basque;;kronologia;;noun, georgian;;\u10e5\u10e0\u10dd\u10dc\u10dd\u10da\u10dd\u10d2\u10d8\u10d0;;noun, czech;;chronologie;;noun, serbo-croatian;;hronol\u00f2gija;;noun, spanish;;cronolog\u00eda;;noun, azerbaijani;;xronologiya;;noun, dutch;;chronologie;;noun, finnish;;kronologia;;noun, kazakh;;\u0443\u0430\u049b\u044b\u0442\u043d\u0430\u043c\u0430;;noun, turkish;;kronoloji;;noun, armenian;;\u056a\u0561\u0574\u0561\u0576\u0561\u056f\u0561\u0563\u0580\u0578\u0582\u0569\u0575\u0578\u0582\u0576;;noun, serbo-croatian;;kronol\u00f2gija;;noun, galician;;cronolox\u00eda;;noun, french;;chronologie;;noun, estonian;;kronoloogia;;noun, russian;;\u0445\u0440\u043e\u043d\u043e\u043b\u043e\u0301\u0433\u0438\u044f;;noun, bulgarian;;\u0445\u0440\u043e\u043d\u043e\u043b\u043e\u0301\u0433\u0438\u044f;;noun, portuguese;;cronologia;;noun, lithuanian;;chronologija;;noun, catalan;;cronologia;;noun, serbo-croatian;;\u0445\u0440\u043e\u043d\u043e\u043b\u043e\u0300\u0433\u0438\u0458\u0430;;noun, norwegian bokm\u00e5l;;kronologi;;noun, romanian;;cronologie;;noun, welsh;;amseryddiaeth;;noun, norwegian nynorsk;;kronologi;;noun, serbo-croatian;;\u043a\u0440\u043e\u043d\u043e\u043b\u043e\u0300\u0433\u0438\u0458\u0430;;noun, indonesian;;kronologi;;noun, irish;;croineola\u00edocht;;noun, slovene;;kronologija;;noun, belarusian;;\u0445\u0440\u0430\u043d\u0430\u043b\u043e\u0301\u0433\u0456\u044f;;noun, swedish;;kronologi;;noun, malay;;kronologi;;noun, danish;;kronologi;;noun, slovak;;chronol\u00f3gia;;noun, hungarian;;kronol\u00f3gia;;noun", "to": "chronology;;(countable) an arrangement of events into chronological order; called a timeline when involving graphical elements.", "value": 43, "width": 43.0}]);
+
+                  nodeColors = {};
+                  allNodes = nodes.get({ returnType: "Object" });
+                  for (nodeId in allNodes) {
+                    nodeColors[nodeId] = allNodes[nodeId].color;
+                  }
+                  allEdges = edges.get({ returnType: "Object" });
+                  // adding nodes and edges to the graph
+                  data = {nodes: nodes, edges: edges};
+
+                  var options = {
+    "configure": {
+        "enabled": false
+    },
+    "edges": {
+        "color": {
+            "inherit": true
+        },
+        "smooth": {
+            "enabled": true,
+            "type": "dynamic"
+        }
+    },
+    "interaction": {
+        "dragNodes": true,
+        "hideEdgesOnDrag": false,
+        "hideNodesOnDrag": false
+    },
+    "physics": {
+        "enabled": true,
+        "stabilization": {
+            "enabled": true,
+            "fit": true,
+            "iterations": 1000,
+            "onlyDynamicEdges": false,
+            "updateInterval": 50
+        }
+    }
+};
+
+                  
+
+
+                  
+
+                  network = new vis.Network(container, data, options);
+
+                  
+
+                  
+
+                  
+
+
+                  
+
+                  return network;
+
+              }
+              drawGraph();
+        </script>
+    
+    <script>
+        // Function to update the legend
+        function updateLegend(content) {
+            const legend = document.getElementById('language-legend');
+            legend.innerHTML = content;
+        }
+
+        // Add event listeners to edges using vis.js API
+        network.on("hoverEdge", function (params) {
+            const edgeId = params.edge;
+            const edge = edges.get(edgeId);
+            if (edge && edge.languages) {
+                const languagesList = edge.languages.split(', ').map(lang => `<li>${lang}</li>`).join('');
+                const numLanguages = edge.languages.split(', ').length;
+                const nodePair = `${edge.from} - ${edge.to}`;
+                updateLegend(`<h3>Languages (${numLanguages}) for ${nodePair}:</h3><ul>${languagesList}</ul>`);
+            }
+        });
+
+        network.on("blurEdge", function () {
+            updateLegend('<h3>Languages:</h3><p>Hover over an edge to see languages.</p>');
+        });
+
+        network.on("click", function (params) {
+            if (params.edges && params.edges.length > 0) {
+                const edgeId = params.edges[0];
+                const edge = edges.get(edgeId);
+                if (edge && edge.languages) {
+                    const languagesList = edge.languages.split(', ').sort().map(lang => `<li>${lang.replaceAll(";;", " - ")}</li>`).join('');
+                    const numLanguages = edge.languages.split(', ').length;
+                    const title1 = edge.from.replaceAll(";;", "&#10;");
+                    const title2 = edge.to.replaceAll(";;", "&#10;");
+                    updateLegend(`<h2><div title="${title1}";>${edge.from.split(";;")[0]}</div><div title="${title2}";>${edge.to.split(";;")[0]}</div></h2><br><h3>Languages (${numLanguages})<br></h3><ul>${languagesList}</ul>`);
+                }
+            }
+        });
+    </script>
+    <style>
+        .container {
+            display: flex;
+            width: 100%;
+            margin-top: 48px;
+        }
+        #mynetwork {
+            flex: 3;
+            height: 750px;
+            width: 90%
+            background-color: #222222;
+            border: 1px solid lightgray;
+        }
+        #language-legend h2 {
+            display: flex; 
+            flex-direction: column;
+            font-weight: bold;
+        }
+        #language-legend h3 {
+             border-bottom: 1px solid black; 
+             padding-bottom: 8px
+        }
+        #language-legend {
+            flex: 1;
+            margin-left: 20px;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            background-color: #f9f9f9;
+            overflow-y: auto;
+            max-height: 750px;
+        }
+        #language-legend ul {
+            list-style-type: none;
+            padding: 0;
+        }
+        #language-legend li {
+            margin: 5px 0;
+            font-size: 1.2em;
+        }
+    </style>
+    </body>
+</html>

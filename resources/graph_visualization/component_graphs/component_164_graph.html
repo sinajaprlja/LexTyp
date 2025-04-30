@@ -1,0 +1,239 @@
+<html>
+    <head>
+        <meta charset="utf-8">
+        
+            <script src="lib/bindings/utils.js"></script>
+            <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/vis-network/9.1.2/dist/dist/vis-network.min.css" integrity="sha512-WgxfT5LWjfszlPHXRmBWHkV2eceiWTOBvrKCNbdgDYTHrT2AeLCGbF4sZlZw3UMN3WtL0tGUoIAKsu8mllg/XA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/vis-network/9.1.2/dist/vis-network.min.js" integrity="sha512-LnvoEWDFrqGHlHmDD2101OrLcbsfkrzoSpvtSQtxK3RMnRV0eOkhhBN2dXHKRrUU8p2DGRTk35n4O8nWSVe1mQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+            
+        
+<center>
+<h1></h1>
+</center>
+
+<!-- <link rel="stylesheet" href="../node_modules/vis/dist/vis.min.css" type="text/css" />
+<script type="text/javascript" src="../node_modules/vis/dist/vis.js"> </script>-->
+        <link
+          href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/css/bootstrap.min.css"
+          rel="stylesheet"
+          integrity="sha384-eOJMYsd53ii+scO/bJGFsiCZc+5NDVN2yr8+0RDqr0Ql0h+rP48ckxlpbzKgwra6"
+          crossorigin="anonymous"
+        />
+        <script
+          src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.bundle.min.js"
+          integrity="sha384-JEW9xMcG8R+pH31jmWH6WWP0WintQrMb4s7ZOdauHnUtxwoG2vI5DkLtS3qm9Ekf"
+          crossorigin="anonymous"
+        ></script>
+
+
+        <center>
+          <h1></h1>
+        </center>
+        <style type="text/css">
+
+             #mynetwork {
+                 width: 100%;
+                 height: 100vh;
+                 background-color: #222222;
+                 border: 1px solid lightgray;
+                 position: relative;
+                 float: left;
+             }
+
+             
+
+             
+
+             
+        </style>
+    </head>
+
+
+    <body>
+        <div class="card" style="width: 100%">
+            
+            
+            <div class="container"><div id="mynetwork" class="card-body"></div>
+    <div id="language-legend">
+        <h3>Languages:</h3>
+        <p>Click on an edge to see languages.</p>
+    </div>
+    </div>
+        </div>
+
+        
+        
+
+        <script type="text/javascript">
+
+              // initialize global variables.
+              var edges;
+              var nodes;
+              var allNodes;
+              var allEdges;
+              var nodeColors;
+              var originalNodes;
+              var network;
+              var container;
+              var options, data;
+              var filter = {
+                  item : '',
+                  property : '',
+                  value : []
+              };
+
+              
+
+              
+
+              // This method is responsible for drawing the graph, returns the drawn network
+              function drawGraph() {
+                  var container = document.getElementById('mynetwork');
+
+                  
+
+                  // parsing and collecting nodes and edges from the python
+                  nodes = new vis.DataSet([{"color": "#97c2fc", "font": {"color": "white"}, "id": "thorn;;(botany) a sharp protective spine of a plant.", "label": "thorn", "shape": "dot", "title": "thorn;;(botany) a sharp protective spine of a plant."}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "vertebra;;(anatomy) any of the bony or cartilaginous segments which make up the backbone, consisting in some lower vertebrates of several distinct elements which never become united, and in higher vertebrates having a short more or less cylindrical body whose ends articulate by pads of elastic or cartilaginous tissue with those of adjacent vertebrae and a bony arch that encloses the spinal cord.", "label": "vertebra", "shape": "dot", "title": "vertebra;;(anatomy) any of the bony or cartilaginous segments which make up the backbone, consisting in some lower vertebrates of several distinct elements which never become united, and in higher vertebrates having a short more or less cylindrical body whose ends articulate by pads of elastic or cartilaginous tissue with those of adjacent vertebrae and a bony arch that encloses the spinal cord."}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "vertebral column;;(anatomy) the series of vertebrae that protect the spinal cord; the spinal column.", "label": "vertebral column", "shape": "dot", "title": "vertebral column;;(anatomy) the series of vertebrae that protect the spinal cord; the spinal column."}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "spine;;(zootomy, botany, mycology) a pointed, fairly rigid protuberance or needlelike structure on an animal, shell, mushroom or plant.", "label": "spine", "shape": "dot", "title": "spine;;(zootomy, botany, mycology) a pointed, fairly rigid protuberance or needlelike structure on an animal, shell, mushroom or plant."}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "spine;;(anatomy, zootomy) a series of bones situated at the back from the head to the pelvis of a human, or from the head to the tail of an animal, enclosing the spinal cord and providing support for the thorax and abdomen.;;(figurative) courage or assertiveness.", "label": "spine", "shape": "dot", "title": "spine;;(anatomy, zootomy) a series of bones situated at the back from the head to the pelvis of a human, or from the head to the tail of an animal, enclosing the spinal cord and providing support for the thorax and abdomen.;;(figurative) courage or assertiveness."}]);
+                  edges = new vis.DataSet([{"from": "thorn;;(botany) a sharp protective spine of a plant.", "languages": "polish;;kolec;;noun, bulgarian;;\u0431\u043e\u0434\u0438\u043b;;noun, russian;;\u043a\u043e\u043b\u044e\u0301\u0447\u043a\u0430;;noun, czech;;osten;;noun, czech;;trn;;noun, ottoman turkish;;\u062f\u06cc\u0643\u0646;;noun, spanish;;espina;;noun, greek;;\u03b1\u03b3\u03ba\u03ac\u03b8\u03b9;;noun, irish;;dealg;;noun, estonian;;oga;;noun, french;;\u00e9pine;;noun, dutch;;doorn;;noun, german;;dorn;;noun, portuguese;;espinho;;noun, galician;;espi\u00f1a;;noun, catalan;;espina;;noun, latin;;sp\u012bna;;noun, russian;;\u0448\u0438\u043f;;noun, hungarian;;t\u00fcske;;noun, finnish;;piikki;;noun, finnish;;oas;;noun, tagalog;;tinik;;noun, turkish;;diken;;noun", "to": "spine;;(zootomy, botany, mycology) a pointed, fairly rigid protuberance or needlelike structure on an animal, shell, mushroom or plant.", "value": 23, "width": 11.5}, {"from": "vertebra;;(anatomy) any of the bony or cartilaginous segments which make up the backbone, consisting in some lower vertebrates of several distinct elements which never become united, and in higher vertebrates having a short more or less cylindrical body whose ends articulate by pads of elastic or cartilaginous tissue with those of adjacent vertebrae and a bony arch that encloses the spinal cord.", "languages": "korean;;\ucc99\ucd94;;noun, scottish gaelic;;cn\u00e0imh an droma;;noun, northern kurdish;;birrbirre;;noun, navajo;;\u00ed\u00edgh\u00e1\u00e1n;;noun, georgian;;\u10ee\u10d4\u10e0\u10ee\u10d4\u10db\u10d0\u10da\u10d8;;noun, bashkir;;\u0443\u043c\u044b\u0440\u0442\u04a1\u0430;;noun, chinese mandarin;;\u810a\u690e;;noun", "to": "spine;;(anatomy, zootomy) a series of bones situated at the back from the head to the pelvis of a human, or from the head to the tail of an animal, enclosing the spinal cord and providing support for the thorax and abdomen.;;(figurative) courage or assertiveness.", "value": 7, "width": 3.5}, {"from": "vertebra;;(anatomy) any of the bony or cartilaginous segments which make up the backbone, consisting in some lower vertebrates of several distinct elements which never become united, and in higher vertebrates having a short more or less cylindrical body whose ends articulate by pads of elastic or cartilaginous tissue with those of adjacent vertebrae and a bony arch that encloses the spinal cord.", "languages": "bashkir;;\u0443\u043c\u044b\u0440\u0442\u04a1\u0430;;noun, chinese mandarin;;\u810a\u690e;;noun", "to": "vertebral column;;(anatomy) the series of vertebrae that protect the spinal cord; the spinal column.", "value": 2, "width": 1.0}, {"from": "vertebral column;;(anatomy) the series of vertebrae that protect the spinal cord; the spinal column.", "languages": "romanian;;coloan\u0103 vertebral\u0103;;noun, spanish;;columna vertebral;;noun, norwegian nynorsk;;virvels\u00f8yle;;noun, norwegian bokm\u00e5l;;virvels\u00f8yle;;noun, polish;;kr\u0119gos\u0142up;;noun, tagalog;;guluguran;;noun, bashkir;;\u0443\u043c\u044b\u0440\u0442\u04a1\u0430;;noun, chinese mandarin;;\u810a\u690e;;noun, german;;wirbels\u00e4ule;;noun, japanese;;\u810a\u67f1;;noun, italian;;colonna vertebrale;;noun, swedish;;ryggrad;;noun, russian;;\u043f\u043e\u0437\u0432\u043e\u043d\u043e\u0301\u0447\u043d\u0438\u043a;;noun, vietnamese;;x\u01b0\u01a1ng s\u1ed1ng;;noun, norwegian bokm\u00e5l;;ryggs\u00f8yle;;noun, danish;;rygs\u00f8jle;;noun, german;;r\u00fcckgrat;;noun, serbo-croatian;;kr\u00e1lje\u017enica;;noun, tagalog;;bangananan;;noun, esperanto;;vertebraro;;noun, greek;;\u03c3\u03c0\u03bf\u03bd\u03b4\u03c5\u03bb\u03b9\u03ba\u03ae \u03c3\u03c4\u03ae\u03bb\u03b7;;noun, volap\u00fck;;b\u00e4kabom;;noun, occitan;;colomna vertebrala;;noun, japanese;;\u810a\u690e;;noun, norwegian nynorsk;;ryggs\u00f8yle;;noun, khmer;;\u1786\u17d2\u17a2\u17b9\u1784\u1781\u17d2\u1793\u1784;;noun, armenian;;\u0578\u0572\u0576\u0561\u0577\u0561\u0580;;noun, portuguese;;coluna vertebral;;noun, finnish;;selk\u00e4ranka;;noun, albanian;;shtyll\u00eb kurrizore;;noun, serbo-croatian;;\u043a\u0440\u0430\u0301\u0459\u0435\u0436\u043d\u0438\u0446\u0430;;noun, ancient greek;;\u1fe5\u03ac\u03c7\u03b9\u03c2;;noun, russian;;\u0445\u0440\u0435\u0431\u0435\u0301\u0442;;noun, danish;;rygrad;;noun, french;;colonne vert\u00e9brale;;noun", "to": "spine;;(anatomy, zootomy) a series of bones situated at the back from the head to the pelvis of a human, or from the head to the tail of an animal, enclosing the spinal cord and providing support for the thorax and abdomen.;;(figurative) courage or assertiveness.", "value": 35, "width": 17.5}, {"from": "spine;;(zootomy, botany, mycology) a pointed, fairly rigid protuberance or needlelike structure on an animal, shell, mushroom or plant.", "languages": "maori;;tu\u0101tara;;noun, latin;;sp\u012bna;;noun, asturian;;espina;;noun, icelandic;;hryggur;;noun", "to": "spine;;(anatomy, zootomy) a series of bones situated at the back from the head to the pelvis of a human, or from the head to the tail of an animal, enclosing the spinal cord and providing support for the thorax and abdomen.;;(figurative) courage or assertiveness.", "value": 4, "width": 2.0}]);
+
+                  nodeColors = {};
+                  allNodes = nodes.get({ returnType: "Object" });
+                  for (nodeId in allNodes) {
+                    nodeColors[nodeId] = allNodes[nodeId].color;
+                  }
+                  allEdges = edges.get({ returnType: "Object" });
+                  // adding nodes and edges to the graph
+                  data = {nodes: nodes, edges: edges};
+
+                  var options = {
+    "configure": {
+        "enabled": false
+    },
+    "edges": {
+        "color": {
+            "inherit": true
+        },
+        "smooth": {
+            "enabled": true,
+            "type": "dynamic"
+        }
+    },
+    "interaction": {
+        "dragNodes": true,
+        "hideEdgesOnDrag": false,
+        "hideNodesOnDrag": false
+    },
+    "physics": {
+        "enabled": true,
+        "stabilization": {
+            "enabled": true,
+            "fit": true,
+            "iterations": 1000,
+            "onlyDynamicEdges": false,
+            "updateInterval": 50
+        }
+    }
+};
+
+                  
+
+
+                  
+
+                  network = new vis.Network(container, data, options);
+
+                  
+
+                  
+
+                  
+
+
+                  
+
+                  return network;
+
+              }
+              drawGraph();
+        </script>
+    
+    <script>
+        // Function to update the legend
+        function updateLegend(content) {
+            const legend = document.getElementById('language-legend');
+            legend.innerHTML = content;
+        }
+
+        // Add event listeners to edges using vis.js API
+        network.on("hoverEdge", function (params) {
+            const edgeId = params.edge;
+            const edge = edges.get(edgeId);
+            if (edge && edge.languages) {
+                const languagesList = edge.languages.split(', ').map(lang => `<li>${lang}</li>`).join('');
+                const numLanguages = edge.languages.split(', ').length;
+                const nodePair = `${edge.from} - ${edge.to}`;
+                updateLegend(`<h3>Languages (${numLanguages}) for ${nodePair}:</h3><ul>${languagesList}</ul>`);
+            }
+        });
+
+        network.on("blurEdge", function () {
+            updateLegend('<h3>Languages:</h3><p>Hover over an edge to see languages.</p>');
+        });
+
+        network.on("click", function (params) {
+            if (params.edges && params.edges.length > 0) {
+                const edgeId = params.edges[0];
+                const edge = edges.get(edgeId);
+                if (edge && edge.languages) {
+                    const languagesList = edge.languages.split(', ').sort().map(lang => `<li>${lang.replaceAll(";;", " - ")}</li>`).join('');
+                    const numLanguages = edge.languages.split(', ').length;
+                    const title1 = edge.from.replaceAll(";;", "&#10;");
+                    const title2 = edge.to.replaceAll(";;", "&#10;");
+                    updateLegend(`<h2><div title="${title1}";>${edge.from.split(";;")[0]}</div><div title="${title2}";>${edge.to.split(";;")[0]}</div></h2><br><h3>Languages (${numLanguages})<br></h3><ul>${languagesList}</ul>`);
+                }
+            }
+        });
+    </script>
+    <style>
+        .container {
+            display: flex;
+            width: 100%;
+            margin-top: 48px;
+        }
+        #mynetwork {
+            flex: 3;
+            height: 750px;
+            width: 90%
+            background-color: #222222;
+            border: 1px solid lightgray;
+        }
+        #language-legend h2 {
+            display: flex; 
+            flex-direction: column;
+            font-weight: bold;
+        }
+        #language-legend h3 {
+             border-bottom: 1px solid black; 
+             padding-bottom: 8px
+        }
+        #language-legend {
+            flex: 1;
+            margin-left: 20px;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            background-color: #f9f9f9;
+            overflow-y: auto;
+            max-height: 750px;
+        }
+        #language-legend ul {
+            list-style-type: none;
+            padding: 0;
+        }
+        #language-legend li {
+            margin: 5px 0;
+            font-size: 1.2em;
+        }
+    </style>
+    </body>
+</html>

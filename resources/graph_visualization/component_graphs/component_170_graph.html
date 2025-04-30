@@ -1,0 +1,239 @@
+<html>
+    <head>
+        <meta charset="utf-8">
+        
+            <script src="lib/bindings/utils.js"></script>
+            <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/vis-network/9.1.2/dist/dist/vis-network.min.css" integrity="sha512-WgxfT5LWjfszlPHXRmBWHkV2eceiWTOBvrKCNbdgDYTHrT2AeLCGbF4sZlZw3UMN3WtL0tGUoIAKsu8mllg/XA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/vis-network/9.1.2/dist/vis-network.min.js" integrity="sha512-LnvoEWDFrqGHlHmDD2101OrLcbsfkrzoSpvtSQtxK3RMnRV0eOkhhBN2dXHKRrUU8p2DGRTk35n4O8nWSVe1mQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+            
+        
+<center>
+<h1></h1>
+</center>
+
+<!-- <link rel="stylesheet" href="../node_modules/vis/dist/vis.min.css" type="text/css" />
+<script type="text/javascript" src="../node_modules/vis/dist/vis.js"> </script>-->
+        <link
+          href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/css/bootstrap.min.css"
+          rel="stylesheet"
+          integrity="sha384-eOJMYsd53ii+scO/bJGFsiCZc+5NDVN2yr8+0RDqr0Ql0h+rP48ckxlpbzKgwra6"
+          crossorigin="anonymous"
+        />
+        <script
+          src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.bundle.min.js"
+          integrity="sha384-JEW9xMcG8R+pH31jmWH6WWP0WintQrMb4s7ZOdauHnUtxwoG2vI5DkLtS3qm9Ekf"
+          crossorigin="anonymous"
+        ></script>
+
+
+        <center>
+          <h1></h1>
+        </center>
+        <style type="text/css">
+
+             #mynetwork {
+                 width: 100%;
+                 height: 100vh;
+                 background-color: #222222;
+                 border: 1px solid lightgray;
+                 position: relative;
+                 float: left;
+             }
+
+             
+
+             
+
+             
+        </style>
+    </head>
+
+
+    <body>
+        <div class="card" style="width: 100%">
+            
+            
+            <div class="container"><div id="mynetwork" class="card-body"></div>
+    <div id="language-legend">
+        <h3>Languages:</h3>
+        <p>Click on an edge to see languages.</p>
+    </div>
+    </div>
+        </div>
+
+        
+        
+
+        <script type="text/javascript">
+
+              // initialize global variables.
+              var edges;
+              var nodes;
+              var allNodes;
+              var allEdges;
+              var nodeColors;
+              var originalNodes;
+              var network;
+              var container;
+              var options, data;
+              var filter = {
+                  item : '',
+                  property : '',
+                  value : []
+              };
+
+              
+
+              
+
+              // This method is responsible for drawing the graph, returns the drawn network
+              function drawGraph() {
+                  var container = document.getElementById('mynetwork');
+
+                  
+
+                  // parsing and collecting nodes and edges from the python
+                  nodes = new vis.DataSet([{"color": "#97c2fc", "font": {"color": "white"}, "id": "thus;;(conjunctive) as a result.", "label": "thus", "shape": "dot", "title": "thus;;(conjunctive) as a result."}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "therefore;;(conjunctive) consequently, by or in consequence of that or this cause; referring to something previously stated.", "label": "therefore", "shape": "dot", "title": "therefore;;(conjunctive) consequently, by or in consequence of that or this cause; referring to something previously stated."}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "then;;(sequence) next in order of place.", "label": "then", "shape": "dot", "title": "then;;(sequence) next in order of place."}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "afterwards;;(temporal location) at a later or succeeding time.", "label": "afterwards", "shape": "dot", "title": "afterwards;;(temporal location) at a later or succeeding time."}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "hence;;(conjunctive) as a result; therefore, for this reason.", "label": "hence", "shape": "dot", "title": "hence;;(conjunctive) as a result; therefore, for this reason."}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "hence;;(archaic) from here, from this place, away.", "label": "hence", "shape": "dot", "title": "hence;;(archaic) from here, from this place, away."}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "then;;(temporal location) at that time.", "label": "then", "shape": "dot", "title": "then;;(temporal location) at that time."}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "thence;;(formal) from there, from that place or from that time.", "label": "thence", "shape": "dot", "title": "thence;;(formal) from there, from that place or from that time."}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "consequently;;(conjunctive) as a result or consequence of something; subsequently.", "label": "consequently", "shape": "dot", "title": "consequently;;(conjunctive) as a result or consequence of something; subsequently."}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "thus;;(manner) in this way or manner.", "label": "thus", "shape": "dot", "title": "thus;;(manner) in this way or manner."}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "thereby;;(formal) by it; by that; by that means, or as a consequence of that.", "label": "thereby", "shape": "dot", "title": "thereby;;(formal) by it; by that; by that means, or as a consequence of that."}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "then;;(temporal location) soon afterward.", "label": "then", "shape": "dot", "title": "then;;(temporal location) soon afterward."}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "then;;(conjunctive) in that case.", "label": "then", "shape": "dot", "title": "then;;(conjunctive) in that case."}]);
+                  edges = new vis.DataSet([{"from": "thus;;(conjunctive) as a result.", "languages": "arabic;;\u0625\u0650\u0630\u064b\u0627;;adv, french;;alors;;adv, swedish;;allts\u00e5;;adv, finnish;;niin;;adv", "to": "then;;(conjunctive) in that case.", "value": 4, "width": 0.09090909090909091}, {"from": "thus;;(conjunctive) as a result.", "languages": "italian;;dunque;;adv, polish;;dlatego;;adv, maori;;n\u0101 reira;;adv, portuguese;;portanto;;adv, german;;also;;adv, finnish;;siten;;adv, italian;;perci\u00f2;;adv, chinese mandarin;;\u6240\u4ee5;;adv, sanskrit;;\u092f\u0925\u093e;;adv, pashto;;\u0681\u06a9\u0647;;adv, german;;demnach;;adv, norwegian bokm\u00e5l;;s\u00e5ledes;;adv, japanese;;\u5f93\u3063\u3066;;adv, spanish;;por cuanto;;adv, french;;donc;;adv, portuguese;;logo;;adv, romanian;;deci;;adv, romansch;;perquai;;adv, italian;;pertanto;;adv, spanish;;por ello;;adv, dutch;;bijgevolg;;adv, korean;;\uadf8\ub7ec\ubbc0\ub85c;;adv, romanian;;a\u0219adar;;adv, chinese mandarin;;\u56e0\u6b64;;adv, italian;;quindi;;adv", "to": "therefore;;(conjunctive) consequently, by or in consequence of that or this cause; referring to something previously stated.", "value": 25, "width": 0.5681818181818182}, {"from": "thus;;(conjunctive) as a result.", "languages": "irish;;mar sin;;adv, irish;;uaidh seo;;adv", "to": "hence;;(archaic) from here, from this place, away.", "value": 2, "width": 0.045454545454545456}, {"from": "thus;;(conjunctive) as a result.", "languages": "french;;donc;;adv, italian;;dunque;;adv, swedish;;s\u00e5ledes;;adv, italian;;perci\u00f2;;adv, maori;;me te aha;;adv, romanian;;a\u0219adar;;adv, chinese mandarin;;\u6240\u4ee5;;adv, chinese mandarin;;\u56e0\u6b64;;adv, pashto;;\u0681\u06a9\u0647;;adv, french;;ainsi;;adv, swedish;;f\u00f6ljaktligen;;adv, portuguese;;portanto;;adv, dutch;;bijgevolg;;adv, japanese;;\u5f93\u3063\u3066;;adv, maori;;n\u0101 konei;;adv, spanish;;por ello;;adv, italian;;quindi;;adv", "to": "hence;;(conjunctive) as a result; therefore, for this reason.", "value": 17, "width": 0.38636363636363635}, {"from": "thus;;(conjunctive) as a result.", "languages": "russian;;\u0442\u0430\u043a\u0438\u0301\u043c \u043e\u0301\u0431\u0440\u0430\u0437\u043e\u043c;;adv, finnish;;n\u00e4in;;adv, dutch;;aldus;;adv, middle english;;\u00feus;;adv, greek;;\u03ad\u03c4\u03c3\u03b9;;adv, bashkir;;\u0448\u0443\u043b\u0430\u0439 \u0438\u0442\u0435\u043f;;adv, hungarian;;\u00edgy;;adv, scottish gaelic;;mar sin;;adv, ukrainian;;\u0442\u0430\u043a\u0438\u0301\u043c \u0447\u0438\u0301\u043d\u043e\u043c;;adv, welsh;;felly;;adv, sanskrit;;\u092f\u0925\u093e;;adv, swedish;;s\u00e5lunda;;adv, french;;ainsi;;adv, portuguese;;assim;;adv, latin;;ita;;adv, spanish;;as\u00ed;;adv", "to": "thus;;(manner) in this way or manner.", "value": 16, "width": 0.36363636363636365}, {"from": "thus;;(conjunctive) as a result.", "languages": "russian;;\u0442\u0430\u043a\u0438\u0301\u043c \u043e\u0301\u0431\u0440\u0430\u0437\u043e\u043c;;adv, finnish;;siten;;adv, italian;;perci\u00f2;;adv, ukrainian;;\u0442\u0430\u043a\u0438\u0301\u043c \u0447\u0438\u0301\u043d\u043e\u043c;;adv, chinese mandarin;;\u56e0\u6b64;;adv, french;;ainsi;;adv, italian;;pertanto;;adv, hungarian;;ez\u00e1ltal;;adv, maori;;n\u014d reira;;adv, spanish;;as\u00ed;;adv", "to": "thereby;;(formal) by it; by that; by that means, or as a consequence of that.", "value": 10, "width": 0.22727272727272727}, {"from": "thus;;(conjunctive) as a result.", "languages": "eastern mari;;\u0441\u0430\u0434\u043b\u0430\u043d;;adv, finnish;;t\u00e4ten;;adv, maori;;n\u0101 kon\u0101;;adv, swedish;;f\u00f6ljaktligen;;adv, chinese mandarin;;\u6240\u4ee5;;adv, chinese mandarin;;\u56e0\u6b64;;adv, maori;;n\u0101 konei;;adv, maori;;me te aha;;adv, dutch;;bijgevolg;;adv", "to": "consequently;;(conjunctive) as a result or consequence of something; subsequently.", "value": 9, "width": 0.20454545454545456}, {"from": "therefore;;(conjunctive) consequently, by or in consequence of that or this cause; referring to something previously stated.", "languages": "serbo-croatian;;dakle;;adv, armenian;;\u0578\u0582\u0580\u0565\u0574\u0576;;adv, khmer;;\u17a2\u1789\u17d2\u1785\u17b9\u1784;;adv, arabic;;\u0625\u0650\u0630\u064e\u0646\u0652;;adv, latin;;igitur;;adv", "to": "then;;(conjunctive) in that case.", "value": 5, "width": 0.11363636363636363}, {"from": "therefore;;(conjunctive) consequently, by or in consequence of that or this cause; referring to something previously stated.", "languages": "italian;;dunque;;adv, korean;;\ub530\ub77c\uc11c;;adv, pashto;;\u0646\u0648;;adv, german;;deswegen;;adv, portuguese;;portanto;;adv, macedonian;;\u0437\u0430\u0442\u043e\u0430;;adv, esperanto;;tial;;adv, swedish;;d\u00e4rf\u00f6r;;adv, russian;;\u0441\u043b\u0435\u0301\u0434\u043e\u0432\u0430\u0442\u0435\u043b\u044c\u043d\u043e;;adv, bulgarian;;\u0441\u043b\u0435\u0434\u043e\u0432\u0430\u0442\u0435\u043b\u043d\u043e;;adv, polish;;wi\u0119c;;adv, norwegian nynorsk;;derfor;;adv, german;;daher;;adv, italian;;perci\u00f2;;adv, norwegian bokm\u00e5l;;f\u00f8lgelig;;adv, chinese mandarin;;\u6240\u4ee5;;adv, pashto;;\u0681\u06a9\u0647;;adv, russian;;\u043f\u043e\u0442\u043e\u043c\u0443\u0301;;adv, danish;;derfor;;adv, icelandic;;\u00feess vegna;;adv, japanese;;\u305d\u308c\u6545\u306b;;adv, japanese;;\u5f93\u3063\u3066;;adv, french;;donc;;adv, polish;;przeto;;adv, czech;;proto;;adv, norwegian bokm\u00e5l;;derfor;;adv, spanish;;por eso;;adv, spanish;;por lo tanto;;adv, czech;;tud\u00ed\u017e;;adv, ukrainian;;\u043e\u0301\u0442\u0436\u0435;;adv, spanish;;por ello;;adv, esperanto;;do;;adv, german;;deshalb;;adv, norwegian nynorsk;;difor;;adv, dutch;;bijgevolg;;adv, catalan;;per tant;;adv, russian;;\u043f\u043e\u044d\u0301\u0442\u043e\u043c\u0443;;adv, chinese mandarin;;\u56e0\u6b64;;adv, romanian;;a\u0219adar;;adv, finnish;;siksi;;adv, finnish;;joten;;adv, italian;;quindi;;adv", "to": "hence;;(conjunctive) as a result; therefore, for this reason.", "value": 42, "width": 0.9545454545454546}, {"from": "therefore;;(conjunctive) consequently, by or in consequence of that or this cause; referring to something previously stated.", "languages": "german;;daher;;adv, bulgarian;;\u0441\u043b\u0435\u0434\u043e\u0432\u0430\u0442\u0435\u043b\u043d\u043e;;adv", "to": "thence;;(formal) from there, from that place or from that time.", "value": 2, "width": 0.045454545454545456}, {"from": "therefore;;(conjunctive) consequently, by or in consequence of that or this cause; referring to something previously stated.", "languages": "sanskrit;;\u092f\u0925\u093e;;adv, dutch;;waardoor;;adv, spanish;;por lo tanto;;adv", "to": "thus;;(manner) in this way or manner.", "value": 3, "width": 0.06818181818181818}, {"from": "therefore;;(conjunctive) consequently, by or in consequence of that or this cause; referring to something previously stated.", "languages": "german;;deshalb;;adv, finnish;;siten;;adv, italian;;perci\u00f2;;adv, german;;deswegen;;adv, chinese mandarin;;\u56e0\u6b64;;adv, italian;;pertanto;;adv, german;;darum;;adv", "to": "thereby;;(formal) by it; by that; by that means, or as a consequence of that.", "value": 7, "width": 0.1590909090909091}, {"from": "therefore;;(conjunctive) consequently, by or in consequence of that or this cause; referring to something previously stated.", "languages": "turkish;;dolay\u0131s\u0131yla;;adv, russian;;\u0441\u043b\u0435\u0301\u0434\u043e\u0432\u0430\u0442\u0435\u043b\u044c\u043d\u043e;;adv, greek;;\u03b5\u03c0\u03bf\u03bc\u03ad\u03bd\u03c9\u03c2;;adv, finnish;;sen takia;;adv, norwegian bokm\u00e5l;;f\u00f8lgelig;;adv, russian;;\u043f\u043e\u044d\u0301\u0442\u043e\u043c\u0443;;adv, finnish;;siksi;;adv, chinese mandarin;;\u6240\u4ee5;;adv, malayalam;;\u0d05\u0d24\u0d41\u0d15\u0d4a\u0d23\u0d4d\u0d1f\u0d4d;;adv, chinese mandarin;;\u56e0\u6b64;;adv, french;;par cons\u00e9quent;;adv, bulgarian;;\u0441\u043b\u0435\u0434\u043e\u0432\u0430\u0442\u0435\u043b\u043d\u043e;;adv, portuguese;;consequentemente;;adv, dutch;;bijgevolg;;adv", "to": "consequently;;(conjunctive) as a result or consequence of something; subsequently.", "value": 14, "width": 0.3181818181818182}, {"from": "then;;(sequence) next in order of place.", "languages": "esperanto;;tiam;;adv, pashto;;\u0628\u064a\u0627;;adv, chinese mandarin;;\u5c31;;adv, dutch;;dan;;adv, romanian;;atunci;;adv, old english;;\u00fe\u0101;;adv, quechua;;hinaspa;;adv, czech;;pak;;adv, portuguese;;ent\u00e3o;;adv, walloon;;adon;;adv, czech;;potom;;adv", "to": "then;;(conjunctive) in that case.", "value": 11, "width": 0.25}, {"from": "then;;(sequence) next in order of place.", "languages": "ancient greek;;\u1f04\u03c1\u03b1;;adv, esperanto;;tiam;;adv, ancient greek;;\u03c4\u03cc\u03c4\u03b5;;adv, scottish gaelic;;an uair sin;;adv, zazaki;;d\u0131ma (diq);;adv, romanian;;atunci;;adv, latin;;deinde;;adv, old english;;\u00fe\u0101;;adv, navajo;;\u00ednda;;adv, portuguese;;ent\u00e3o;;adv, walloon;;adon;;adv", "to": "then;;(temporal location) at that time.", "value": 11, "width": 0.25}, {"from": "then;;(sequence) next in order of place.", "languages": "japanese;;\u305d\u306e\u5f8c;;adv, french;;puis;;adv, northern kurdish;;pa\u015f\u00ee;;adv, albanian;;pastaj;;adv, polish;;(a) potem;;adv, german;;danach;;adv, armenian;;\u0570\u0565\u057f\u0578;;adv, romansch;;alura;;adv, russian;;\u043f\u043e\u0442\u043e\u0301\u043c;;adv, latin;;exinde;;adv, esperanto;;tiam;;adv, northern kurdish;;d\u00fbvre;;adv, chinese mandarin;;\u63a5\u8457 /\u63a5\u7740;;adv, russian;;\u0437\u0430\u0442\u0435\u0301\u043c;;adv, old english;;\u00fe\u0101;;adv, polish;;(a) nast\u0119pnie;;adv, norwegian;;s\u00e5;;adv, latin;;deinde;;adv, hungarian;;azt\u00e1n;;adv, indonesian;;lalu;;adv, portuguese;;ent\u00e3o;;adv, slovene;;pot\u00e9m;;adv, taos;;y\u00edane;;adv, northern kurdish;;peyre;;adv, finnish;;sitten;;adv, japanese;;\u305d\u308c\u304b\u3089;;adv, tocharian b;;\u1e45ke;;adv, northern kurdish;;pi\u015ftre;;adv, italian;;poi;;adv, portuguese;;depois;;adv, czech;;pak;;adv, walloon;;adon;;adv, norwegian;;deretter;;adv, arabic;;\u062b\u064f\u0645\u064e\u0651;;adv, catalan;;despr\u00e9s;;adv, vietnamese;;r\u1ed3i;;adv, swedish;;sen;;adv, hungarian;;majd;;adv, pashto;;\u0628\u064a\u0627;;adv, northern kurdish;;d\u00fbre;;adv, dutch;;dan;;adv, swedish;;sedan;;adv, czech;;potom;;adv, italian;;quindi;;adv", "to": "then;;(temporal location) soon afterward.", "value": 44, "width": 1.0}, {"from": "then;;(sequence) next in order of place.", "languages": "bengali;;\u09a4\u09be\u09b0\u09aa\u09b0;;adv, catalan;;despr\u00e9s;;adv, chinese mandarin;;\u7136\u5f8c /\u7136\u540e;;adv, japanese;;\u305d\u306e\u5f8c;;adv, japanese;;\u305d\u308c\u304b\u3089;;adv, bulgarian;;\u0441\u043b\u0435\u0434 \u0442\u043e\u0432\u0430;;adv, albanian;;pastaj;;adv, italian;;poi;;adv, spanish;;despu\u00e9s;;adv, walloon;;apr\u00e8s;;adv, portuguese;;depois;;adv, slovene;;pot\u00e9m;;adv, german;;danach;;adv, armenian;;\u0570\u0565\u057f\u0578;;adv, bengali;;\u098f\u09b0\u09aa\u09b0;;adv", "to": "afterwards;;(temporal location) at a later or succeeding time.", "value": 15, "width": 0.3409090909090909}, {"from": "afterwards;;(temporal location) at a later or succeeding time.", "languages": "latin;;tunc;;adv, romanian;;apoi;;adv", "to": "then;;(conjunctive) in that case.", "value": 2, "width": 0.045454545454545456}, {"from": "afterwards;;(temporal location) at a later or succeeding time.", "languages": "latin;;tunc;;adv, lower sorbian;;p\u00f3n;;adv, lower sorbian;;p\u00f3tom;;adv", "to": "then;;(temporal location) at that time.", "value": 3, "width": 0.06818181818181818}, {"from": "afterwards;;(temporal location) at a later or succeeding time.", "languages": "serbo-croatian;;posle;;adv, japanese;;\u305d\u306e\u5f8c;;adv, scottish gaelic;;an d\u00e8idh sin;;adv, serbo-croatian;;\u043f\u043e\u0441\u043b\u0438\u0458\u0435;;adv, albanian;;pastaj;;adv, turkish;;sonra;;adv, arabic;;\u0645\u0646 \u0628\u0639\u062f;;adv, german;;danach;;adv, armenian;;\u0570\u0565\u057f\u0578;;adv, lower sorbian;;p\u00f3tom;;adv, portuguese;;em seguida;;adv, persian;;\u0628\u0639\u062f;;adv, serbo-croatian;;potom;;adv, serbo-croatian;;\u043f\u043e\u0442\u043e\u043c;;adv, lower sorbian;;p\u00f3n;;adv, persian;;\u0633\u067e\u0633;;adv, scottish gaelic;;an d\u00e8idh l\u00e0imhe;;adv, slovene;;pot\u00e9m;;adv, ancient greek;;\u03b5\u1f36\u03c4\u03b1;;adv, hungarian;;ut\u00e1na;;adv, japanese;;\u305d\u308c\u304b\u3089;;adv, romanian;;apoi;;adv, italian;;poi;;adv, ukrainian;;\u043f\u043e\u0301\u0442\u0456\u043c;;adv, portuguese;;depois;;adv, french;;ensuite;;adv, catalan;;despr\u00e9s;;adv, slovak;;potom;;adv, hungarian;;azut\u00e1n;;adv, vietnamese;;sau \u0111\u00f3;;adv, serbo-croatian;;\u043f\u043e\u0441\u043b\u0435;;adv, esperanto;;poste;;adv", "to": "then;;(temporal location) soon afterward.", "value": 32, "width": 0.7272727272727273}, {"from": "hence;;(conjunctive) as a result; therefore, for this reason.", "languages": "german;;daher;;adv, bulgarian;;\u0441\u043b\u0435\u0434\u043e\u0432\u0430\u0442\u0435\u043b\u043d\u043e;;adv", "to": "thence;;(formal) from there, from that place or from that time.", "value": 2, "width": 0.045454545454545456}, {"from": "hence;;(conjunctive) as a result; therefore, for this reason.", "languages": "french;;ainsi;;adv, occitan;;atal;;adv, spanish;;por lo tanto;;adv", "to": "thus;;(manner) in this way or manner.", "value": 3, "width": 0.06818181818181818}, {"from": "hence;;(conjunctive) as a result; therefore, for this reason.", "languages": "german;;deshalb;;adv, italian;;perci\u00f2;;adv, german;;deswegen;;adv, chinese mandarin;;\u56e0\u6b64;;adv, hungarian;;enn\u00e9lfogva;;adv, french;;ainsi;;adv, occitan;;atal;;adv", "to": "thereby;;(formal) by it; by that; by that means, or as a consequence of that.", "value": 7, "width": 0.1590909090909091}, {"from": "hence;;(conjunctive) as a result; therefore, for this reason.", "languages": "maori;;n\u014d konei;;adv, russian;;\u0441\u043b\u0435\u0301\u0434\u043e\u0432\u0430\u0442\u0435\u043b\u044c\u043d\u043e;;adv, chinese mandarin;;\u65bc\u662f /\u4e8e\u662f;;adv, norwegian bokm\u00e5l;;f\u00f8lgelig;;adv, russian;;\u043f\u043e\u044d\u0301\u0442\u043e\u043c\u0443;;adv, finnish;;siksi;;adv, chinese mandarin;;\u6240\u4ee5;;adv, chinese mandarin;;\u56e0\u6b64;;adv, swedish;;f\u00f6ljaktligen;;adv, bulgarian;;\u0441\u043b\u0435\u0434\u043e\u0432\u0430\u0442\u0435\u043b\u043d\u043e;;adv, maori;;n\u0101 konei;;adv, maori;;me te aha;;adv, dutch;;bijgevolg;;adv", "to": "consequently;;(conjunctive) as a result or consequence of something; subsequently.", "value": 13, "width": 0.29545454545454547}, {"from": "then;;(temporal location) at that time.", "languages": "hungarian;;akkor;;adv, italian;;allora;;adv, galician;;daquela;;adv, persian;;\u067e\u0633;;adv, catalan;;llavors;;adv, spanish;;entonces;;adv, old norse;;\u00fe\u00e1;;adv, esperanto;;tiam;;adv, old english;;\u00fe\u0101;;adv, galician;;ent\u00f3n;;adv, portuguese;;ent\u00e3o;;adv, latin;;tunc;;adv, polish;;w\u00f3wczas;;adv, russian;;\u0442\u043e\u0433\u0434\u0430\u0301;;adv, belarusian;;\u0442\u0430\u0434\u044b\u0301;;adv, norwegian;;da;;adv, walloon;;adon;;adv, latin;;tum;;adv, french;;alors;;adv, turkish;;o zaman;;adv, swedish;;d\u00e5;;adv, lithuanian;;tada;;adv, romanian;;atunci;;adv, german;;dann;;adv, ukrainian;;\u0442\u043e\u0434\u0456\u0301;;adv", "to": "then;;(conjunctive) in that case.", "value": 25, "width": 0.5681818181818182}, {"from": "then;;(temporal location) at that time.", "languages": "esperanto;;tiam;;adv, old english;;\u00fe\u0101;;adv, latin;;deinde;;adv, dutch;;toen;;adv, catalan;;llavors;;adv, german;;dann;;adv, lower sorbian;;p\u00f3n;;adv, portuguese;;ent\u00e3o;;adv, old norse;;\u00fe\u00e1;;adv, ido;;lore;;adv, walloon;;adon;;adv, lower sorbian;;p\u00f3tom;;adv", "to": "then;;(temporal location) soon afterward.", "value": 12, "width": 0.2727272727272727}, {"from": "thus;;(manner) in this way or manner.", "languages": "russian;;\u0442\u0430\u043a\u0438\u0301\u043c \u043e\u0301\u0431\u0440\u0430\u0437\u043e\u043c;;adv, ukrainian;;\u0442\u0430\u043a\u0438\u0301\u043c \u0447\u0438\u0301\u043d\u043e\u043c;;adv, french;;ainsi;;adv, occitan;;atal;;adv, spanish;;as\u00ed;;adv", "to": "thereby;;(formal) by it; by that; by that means, or as a consequence of that.", "value": 5, "width": 0.11363636363636363}, {"from": "then;;(temporal location) soon afterward.", "languages": "esperanto;;tiam;;adv, czech;;potom;;adv, pashto;;\u0628\u064a\u0627;;adv, romanian;;apoi;;adv, dutch;;dan;;adv, old english;;\u00fe\u0101;;adv, catalan;;llavors;;adv, german;;dann;;adv, czech;;pak;;adv, portuguese;;ent\u00e3o;;adv, old norse;;\u00fe\u00e1;;adv, walloon;;adon;;adv, tok pisin;;orait;;adv", "to": "then;;(conjunctive) in that case.", "value": 13, "width": 0.29545454545454547}]);
+
+                  nodeColors = {};
+                  allNodes = nodes.get({ returnType: "Object" });
+                  for (nodeId in allNodes) {
+                    nodeColors[nodeId] = allNodes[nodeId].color;
+                  }
+                  allEdges = edges.get({ returnType: "Object" });
+                  // adding nodes and edges to the graph
+                  data = {nodes: nodes, edges: edges};
+
+                  var options = {
+    "configure": {
+        "enabled": false
+    },
+    "edges": {
+        "color": {
+            "inherit": true
+        },
+        "smooth": {
+            "enabled": true,
+            "type": "dynamic"
+        }
+    },
+    "interaction": {
+        "dragNodes": true,
+        "hideEdgesOnDrag": false,
+        "hideNodesOnDrag": false
+    },
+    "physics": {
+        "enabled": true,
+        "stabilization": {
+            "enabled": true,
+            "fit": true,
+            "iterations": 1000,
+            "onlyDynamicEdges": false,
+            "updateInterval": 50
+        }
+    }
+};
+
+                  
+
+
+                  
+
+                  network = new vis.Network(container, data, options);
+
+                  
+
+                  
+
+                  
+
+
+                  
+
+                  return network;
+
+              }
+              drawGraph();
+        </script>
+    
+    <script>
+        // Function to update the legend
+        function updateLegend(content) {
+            const legend = document.getElementById('language-legend');
+            legend.innerHTML = content;
+        }
+
+        // Add event listeners to edges using vis.js API
+        network.on("hoverEdge", function (params) {
+            const edgeId = params.edge;
+            const edge = edges.get(edgeId);
+            if (edge && edge.languages) {
+                const languagesList = edge.languages.split(', ').map(lang => `<li>${lang}</li>`).join('');
+                const numLanguages = edge.languages.split(', ').length;
+                const nodePair = `${edge.from} - ${edge.to}`;
+                updateLegend(`<h3>Languages (${numLanguages}) for ${nodePair}:</h3><ul>${languagesList}</ul>`);
+            }
+        });
+
+        network.on("blurEdge", function () {
+            updateLegend('<h3>Languages:</h3><p>Hover over an edge to see languages.</p>');
+        });
+
+        network.on("click", function (params) {
+            if (params.edges && params.edges.length > 0) {
+                const edgeId = params.edges[0];
+                const edge = edges.get(edgeId);
+                if (edge && edge.languages) {
+                    const languagesList = edge.languages.split(', ').sort().map(lang => `<li>${lang.replaceAll(";;", " - ")}</li>`).join('');
+                    const numLanguages = edge.languages.split(', ').length;
+                    const title1 = edge.from.replaceAll(";;", "&#10;");
+                    const title2 = edge.to.replaceAll(";;", "&#10;");
+                    updateLegend(`<h2><div title="${title1}";>${edge.from.split(";;")[0]}</div><div title="${title2}";>${edge.to.split(";;")[0]}</div></h2><br><h3>Languages (${numLanguages})<br></h3><ul>${languagesList}</ul>`);
+                }
+            }
+        });
+    </script>
+    <style>
+        .container {
+            display: flex;
+            width: 100%;
+            margin-top: 48px;
+        }
+        #mynetwork {
+            flex: 3;
+            height: 750px;
+            width: 90%
+            background-color: #222222;
+            border: 1px solid lightgray;
+        }
+        #language-legend h2 {
+            display: flex; 
+            flex-direction: column;
+            font-weight: bold;
+        }
+        #language-legend h3 {
+             border-bottom: 1px solid black; 
+             padding-bottom: 8px
+        }
+        #language-legend {
+            flex: 1;
+            margin-left: 20px;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            background-color: #f9f9f9;
+            overflow-y: auto;
+            max-height: 750px;
+        }
+        #language-legend ul {
+            list-style-type: none;
+            padding: 0;
+        }
+        #language-legend li {
+            margin: 5px 0;
+            font-size: 1.2em;
+        }
+    </style>
+    </body>
+</html>

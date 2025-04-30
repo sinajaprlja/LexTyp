@@ -1,0 +1,239 @@
+<html>
+    <head>
+        <meta charset="utf-8">
+        
+            <script src="lib/bindings/utils.js"></script>
+            <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/vis-network/9.1.2/dist/dist/vis-network.min.css" integrity="sha512-WgxfT5LWjfszlPHXRmBWHkV2eceiWTOBvrKCNbdgDYTHrT2AeLCGbF4sZlZw3UMN3WtL0tGUoIAKsu8mllg/XA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/vis-network/9.1.2/dist/vis-network.min.js" integrity="sha512-LnvoEWDFrqGHlHmDD2101OrLcbsfkrzoSpvtSQtxK3RMnRV0eOkhhBN2dXHKRrUU8p2DGRTk35n4O8nWSVe1mQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+            
+        
+<center>
+<h1></h1>
+</center>
+
+<!-- <link rel="stylesheet" href="../node_modules/vis/dist/vis.min.css" type="text/css" />
+<script type="text/javascript" src="../node_modules/vis/dist/vis.js"> </script>-->
+        <link
+          href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/css/bootstrap.min.css"
+          rel="stylesheet"
+          integrity="sha384-eOJMYsd53ii+scO/bJGFsiCZc+5NDVN2yr8+0RDqr0Ql0h+rP48ckxlpbzKgwra6"
+          crossorigin="anonymous"
+        />
+        <script
+          src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.bundle.min.js"
+          integrity="sha384-JEW9xMcG8R+pH31jmWH6WWP0WintQrMb4s7ZOdauHnUtxwoG2vI5DkLtS3qm9Ekf"
+          crossorigin="anonymous"
+        ></script>
+
+
+        <center>
+          <h1></h1>
+        </center>
+        <style type="text/css">
+
+             #mynetwork {
+                 width: 100%;
+                 height: 100vh;
+                 background-color: #222222;
+                 border: 1px solid lightgray;
+                 position: relative;
+                 float: left;
+             }
+
+             
+
+             
+
+             
+        </style>
+    </head>
+
+
+    <body>
+        <div class="card" style="width: 100%">
+            
+            
+            <div class="container"><div id="mynetwork" class="card-body"></div>
+    <div id="language-legend">
+        <h3>Languages:</h3>
+        <p>Click on an edge to see languages.</p>
+    </div>
+    </div>
+        </div>
+
+        
+        
+
+        <script type="text/javascript">
+
+              // initialize global variables.
+              var edges;
+              var nodes;
+              var allNodes;
+              var allEdges;
+              var nodeColors;
+              var originalNodes;
+              var network;
+              var container;
+              var options, data;
+              var filter = {
+                  item : '',
+                  property : '',
+                  value : []
+              };
+
+              
+
+              
+
+              // This method is responsible for drawing the graph, returns the drawn network
+              function drawGraph() {
+                  var container = document.getElementById('mynetwork');
+
+                  
+
+                  // parsing and collecting nodes and edges from the python
+                  nodes = new vis.DataSet([{"color": "#97c2fc", "font": {"color": "white"}, "id": "grateful;;(obsolete or archaic) pleasing, welcome.", "label": "grateful", "shape": "dot", "title": "grateful;;(obsolete or archaic) pleasing, welcome."}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "thankful;;(obsolete) obtaining or deserving thanks; thankworthy.", "label": "thankful", "shape": "dot", "title": "thankful;;(obsolete) obtaining or deserving thanks; thankworthy."}]);
+                  edges = new vis.DataSet([{"from": "grateful;;(obsolete or archaic) pleasing, welcome.", "languages": "yiddish;;\u05d3\u05d0\u05b7\u05e0\u05e7\u05d1\u05d0\u05b7\u05e8;;adj, esperanto;;dankema;;adj, romanian;;recunosc\u0103tor;;adj, vietnamese;;bi\u1ebft \u01a1n;;adj, thai;;\u0e23\u0e39\u0e49\u0e04\u0e38\u0e13;;adj, danish;;taknemmelig;;adj, ukrainian;;\u0432\u0434\u044f\u0301\u0447\u043d\u0438\u0439;;adj, polish;;wdzi\u0119czny;;adj, chinese mandarin;;\u611f\u6fc0;;adj, persian;;\u0645\u0645\u0646\u0648\u0646;;adj, russian;;\u043f\u0440\u0438\u0437\u043d\u0430\u0301\u0442\u0435\u043b\u044c\u043d\u044b\u0439;;adj, japanese;;\u611f\u8b1d\u3059\u308b;;adj, norwegian nynorsk;;takknemleg;;adj, romanian;;mul\u021bumitor;;adj, uzbek;;minnatdor;;adj, dutch;;dankbaar;;adj, hebrew;;\u05d0\u05e1\u05d9\u05e8 \u05ea\u05d5\u05d3\u05d4;;adj, catalan;;agra\u00eft;;adj, kyrgyz;;\u044b\u0440\u0430\u0430\u0437\u044b;;adj, danish;;taknemlig;;adj, japanese;;\u6709\u96e3\u3044;;adj, italian;;grato;;adj, portuguese;;grato;;adj, tajik;;\u043c\u0443\u0442\u0430\u0448\u0430\u043a\u043a\u0438\u0440;;adj, romansch;;savair gr\u00e0 (a);;adj, belarusian;;\u0443\u0434\u0437\u044f\u0301\u0447\u043d\u044b;;adj, ingrian;;kiitolliin;;adj, slovak;;v\u010fa\u010dn\u00fd;;adj, lithuanian;;d\u0117kingas;;adj, georgian;;\u10db\u10d0\u10d3\u10da\u10d8\u10d4\u10e0\u10d8;;adj, azerbaijani;;minn\u0259tdar;;adj, korean;;\uac10\uc0ac\ud558\ub2e4;;adj, bulgarian;;\u043f\u0440\u0438\u0437\u043d\u0430\u0301\u0442\u0435\u043b\u0435\u043d;;adj, khmer;;\u1780\u178f\u179c\u17c1\u1791\u17b8;;adj, french;;reconnaissant;;adj, tajik;;\u0441\u0438\u043f\u043e\u0441\u0433\u0443\u0437\u043e\u0440;;adj, german;;dankbar;;adj, latvian;;pateic\u012bgs;;adj, turkmen;;minnetdar;;adj, hungarian;;h\u00e1l\u00e1s;;adj, turkish;;minnettar;;adj, finnish;;kiitollinen;;adj, albanian;;mir\u00ebnjoh\u00ebs;;adj, hindi;;\u0915\u0943\u0924\u091c\u094d\u091e;;adj, faroese;;takksamur;;adj, serbo-croatian;;\u0437\u0430\u0301\u0445\u0432\u0430\u0304\u043b\u0430\u043d;;adj, spanish;;agradecido;;adj, kazakh;;\u0438\u0433\u0456\u043b\u0456\u043a\u0442\u0456;;adj, khmer;;\u17a2\u179a\u1782\u17bb\u178e;;adj, tajik;;\u043c\u0430\u043c\u043d\u0443\u043d;;adj, persian;;\u0634\u0627\u06a9\u0631;;adj, persian;;\u0645\u062a\u0634\u06a9\u0631;;adj, arabic;;\u0634\u064e\u0627\u0643\u0650\u0631;;adj, chinese mandarin;;\u611f\u8b1d /\u611f\u8c22;;adj, arabic;;\u0634\u064e\u0643\u064f\u0648\u0631;;adj, ottoman turkish;;\u0634\u0627\u0643\u0631;;adj, ancient greek;;\u03b5\u1f50\u03c7\u03ac\u03c1\u03b9\u03c3\u03c4\u03bf\u03c2;;adj, russian;;\u0431\u043b\u0430\u0433\u043e\u0434\u0430\u0301\u0440\u043d\u044b\u0439;;adj, belarusian;;\u045e\u0434\u0437\u044f\u0301\u0447\u043d\u044b;;adj, greek;;\u03b5\u03c5\u03b3\u03bd\u03ce\u03bc\u03c9\u03bd;;adj, korean;;\uace0\ub9d9\ub2e4;;adj, norwegian bokm\u00e5l;;takknemlig;;adj, persian;;\u0633\u067e\u0627\u0633\u06af\u0632\u0627\u0631;;adj, portuguese;;agradecido;;adj, slovene;;hvale\u017een;;adj, estonian;;t\u00e4nulik;;adj, macedonian;;\u0431\u043b\u0430\u0433\u043e\u0434\u0430\u0440\u0435\u043d;;adj, khmer;;\u178a\u17b9\u1784\u1782\u17bb\u178e;;adj, czech;;vd\u011b\u010dn\u00fd;;adj, bulgarian;;\u0431\u043b\u0430\u0433\u043e\u0434\u0430\u0301\u0440\u0435\u043d;;adj, swedish;;tacksam;;adj, burmese;;\u1000\u103b\u1031\u1038\u1007\u1030\u1038\u101e\u102d;;adj, hindi;;\u0906\u092d\u093e\u0930\u0940;;adj, armenian;;\u0577\u0576\u0578\u0580\u0570\u0561\u056f\u0561\u056c;;adj, plautdietsch;;dankboa;;adj, welsh;;diolchgar;;adj, serbo-croatian;;z\u00e1hv\u0101lan;;adj, turkish;;m\u00fcte\u015fekkir;;adj, thai;;\u0e01\u0e15\u0e31\u0e0d\u0e0d\u0e39;;adj", "to": "thankful;;(obsolete) obtaining or deserving thanks; thankworthy.", "value": 79, "width": 1.0}]);
+
+                  nodeColors = {};
+                  allNodes = nodes.get({ returnType: "Object" });
+                  for (nodeId in allNodes) {
+                    nodeColors[nodeId] = allNodes[nodeId].color;
+                  }
+                  allEdges = edges.get({ returnType: "Object" });
+                  // adding nodes and edges to the graph
+                  data = {nodes: nodes, edges: edges};
+
+                  var options = {
+    "configure": {
+        "enabled": false
+    },
+    "edges": {
+        "color": {
+            "inherit": true
+        },
+        "smooth": {
+            "enabled": true,
+            "type": "dynamic"
+        }
+    },
+    "interaction": {
+        "dragNodes": true,
+        "hideEdgesOnDrag": false,
+        "hideNodesOnDrag": false
+    },
+    "physics": {
+        "enabled": true,
+        "stabilization": {
+            "enabled": true,
+            "fit": true,
+            "iterations": 1000,
+            "onlyDynamicEdges": false,
+            "updateInterval": 50
+        }
+    }
+};
+
+                  
+
+
+                  
+
+                  network = new vis.Network(container, data, options);
+
+                  
+
+                  
+
+                  
+
+
+                  
+
+                  return network;
+
+              }
+              drawGraph();
+        </script>
+    
+    <script>
+        // Function to update the legend
+        function updateLegend(content) {
+            const legend = document.getElementById('language-legend');
+            legend.innerHTML = content;
+        }
+
+        // Add event listeners to edges using vis.js API
+        network.on("hoverEdge", function (params) {
+            const edgeId = params.edge;
+            const edge = edges.get(edgeId);
+            if (edge && edge.languages) {
+                const languagesList = edge.languages.split(', ').map(lang => `<li>${lang}</li>`).join('');
+                const numLanguages = edge.languages.split(', ').length;
+                const nodePair = `${edge.from} - ${edge.to}`;
+                updateLegend(`<h3>Languages (${numLanguages}) for ${nodePair}:</h3><ul>${languagesList}</ul>`);
+            }
+        });
+
+        network.on("blurEdge", function () {
+            updateLegend('<h3>Languages:</h3><p>Hover over an edge to see languages.</p>');
+        });
+
+        network.on("click", function (params) {
+            if (params.edges && params.edges.length > 0) {
+                const edgeId = params.edges[0];
+                const edge = edges.get(edgeId);
+                if (edge && edge.languages) {
+                    const languagesList = edge.languages.split(', ').sort().map(lang => `<li>${lang.replaceAll(";;", " - ")}</li>`).join('');
+                    const numLanguages = edge.languages.split(', ').length;
+                    const title1 = edge.from.replaceAll(";;", "&#10;");
+                    const title2 = edge.to.replaceAll(";;", "&#10;");
+                    updateLegend(`<h2><div title="${title1}";>${edge.from.split(";;")[0]}</div><div title="${title2}";>${edge.to.split(";;")[0]}</div></h2><br><h3>Languages (${numLanguages})<br></h3><ul>${languagesList}</ul>`);
+                }
+            }
+        });
+    </script>
+    <style>
+        .container {
+            display: flex;
+            width: 100%;
+            margin-top: 48px;
+        }
+        #mynetwork {
+            flex: 3;
+            height: 750px;
+            width: 90%
+            background-color: #222222;
+            border: 1px solid lightgray;
+        }
+        #language-legend h2 {
+            display: flex; 
+            flex-direction: column;
+            font-weight: bold;
+        }
+        #language-legend h3 {
+             border-bottom: 1px solid black; 
+             padding-bottom: 8px
+        }
+        #language-legend {
+            flex: 1;
+            margin-left: 20px;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            background-color: #f9f9f9;
+            overflow-y: auto;
+            max-height: 750px;
+        }
+        #language-legend ul {
+            list-style-type: none;
+            padding: 0;
+        }
+        #language-legend li {
+            margin: 5px 0;
+            font-size: 1.2em;
+        }
+    </style>
+    </body>
+</html>

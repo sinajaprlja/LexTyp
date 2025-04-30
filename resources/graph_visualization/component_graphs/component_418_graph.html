@@ -1,0 +1,239 @@
+<html>
+    <head>
+        <meta charset="utf-8">
+        
+            <script src="lib/bindings/utils.js"></script>
+            <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/vis-network/9.1.2/dist/dist/vis-network.min.css" integrity="sha512-WgxfT5LWjfszlPHXRmBWHkV2eceiWTOBvrKCNbdgDYTHrT2AeLCGbF4sZlZw3UMN3WtL0tGUoIAKsu8mllg/XA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/vis-network/9.1.2/dist/vis-network.min.js" integrity="sha512-LnvoEWDFrqGHlHmDD2101OrLcbsfkrzoSpvtSQtxK3RMnRV0eOkhhBN2dXHKRrUU8p2DGRTk35n4O8nWSVe1mQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+            
+        
+<center>
+<h1></h1>
+</center>
+
+<!-- <link rel="stylesheet" href="../node_modules/vis/dist/vis.min.css" type="text/css" />
+<script type="text/javascript" src="../node_modules/vis/dist/vis.js"> </script>-->
+        <link
+          href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/css/bootstrap.min.css"
+          rel="stylesheet"
+          integrity="sha384-eOJMYsd53ii+scO/bJGFsiCZc+5NDVN2yr8+0RDqr0Ql0h+rP48ckxlpbzKgwra6"
+          crossorigin="anonymous"
+        />
+        <script
+          src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.bundle.min.js"
+          integrity="sha384-JEW9xMcG8R+pH31jmWH6WWP0WintQrMb4s7ZOdauHnUtxwoG2vI5DkLtS3qm9Ekf"
+          crossorigin="anonymous"
+        ></script>
+
+
+        <center>
+          <h1></h1>
+        </center>
+        <style type="text/css">
+
+             #mynetwork {
+                 width: 100%;
+                 height: 100vh;
+                 background-color: #222222;
+                 border: 1px solid lightgray;
+                 position: relative;
+                 float: left;
+             }
+
+             
+
+             
+
+             
+        </style>
+    </head>
+
+
+    <body>
+        <div class="card" style="width: 100%">
+            
+            
+            <div class="container"><div id="mynetwork" class="card-body"></div>
+    <div id="language-legend">
+        <h3>Languages:</h3>
+        <p>Click on an edge to see languages.</p>
+    </div>
+    </div>
+        </div>
+
+        
+        
+
+        <script type="text/javascript">
+
+              // initialize global variables.
+              var edges;
+              var nodes;
+              var allNodes;
+              var allEdges;
+              var nodeColors;
+              var originalNodes;
+              var network;
+              var container;
+              var options, data;
+              var filter = {
+                  item : '',
+                  property : '',
+                  value : []
+              };
+
+              
+
+              
+
+              // This method is responsible for drawing the graph, returns the drawn network
+              function drawGraph() {
+                  var container = document.getElementById('mynetwork');
+
+                  
+
+                  // parsing and collecting nodes and edges from the python
+                  nodes = new vis.DataSet([{"color": "#97c2fc", "font": {"color": "white"}, "id": "notebook;;(computing) ellipsis of notebook computer. a laptop.", "label": "notebook", "shape": "dot", "title": "notebook;;(computing) ellipsis of notebook computer. a laptop."}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "laptop;;(computing) a laptop computer.", "label": "laptop", "shape": "dot", "title": "laptop;;(computing) a laptop computer."}]);
+                  edges = new vis.DataSet([{"from": "notebook;;(computing) ellipsis of notebook computer. a laptop.", "languages": "belarusian;;\u043b\u044d\u043f\u0442\u043e\u0301\u043f;;noun, lithuanian;;ne\u0161iojamasis kompiuteris;;noun, bulgarian;;\u043d\u043e\u0301\u0443\u0442\u0431\u0443\u043a;;noun, serbo-croatian;;\u043f\u0440\u0435\u0301\u043d\u043e\u0441\u043d\u04e3\u043a;;noun, estonian;;s\u00fclearvuti;;noun, macedonian;;\u043f\u0440\u0435\u0301\u043d\u043e\u0441\u043b\u0438\u0432 \u043a\u043e\u043c\u043f\u0458\u0443\u0301\u0442\u0435\u0440;;noun, latvian;;piez\u012bmjdators;;noun, khmer;;\u1780\u17bb\u17c6\u1796\u17d2\u1799\u17bc\u1791\u17d0\u179a\u1799\u17bd\u179a\u178a\u17c3;;noun, spanish;;computador port\u00e1til;;noun, russian;;\u043d\u043e\u0443\u0442\u0431\u0443\u0301\u043a;;noun, chinese mandarin;;\u7b46\u8a18\u672c\u96fb\u8166 /\u7b14\u8bb0\u672c\u7535\u8111;;noun, slovene;;prenosnik;;noun, azerbaijani;;noutbuk;;noun, georgian;;\u10da\u10d4\u10de\u10e2\u10dd\u10de\u10d8;;noun, hebrew;;\u05de\u05b7\u05d7\u05b0\u05e9\u05b5\u05c1\u05d1 \u05e0\u05b7\u05d9\u05b8\u05bc\u05d3;;noun, esperanto;;tekokomputilo;;noun, greek;;\u03c6\u03bf\u03c1\u03b7\u03c4\u03cc\u03c2 \u03c5\u03c0\u03bf\u03bb\u03bf\u03b3\u03b9\u03c3\u03c4\u03ae\u03c2;;noun, german;;laptop;;noun, uzbek;;noutbuk;;noun, tajik;;\u0440\u043e\u0451\u043d\u0430\u0438 \u043a\u0438\u0444\u04e3;;noun, armenian;;\u0576\u0578\u0569\u0562\u0578\u0582\u0584;;noun, vietnamese;;m\u00e1y t\u00ednh x\u00e1ch tay;;noun, hungarian;;notebook;;noun, czech;;notebook;;noun, chinese mandarin;;\u624b\u63d0\u8a08\u7b97\u6a5f /\u624b\u63d0\u8ba1\u7b97\u673a;;noun, russian;;\u043b\u044d\u043f\u0442\u043e\u0301\u043f;;noun, latvian;;kl\u0113pjdators;;noun, serbo-croatian;;\u043f\u0440\u0438\u0458\u0435\u0301\u043d\u043e\u0441\u043d\u04e3\u043a;;noun, armenian;;\u0576\u0578\u0578\u0582\u0569\u0562\u0578\u0582\u0584;;noun, portuguese;;notebook;;noun, irish;;r\u00edomhaire gl\u00faine;;noun, belarusian;;\u043d\u043e\u0301\u045e\u0442\u0431\u0443\u043a;;noun, lithuanian;;ne\u0161iojamas kompiuteris;;noun, slovak;;laptop;;noun, korean;;\ub178\ud2b8\ubd81;;noun, serbo-croatian;;pr\u00e9nosn\u012bk;;noun, serbo-croatian;;prij\u00e9nosn\u012bk;;noun, swedish;;b\u00e4rbar dator;;noun, tajik;;\u043d\u043e\u0443\u0442\u0431\u0443\u043a;;noun, portuguese;;laptop;;noun, russian;;\u043d\u043e\u0301\u0443\u0442\u0431\u0443\u043a;;noun, chinese mandarin;;\u7b46\u8a18\u672c /\u7b14\u8bb0\u672c;;noun, macedonian;;\u043b\u0430\u0301\u043f\u0442\u043e\u043f;;noun, spanish;;port\u00e1til;;noun, ukrainian;;\u043d\u043e\u0443\u0442\u0431\u0443\u0301\u043a;;noun, slovak;;notbuk;;noun, arabic;;\u062d\u064e\u0627\u0633\u064f\u0648\u0628 \u0645\u064e\u062d\u0652\u0645\u064f\u0648\u0644;;noun, japanese;;\u30ce\u30fc\u30c8\u30d1\u30bd\u30b3\u30f3;;noun, georgian;;\u10dc\u10dd\u10e3\u10d7\u10d1\u10e3\u10e5\u10d8;;noun, hebrew;;\u05de\u05d7\u05e9\u05d1 \u05e0\u05d9\u05d9\u05d3;;noun", "to": "laptop;;(computing) a laptop computer.", "value": 50, "width": 50.0}]);
+
+                  nodeColors = {};
+                  allNodes = nodes.get({ returnType: "Object" });
+                  for (nodeId in allNodes) {
+                    nodeColors[nodeId] = allNodes[nodeId].color;
+                  }
+                  allEdges = edges.get({ returnType: "Object" });
+                  // adding nodes and edges to the graph
+                  data = {nodes: nodes, edges: edges};
+
+                  var options = {
+    "configure": {
+        "enabled": false
+    },
+    "edges": {
+        "color": {
+            "inherit": true
+        },
+        "smooth": {
+            "enabled": true,
+            "type": "dynamic"
+        }
+    },
+    "interaction": {
+        "dragNodes": true,
+        "hideEdgesOnDrag": false,
+        "hideNodesOnDrag": false
+    },
+    "physics": {
+        "enabled": true,
+        "stabilization": {
+            "enabled": true,
+            "fit": true,
+            "iterations": 1000,
+            "onlyDynamicEdges": false,
+            "updateInterval": 50
+        }
+    }
+};
+
+                  
+
+
+                  
+
+                  network = new vis.Network(container, data, options);
+
+                  
+
+                  
+
+                  
+
+
+                  
+
+                  return network;
+
+              }
+              drawGraph();
+        </script>
+    
+    <script>
+        // Function to update the legend
+        function updateLegend(content) {
+            const legend = document.getElementById('language-legend');
+            legend.innerHTML = content;
+        }
+
+        // Add event listeners to edges using vis.js API
+        network.on("hoverEdge", function (params) {
+            const edgeId = params.edge;
+            const edge = edges.get(edgeId);
+            if (edge && edge.languages) {
+                const languagesList = edge.languages.split(', ').map(lang => `<li>${lang}</li>`).join('');
+                const numLanguages = edge.languages.split(', ').length;
+                const nodePair = `${edge.from} - ${edge.to}`;
+                updateLegend(`<h3>Languages (${numLanguages}) for ${nodePair}:</h3><ul>${languagesList}</ul>`);
+            }
+        });
+
+        network.on("blurEdge", function () {
+            updateLegend('<h3>Languages:</h3><p>Hover over an edge to see languages.</p>');
+        });
+
+        network.on("click", function (params) {
+            if (params.edges && params.edges.length > 0) {
+                const edgeId = params.edges[0];
+                const edge = edges.get(edgeId);
+                if (edge && edge.languages) {
+                    const languagesList = edge.languages.split(', ').sort().map(lang => `<li>${lang.replaceAll(";;", " - ")}</li>`).join('');
+                    const numLanguages = edge.languages.split(', ').length;
+                    const title1 = edge.from.replaceAll(";;", "&#10;");
+                    const title2 = edge.to.replaceAll(";;", "&#10;");
+                    updateLegend(`<h2><div title="${title1}";>${edge.from.split(";;")[0]}</div><div title="${title2}";>${edge.to.split(";;")[0]}</div></h2><br><h3>Languages (${numLanguages})<br></h3><ul>${languagesList}</ul>`);
+                }
+            }
+        });
+    </script>
+    <style>
+        .container {
+            display: flex;
+            width: 100%;
+            margin-top: 48px;
+        }
+        #mynetwork {
+            flex: 3;
+            height: 750px;
+            width: 90%
+            background-color: #222222;
+            border: 1px solid lightgray;
+        }
+        #language-legend h2 {
+            display: flex; 
+            flex-direction: column;
+            font-weight: bold;
+        }
+        #language-legend h3 {
+             border-bottom: 1px solid black; 
+             padding-bottom: 8px
+        }
+        #language-legend {
+            flex: 1;
+            margin-left: 20px;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            background-color: #f9f9f9;
+            overflow-y: auto;
+            max-height: 750px;
+        }
+        #language-legend ul {
+            list-style-type: none;
+            padding: 0;
+        }
+        #language-legend li {
+            margin: 5px 0;
+            font-size: 1.2em;
+        }
+    </style>
+    </body>
+</html>

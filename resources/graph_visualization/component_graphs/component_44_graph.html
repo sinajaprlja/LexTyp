@@ -1,0 +1,239 @@
+<html>
+    <head>
+        <meta charset="utf-8">
+        
+            <script src="lib/bindings/utils.js"></script>
+            <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/vis-network/9.1.2/dist/dist/vis-network.min.css" integrity="sha512-WgxfT5LWjfszlPHXRmBWHkV2eceiWTOBvrKCNbdgDYTHrT2AeLCGbF4sZlZw3UMN3WtL0tGUoIAKsu8mllg/XA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/vis-network/9.1.2/dist/vis-network.min.js" integrity="sha512-LnvoEWDFrqGHlHmDD2101OrLcbsfkrzoSpvtSQtxK3RMnRV0eOkhhBN2dXHKRrUU8p2DGRTk35n4O8nWSVe1mQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+            
+        
+<center>
+<h1></h1>
+</center>
+
+<!-- <link rel="stylesheet" href="../node_modules/vis/dist/vis.min.css" type="text/css" />
+<script type="text/javascript" src="../node_modules/vis/dist/vis.js"> </script>-->
+        <link
+          href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/css/bootstrap.min.css"
+          rel="stylesheet"
+          integrity="sha384-eOJMYsd53ii+scO/bJGFsiCZc+5NDVN2yr8+0RDqr0Ql0h+rP48ckxlpbzKgwra6"
+          crossorigin="anonymous"
+        />
+        <script
+          src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.bundle.min.js"
+          integrity="sha384-JEW9xMcG8R+pH31jmWH6WWP0WintQrMb4s7ZOdauHnUtxwoG2vI5DkLtS3qm9Ekf"
+          crossorigin="anonymous"
+        ></script>
+
+
+        <center>
+          <h1></h1>
+        </center>
+        <style type="text/css">
+
+             #mynetwork {
+                 width: 100%;
+                 height: 100vh;
+                 background-color: #222222;
+                 border: 1px solid lightgray;
+                 position: relative;
+                 float: left;
+             }
+
+             
+
+             
+
+             
+        </style>
+    </head>
+
+
+    <body>
+        <div class="card" style="width: 100%">
+            
+            
+            <div class="container"><div id="mynetwork" class="card-body"></div>
+    <div id="language-legend">
+        <h3>Languages:</h3>
+        <p>Click on an edge to see languages.</p>
+    </div>
+    </div>
+        </div>
+
+        
+        
+
+        <script type="text/javascript">
+
+              // initialize global variables.
+              var edges;
+              var nodes;
+              var allNodes;
+              var allEdges;
+              var nodeColors;
+              var originalNodes;
+              var network;
+              var container;
+              var options, data;
+              var filter = {
+                  item : '',
+                  property : '',
+                  value : []
+              };
+
+              
+
+              
+
+              // This method is responsible for drawing the graph, returns the drawn network
+              function drawGraph() {
+                  var container = document.getElementById('mynetwork');
+
+                  
+
+                  // parsing and collecting nodes and edges from the python
+                  nodes = new vis.DataSet([{"color": "#97c2fc", "font": {"color": "white"}, "id": "accent;;(orthography) a mark or character used in writing, in order to indicate the place of the spoken accent, or to indicate the nature or quality of the vowel marked.", "label": "accent", "shape": "dot", "title": "accent;;(orthography) a mark or character used in writing, in order to indicate the place of the spoken accent, or to indicate the nature or quality of the vowel marked."}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "excitement;;(uncountable) the state of being excited (emotionally aroused).", "label": "excitement", "shape": "dot", "title": "excitement;;(uncountable) the state of being excited (emotionally aroused)."}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "diacritical mark;;(orthography, typography) a symbol in writing used with a letter to indicate a different pronunciation, stress, tone, or meaning.", "label": "diacritical mark", "shape": "dot", "title": "diacritical mark;;(orthography, typography) a symbol in writing used with a letter to indicate a different pronunciation, stress, tone, or meaning."}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "anxiety;;(pathology) a state of restlessness and agitation, often accompanied by a distressing sense of oppression or tightness in the stomach.", "label": "anxiety", "shape": "dot", "title": "anxiety;;(pathology) a state of restlessness and agitation, often accompanied by a distressing sense of oppression or tightness in the stomach."}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "horror;;(countable, uncountable) an intense distressing emotion of fear or repugnance.", "label": "horror", "shape": "dot", "title": "horror;;(countable, uncountable) an intense distressing emotion of fear or repugnance."}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "accent;;(linguistics) a higher-pitched or stronger (louder or longer) articulation of a particular syllable of a word or phrase in order to distinguish it from the others or to emphasize it.", "label": "accent", "shape": "dot", "title": "accent;;(linguistics) a higher-pitched or stronger (louder or longer) articulation of a particular syllable of a word or phrase in order to distinguish it from the others or to emphasize it."}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "acute accent;;(orthography): a diacritical mark ( \u00b4 ) that can be placed above a number of letters in many languages of the latin, greek and cyrillic writing systems.", "label": "acute accent", "shape": "dot", "title": "acute accent;;(orthography): a diacritical mark ( \u00b4 ) that can be placed above a number of letters in many languages of the latin, greek and cyrillic writing systems."}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "stress;;(countable, physics) the internal distribution of force across a small boundary per unit area of that boundary (pressure) within a body. it causes strain or deformation and is typically symbolised by \u03c3 or \u03c4.", "label": "stress", "shape": "dot", "title": "stress;;(countable, physics) the internal distribution of force across a small boundary per unit area of that boundary (pressure) within a body. it causes strain or deformation and is typically symbolised by \u03c3 or \u03c4."}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "pressure;;(physics) the amount of force that is applied over a given area divided by the size of this area; force per unit area.", "label": "pressure", "shape": "dot", "title": "pressure;;(physics) the amount of force that is applied over a given area divided by the size of this area; force per unit area."}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "stress;;(uncountable) emotional pressure suffered by a human being or other animal.", "label": "stress", "shape": "dot", "title": "stress;;(uncountable) emotional pressure suffered by a human being or other animal."}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "fear;;(countable) a phobia, a sense of fear induced by something or someone.", "label": "fear", "shape": "dot", "title": "fear;;(countable) a phobia, a sense of fear induced by something or someone."}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "terror;;(countable, uncountable) intense dread, fright, or fear.", "label": "terror", "shape": "dot", "title": "terror;;(countable, uncountable) intense dread, fright, or fear."}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "intonation;;(linguistics) the rise and fall of the voice in speaking.", "label": "intonation", "shape": "dot", "title": "intonation;;(linguistics) the rise and fall of the voice in speaking."}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "voltage;;(electricity) the difference in electrostatic potential between two points in space, especially between live and neutral conductors or the earth.", "label": "voltage", "shape": "dot", "title": "voltage;;(electricity) the difference in electrostatic potential between two points in space, especially between live and neutral conductors or the earth."}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "fear;;(uncountable) a strong, unpleasant emotion or feeling caused by actual or perceived danger or threat.", "label": "fear", "shape": "dot", "title": "fear;;(uncountable) a strong, unpleasant emotion or feeling caused by actual or perceived danger or threat."}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "panic;;(uncountable) overwhelming fear or fright, often affecting groups of people or animals; (countable) an instance of this; a fright, a scare.", "label": "panic", "shape": "dot", "title": "panic;;(uncountable) overwhelming fear or fright, often affecting groups of people or animals; (countable) an instance of this; a fright, a scare."}]);
+                  edges = new vis.DataSet([{"from": "accent;;(orthography) a mark or character used in writing, in order to indicate the place of the spoken accent, or to indicate the nature or quality of the vowel marked.", "languages": "polish;;akcent;;noun, italian;;accento;;noun, japanese;;\u30a2\u30af\u30bb\u30f3\u30c8;;noun, greek;;\u03c4\u03cc\u03bd\u03bf\u03c2;;noun, norwegian bokm\u00e5l;;aksent;;noun, norman;;accent;;noun, russian;;\u0443\u0434\u0430\u0440\u0435\u0301\u043d\u0438\u0435;;noun, catalan;;accent;;noun, portuguese;;acento;;noun, romanian;;accent;;noun, asturian;;acentu;;noun, galician;;acento;;noun, ukrainian;;\u043d\u0430\u0301\u0433\u043e\u043b\u043e\u0441;;noun, dutch;;accent;;noun, swedish;;accent;;noun, dutch;;klemtoon;;noun, armenian;;\u0577\u0565\u0577\u057f;;noun, hebrew;;\u05d8\u05b7\u05e2\u05b7\u05dd;;noun, bulgarian;;\u0443\u0434\u0430\u0440\u0435\u0301\u043d\u0438\u0435;;noun, sardinian;;atzentu;;noun, french;;accent;;noun, czech;;p\u0159\u00edzvuk;;noun", "to": "accent;;(linguistics) a higher-pitched or stronger (louder or longer) articulation of a particular syllable of a word or phrase in order to distinguish it from the others or to emphasize it.", "value": 22, "width": 0.4230769230769231}, {"from": "accent;;(orthography) a mark or character used in writing, in order to indicate the place of the spoken accent, or to indicate the nature or quality of the vowel marked.", "languages": "portuguese;;acento;;noun, esperanto;;diakritilo;;noun, esperanto;;diakrita signo;;noun, ido;;diakritiko;;noun, maori;;tohu whakahua;;noun", "to": "diacritical mark;;(orthography, typography) a symbol in writing used with a letter to indicate a different pronunciation, stress, tone, or meaning.", "value": 5, "width": 0.09615384615384616}, {"from": "accent;;(orthography) a mark or character used in writing, in order to indicate the place of the spoken accent, or to indicate the nature or quality of the vowel marked.", "languages": "chinese mandarin;;\u5c16\u97f3\u7b26;;noun, estonian;;r\u00f5hum\u00e4rk;;noun, spanish;;tilde;;noun", "to": "acute accent;;(orthography): a diacritical mark ( \u00b4 ) that can be placed above a number of letters in many languages of the latin, greek and cyrillic writing systems.", "value": 3, "width": 0.057692307692307696}, {"from": "excitement;;(uncountable) the state of being excited (emotionally aroused).", "languages": "german;;spannung;;noun, finnish;;j\u00e4nnitys;;noun", "to": "stress;;(countable, physics) the internal distribution of force across a small boundary per unit area of that boundary (pressure) within a body. it causes strain or deformation and is typically symbolised by \u03c3 or \u03c4.", "value": 2, "width": 0.038461538461538464}, {"from": "excitement;;(uncountable) the state of being excited (emotionally aroused).", "languages": "german;;spannung;;noun, norwegian;;spenning;;noun", "to": "voltage;;(electricity) the difference in electrostatic potential between two points in space, especially between live and neutral conductors or the earth.", "value": 2, "width": 0.038461538461538464}, {"from": "excitement;;(uncountable) the state of being excited (emotionally aroused).", "languages": "german;;erregung;;noun, german;;aufgeregtheit;;noun", "to": "anxiety;;(pathology) a state of restlessness and agitation, often accompanied by a distressing sense of oppression or tightness in the stomach.", "value": 2, "width": 0.038461538461538464}, {"from": "anxiety;;(pathology) a state of restlessness and agitation, often accompanied by a distressing sense of oppression or tightness in the stomach.", "languages": "latin;;metus;;noun, russian;;\u0441\u0442\u0440\u0430\u0445;;noun, romanian;;team\u0103;;noun, german;;angst;;noun, german;;furcht;;noun, russian;;\u0431\u043e\u044f\u0301\u0437\u043d\u044c;;noun, dutch;;vrees;;noun, danish;;angst;;noun, dutch;;angst;;noun", "to": "fear;;(uncountable) a strong, unpleasant emotion or feeling caused by actual or perceived danger or threat.", "value": 9, "width": 0.17307692307692307}, {"from": "anxiety;;(pathology) a state of restlessness and agitation, often accompanied by a distressing sense of oppression or tightness in the stomach.", "languages": "russian;;\u0441\u0442\u0440\u0430\u0445;;noun, german;;angst;;noun, german;;furcht;;noun, russian;;\u0431\u043e\u044f\u0301\u0437\u043d\u044c;;noun, danish;;angst;;noun, polish;;l\u0119k;;noun, dutch;;angst;;noun", "to": "fear;;(countable) a phobia, a sense of fear induced by something or someone.", "value": 7, "width": 0.1346153846153846}, {"from": "anxiety;;(pathology) a state of restlessness and agitation, often accompanied by a distressing sense of oppression or tightness in the stomach.", "languages": "german;;furcht;;noun, russian;;\u0441\u0442\u0440\u0430\u0445;;noun, german;;angst;;noun, russian;;\u0431\u043e\u044f\u0301\u0437\u043d\u044c;;noun", "to": "horror;;(countable, uncountable) an intense distressing emotion of fear or repugnance.", "value": 4, "width": 0.07692307692307693}, {"from": "horror;;(countable, uncountable) an intense distressing emotion of fear or repugnance.", "languages": "mongolian;;\u0430\u0439\u043c\u0448\u0438\u0433;;noun, macedonian;;\u0441\u0442\u0440\u0430\u0432;;noun, armenian;;\u0561\u0570;;noun, arabic;;\u062e\u064e\u0648\u0652\u0641;;noun, hindi;;\u092d\u092f;;noun, finnish;;kammo;;noun, norwegian bokm\u00e5l;;redsel;;noun, korean;;\uacf5\ud3ec;;noun, german;;furcht;;noun, ukrainian;;\u0441\u0442\u0440\u0430\u0445;;noun, kyrgyz;;\u043a\u043e\u0440\u043a\u0443\u043d\u0443\u0447;;noun, belarusian;;\u0441\u0442\u0440\u0430\u0445;;noun, polish;;strach;;noun, uzbek;;qo\u02bbrquv;;noun, turkish;;korku;;noun, japanese;;\u6050\u308c;;noun, japanese;;\u6050\u6016;;noun, russian;;\u0441\u0442\u0440\u0430\u0445;;noun, german;;angst;;noun, kazakh;;\u049b\u043e\u0440\u049b\u044b\u043d\u044b\u0448;;noun, russian;;\u0431\u043e\u044f\u0301\u0437\u043d\u044c;;noun, swedish;;skr\u00e4ck;;noun, bengali;;\u09ad\u09af\u09bc;;noun, bulgarian;;\u0441\u0442\u0440\u0430\u0445;;noun, chinese mandarin;;\u6050\u6016;;noun", "to": "fear;;(uncountable) a strong, unpleasant emotion or feeling caused by actual or perceived danger or threat.", "value": 25, "width": 0.4807692307692308}, {"from": "horror;;(countable, uncountable) an intense distressing emotion of fear or repugnance.", "languages": "russian;;\u0441\u0442\u0440\u0430\u0445;;noun, german;;angst;;noun, german;;furcht;;noun, russian;;\u0431\u043e\u044f\u0301\u0437\u043d\u044c;;noun, swedish;;fruktan;;noun, chinese mandarin;;\u6050\u6016;;noun", "to": "fear;;(countable) a phobia, a sense of fear induced by something or someone.", "value": 6, "width": 0.11538461538461539}, {"from": "horror;;(countable, uncountable) an intense distressing emotion of fear or repugnance.", "languages": "arabic;;\u062e\u064e\u0648\u0652\u0641;;noun, hindi;;\u0906\u0924\u0902\u0915;;noun, arabic;;\u0631\u064f\u0639\u0652\u0628;;noun", "to": "panic;;(uncountable) overwhelming fear or fright, often affecting groups of people or animals; (countable) an instance of this; a fright, a scare.", "value": 3, "width": 0.057692307692307696}, {"from": "horror;;(countable, uncountable) an intense distressing emotion of fear or repugnance.", "languages": "ukrainian;;\u0436\u0430\u0445;;noun, albanian;;tmerr;;noun, armenian;;\u0561\u0570;;noun, arabic;;\u062e\u064e\u0648\u0652\u0641;;noun, serbo-croatian;;\u0443\u030f\u0436\u0430\u0304\u0441;;noun, hindi;;\u0926\u0939\u0936\u0924;;noun, serbo-croatian;;\u0215\u017e\u0101s;;noun, romanian;;spaim\u0103;;noun, korean;;\uacf5\ud3ec;;noun, armenian;;\u057d\u0561\u0580\u057d\u0561\u0583;;noun, khmer;;\u1797\u17c1\u179a\u179c\u17b6\u179a\u1798\u17d2\u1798\u178e\u17cd;;noun, czech;;hr\u016fza;;noun, tocharian b;;empel\u00f1e;;noun, slovene;;groza;;noun, belarusian;;\u0436\u0430\u0445;;noun, slovak;;hr\u00f4za;;noun, hungarian;;borzalom;;noun, icelandic;;\u00f3gn;;noun, vietnamese;;s\u1ef1 khi\u1ebfp;;noun, kyrgyz;;\u043a\u043e\u0440\u043a\u0443\u043d\u0443\u0447;;noun, hebrew;;\u05d0\u05b5\u05d9\u05de\u05b8\u05d4;;noun, uzbek;;qo\u02bbrquv;;noun, finnish;;kauhu;;noun, tajik;;\u0434\u0430\u04b3\u0448\u0430\u0442;;noun, irish;;uaf\u00e1s;;noun, japanese;;\u6050\u6016;;noun, bulgarian;;\u0443\u0301\u0436\u0430\u0441;;noun, arabic;;\u0631\u064f\u0639\u0652\u0628;;noun, greek;;\u03c4\u03c1\u03cc\u03bc\u03bf\u03c2;;noun, polish;;groza;;noun, pashto;;\u062f\u0647\u0634\u062a;;noun, turkish;;deh\u015fet;;noun, uzbek;;dahshat;;noun, kazakh;;\u049b\u043e\u0440\u049b\u044b\u043d\u044b\u0448;;noun, german;;grauen;;noun, french;;effroi;;noun, russian;;\u0443\u0301\u0436\u0430\u0441;;noun, chinese mandarin;;\u6050\u6016;;noun, azerbaijani;;d\u0259h\u015f\u0259t;;noun, esperanto;;teruro;;noun", "to": "terror;;(countable, uncountable) intense dread, fright, or fear.", "value": 40, "width": 0.7692307692307693}, {"from": "accent;;(linguistics) a higher-pitched or stronger (louder or longer) articulation of a particular syllable of a word or phrase in order to distinguish it from the others or to emphasize it.", "languages": "bashkir;;\u0431\u0430\u04ab\u044b\u043c;;noun, malay;;tekanan;;noun, indonesian;;tekanan;;noun, kyrgyz;;\u0431\u0430\u0441\u044b\u043c;;noun, tatar;;\u0431\u0430\u0441\u044b\u043c;;noun, danish;;tryk;;noun, norwegian bokm\u00e5l;;trykk;;noun, estonian;;r\u00f5hk;;noun, belarusian;;\u043d\u0430\u0301\u0446\u0456\u0441\u043a;;noun", "to": "pressure;;(physics) the amount of force that is applied over a given area divided by the size of this area; force per unit area.", "value": 9, "width": 0.17307692307692307}, {"from": "accent;;(linguistics) a higher-pitched or stronger (louder or longer) articulation of a particular syllable of a word or phrase in order to distinguish it from the others or to emphasize it.", "languages": "bashkir;;\u0431\u0430\u04ab\u044b\u043c;;noun, malay;;tekanan;;noun", "to": "stress;;(uncountable) emotional pressure suffered by a human being or other animal.", "value": 2, "width": 0.038461538461538464}, {"from": "accent;;(linguistics) a higher-pitched or stronger (louder or longer) articulation of a particular syllable of a word or phrase in order to distinguish it from the others or to emphasize it.", "languages": "turkish;;tonlama;;noun, korean;;\uc5b5\uc591;;noun, chinese mandarin;;\u8154\u8abf /\u8154\u8c03;;noun", "to": "intonation;;(linguistics) the rise and fall of the voice in speaking.", "value": 3, "width": 0.057692307692307696}, {"from": "stress;;(countable, physics) the internal distribution of force across a small boundary per unit area of that boundary (pressure) within a body. it causes strain or deformation and is typically symbolised by \u03c3 or \u03c4.", "languages": "korean;;\uc555\ub825;;noun, russian;;\u0434\u0430\u0432\u043b\u0435\u0301\u043d\u0438\u0435;;noun, hungarian;;nyom\u00e1s;;noun, vietnamese;;\u00e1p l\u1ef1c;;noun, chinese mandarin;;\u58d3\u529b /\u538b\u529b;;noun, belarusian;;\u043d\u0430\u0301\u0446\u0456\u0441\u043a;;noun", "to": "pressure;;(physics) the amount of force that is applied over a given area divided by the size of this area; force per unit area.", "value": 6, "width": 0.11538461538461539}, {"from": "stress;;(countable, physics) the internal distribution of force across a small boundary per unit area of that boundary (pressure) within a body. it causes strain or deformation and is typically symbolised by \u03c3 or \u03c4.", "languages": "finnish;;rasitus;;noun, arabic;;\u0625\u0650\u062c\u0652\u0647\u064e\u0627\u062f;;noun, russian;;\u043d\u0430\u043f\u0440\u044f\u0436\u0435\u0301\u043d\u0438\u0435;;noun, sinhalese;;\u0d86\u0dad\u0dad\u0dd2\u0dba;;noun, russian;;\u0434\u0430\u0432\u043b\u0435\u0301\u043d\u0438\u0435;;noun, vietnamese;;\u00e1p l\u1ef1c;;noun, chinese mandarin;;\u58d3\u529b /\u538b\u529b;;noun, persian;;\u0641\u0634\u0627\u0631;;noun", "to": "stress;;(uncountable) emotional pressure suffered by a human being or other animal.", "value": 8, "width": 0.15384615384615385}, {"from": "stress;;(countable, physics) the internal distribution of force across a small boundary per unit area of that boundary (pressure) within a body. it causes strain or deformation and is typically symbolised by \u03c3 or \u03c4.", "languages": "italian;;tensione;;noun, spanish;;tensi\u00f3n;;noun, german;;spannung;;noun, russian;;\u043d\u0430\u043f\u0440\u044f\u0436\u0435\u0301\u043d\u0438\u0435;;noun, latvian;;spriegums;;noun, georgian;;\u10eb\u10d0\u10d1\u10d5\u10d0;;noun, romanian;;tensiune;;noun, bulgarian;;\u043d\u0430\u043f\u0440\u0435\u0436\u0435\u0301\u043d\u0438\u0435;;noun, portuguese;;tens\u00e3o;;noun, danish;;sp\u00e6nding;;noun, french;;tension;;noun, dutch;;spanning;;noun, swedish;;sp\u00e4nning;;noun", "to": "voltage;;(electricity) the difference in electrostatic potential between two points in space, especially between live and neutral conductors or the earth.", "value": 13, "width": 0.25}, {"from": "pressure;;(physics) the amount of force that is applied over a given area divided by the size of this area; force per unit area.", "languages": "bashkir;;\u0431\u0430\u04ab\u044b\u043c;;noun, malay;;tekanan;;noun, russian;;\u0434\u0430\u0432\u043b\u0435\u0301\u043d\u0438\u0435;;noun, serbo-croatian;;\u043f\u0440\u045d\u0442\u0438\u0441\u0430\u043a;;noun, finnish;;paine;;noun, vietnamese;;\u00e1p l\u1ef1c;;noun, chinese mandarin;;\u58d3\u529b /\u538b\u529b;;noun, italian;;pressione;;noun", "to": "stress;;(uncountable) emotional pressure suffered by a human being or other animal.", "value": 8, "width": 0.15384615384615385}, {"from": "fear;;(countable) a phobia, a sense of fear induced by something or someone.", "languages": "ligurian;;po\u00eea;;noun, estonian;;kartus;;noun, northern kurdish;;tirs;;noun, spanish;;miedo;;noun, galician;;medo;;noun, sardinian;;timoria;;noun, romansch;;tema;;noun, asturian;;mieu;;noun, french;;crainte;;noun, hungarian;;f\u00e9lelem;;noun, scottish gaelic;;uabhas;;noun, armenian;;\u057e\u0561\u056d;;noun, german;;furcht;;noun, tagalog;;takot;;noun, ligurian;;p\u00f3ia;;noun, scottish gaelic;;eagal;;noun, serbo-croatian;;str\u0203h;;noun, hawaiian;;maka\u02bbu;;noun, finnish;;pelko;;noun, czech;;strach;;noun, latin;;pavor;;noun, old french;;peor;;noun, catalan;;basarda;;noun, danish;;angst;;noun, catalan;;por;;noun, italian;;paura;;noun, irish;;eagla;;noun, catalan;;temor;;noun, malay;;ketakutan;;noun, central kurdish;;\u062a\u0631\u0633;;noun, khmer;;\u179f\u17c1\u1785\u1780\u17d2\u178a\u17b8\u1781\u17d2\u179b\u17b6\u1785;;noun, swedish;;r\u00e4dsla;;noun, old english;;e\u0121e;;noun, occitan;;paur;;noun, estonian;;hirm;;noun, malayalam;;\u0d2d\u0d2f\u0d02;;noun, georgian;;\u10e8\u10d8\u10e8\u10d8;;noun, german;;angst;;noun, danish;;frygt;;noun, russian;;\u0441\u0442\u0440\u0430\u0445;;noun, spanish;;pavor;;noun, slovene;;strah;;noun, russian;;\u0431\u043e\u044f\u0301\u0437\u043d\u044c;;noun, scottish gaelic;;oillt;;noun, catalan;;pa\u00fcra;;noun, ottoman turkish;;\u0642\u0648\u0631\u0642\u0648;;noun, serbo-croatian;;\u0441\u0442\u0440\u0430\u0311\u0445;;noun, portuguese;;medo;;noun, dutch;;angst;;noun, french;;peur;;noun, chinese mandarin;;\u6050\u6016;;noun, esperanto;;timo;;noun", "to": "fear;;(uncountable) a strong, unpleasant emotion or feeling caused by actual or perceived danger or threat.", "value": 52, "width": 1.0}, {"from": "fear;;(countable) a phobia, a sense of fear induced by something or someone.", "languages": "chinese mandarin;;\u6050\u6016;;noun, hungarian;;retteg\u00e9s;;noun, ottoman turkish;;\u0642\u0648\u0631\u0642\u0648;;noun", "to": "terror;;(countable, uncountable) intense dread, fright, or fear.", "value": 3, "width": 0.057692307692307696}, {"from": "fear;;(countable) a phobia, a sense of fear induced by something or someone.", "languages": "latin;;pavor;;noun, hindi;;\u0918\u092c\u0930\u093e\u0939\u091f;;noun", "to": "panic;;(uncountable) overwhelming fear or fright, often affecting groups of people or animals; (countable) an instance of this; a fright, a scare.", "value": 2, "width": 0.038461538461538464}, {"from": "terror;;(countable, uncountable) intense dread, fright, or fear.", "languages": "hindi;;\u0938\u0939\u092e;;noun, nepali;;\u0924\u094d\u0930\u093e\u0938;;noun, icelandic;;hr\u00e6\u00f0sla;;noun, nepali;;\u092d\u092f;;noun, kyrgyz;;\u043a\u043e\u0440\u043a\u0443\u043d\u0443\u0447;;noun, arabic;;\u062e\u064e\u0648\u0652\u0641;;noun, armenian;;\u0561\u0570;;noun, kazakh;;\u049b\u043e\u0440\u049b\u044b\u043d\u044b\u0448;;noun, irish;;sc\u00e9in;;noun, korean;;\uacf5\ud3ec;;noun, uzbek;;qo\u02bbrquv;;noun, ladino;;espanto;;noun, tocharian b;;\u012bwate;;noun, ottoman turkish;;\u0642\u0648\u0631\u0642\u0648;;noun, japanese;;\u6050\u6016;;noun, chinese mandarin;;\u6050\u6016;;noun, sanskrit;;\u092d\u092f;;noun", "to": "fear;;(uncountable) a strong, unpleasant emotion or feeling caused by actual or perceived danger or threat.", "value": 17, "width": 0.3269230769230769}, {"from": "terror;;(countable, uncountable) intense dread, fright, or fear.", "languages": "arabic;;\u062e\u064e\u0648\u0652\u0641;;noun, arabic;;\u0630\u064f\u0639\u0652\u0631;;noun, scottish gaelic;;maoim;;noun, icelandic;;skelfing;;noun, navajo;;i\u0142 h\u00f3\u00f3y\u00e9\u00e9\u02bc;;noun, arabic;;\u0631\u064f\u0639\u0652\u0628;;noun, plautdietsch;;schrakj;;noun", "to": "panic;;(uncountable) overwhelming fear or fright, often affecting groups of people or animals; (countable) an instance of this; a fright, a scare.", "value": 7, "width": 0.1346153846153846}, {"from": "fear;;(uncountable) a strong, unpleasant emotion or feeling caused by actual or perceived danger or threat.", "languages": "latin;;pavor;;noun, arabic;;\u062e\u064e\u0648\u0652\u0641;;noun", "to": "panic;;(uncountable) overwhelming fear or fright, often affecting groups of people or animals; (countable) an instance of this; a fright, a scare.", "value": 2, "width": 0.038461538461538464}]);
+
+                  nodeColors = {};
+                  allNodes = nodes.get({ returnType: "Object" });
+                  for (nodeId in allNodes) {
+                    nodeColors[nodeId] = allNodes[nodeId].color;
+                  }
+                  allEdges = edges.get({ returnType: "Object" });
+                  // adding nodes and edges to the graph
+                  data = {nodes: nodes, edges: edges};
+
+                  var options = {
+    "configure": {
+        "enabled": false
+    },
+    "edges": {
+        "color": {
+            "inherit": true
+        },
+        "smooth": {
+            "enabled": true,
+            "type": "dynamic"
+        }
+    },
+    "interaction": {
+        "dragNodes": true,
+        "hideEdgesOnDrag": false,
+        "hideNodesOnDrag": false
+    },
+    "physics": {
+        "enabled": true,
+        "stabilization": {
+            "enabled": true,
+            "fit": true,
+            "iterations": 1000,
+            "onlyDynamicEdges": false,
+            "updateInterval": 50
+        }
+    }
+};
+
+                  
+
+
+                  
+
+                  network = new vis.Network(container, data, options);
+
+                  
+
+                  
+
+                  
+
+
+                  
+
+                  return network;
+
+              }
+              drawGraph();
+        </script>
+    
+    <script>
+        // Function to update the legend
+        function updateLegend(content) {
+            const legend = document.getElementById('language-legend');
+            legend.innerHTML = content;
+        }
+
+        // Add event listeners to edges using vis.js API
+        network.on("hoverEdge", function (params) {
+            const edgeId = params.edge;
+            const edge = edges.get(edgeId);
+            if (edge && edge.languages) {
+                const languagesList = edge.languages.split(', ').map(lang => `<li>${lang}</li>`).join('');
+                const numLanguages = edge.languages.split(', ').length;
+                const nodePair = `${edge.from} - ${edge.to}`;
+                updateLegend(`<h3>Languages (${numLanguages}) for ${nodePair}:</h3><ul>${languagesList}</ul>`);
+            }
+        });
+
+        network.on("blurEdge", function () {
+            updateLegend('<h3>Languages:</h3><p>Hover over an edge to see languages.</p>');
+        });
+
+        network.on("click", function (params) {
+            if (params.edges && params.edges.length > 0) {
+                const edgeId = params.edges[0];
+                const edge = edges.get(edgeId);
+                if (edge && edge.languages) {
+                    const languagesList = edge.languages.split(', ').sort().map(lang => `<li>${lang.replaceAll(";;", " - ")}</li>`).join('');
+                    const numLanguages = edge.languages.split(', ').length;
+                    const title1 = edge.from.replaceAll(";;", "&#10;");
+                    const title2 = edge.to.replaceAll(";;", "&#10;");
+                    updateLegend(`<h2><div title="${title1}";>${edge.from.split(";;")[0]}</div><div title="${title2}";>${edge.to.split(";;")[0]}</div></h2><br><h3>Languages (${numLanguages})<br></h3><ul>${languagesList}</ul>`);
+                }
+            }
+        });
+    </script>
+    <style>
+        .container {
+            display: flex;
+            width: 100%;
+            margin-top: 48px;
+        }
+        #mynetwork {
+            flex: 3;
+            height: 750px;
+            width: 90%
+            background-color: #222222;
+            border: 1px solid lightgray;
+        }
+        #language-legend h2 {
+            display: flex; 
+            flex-direction: column;
+            font-weight: bold;
+        }
+        #language-legend h3 {
+             border-bottom: 1px solid black; 
+             padding-bottom: 8px
+        }
+        #language-legend {
+            flex: 1;
+            margin-left: 20px;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            background-color: #f9f9f9;
+            overflow-y: auto;
+            max-height: 750px;
+        }
+        #language-legend ul {
+            list-style-type: none;
+            padding: 0;
+        }
+        #language-legend li {
+            margin: 5px 0;
+            font-size: 1.2em;
+        }
+    </style>
+    </body>
+</html>
