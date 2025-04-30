@@ -4,6 +4,6 @@ pyvis==0.3.2
 matplotlib==3.9.2
 seaborn==0.13.2
 numpy==1.26.1
-scikit-learn
+scikit-learn==1.6.1
 kneed==0.8.5
 tqdm==4.66.4
