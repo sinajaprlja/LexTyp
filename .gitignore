@@ -2,4 +2,3 @@ __pycache__/*
 lib/*
 kaikki.org-dictionary-English.jsonl
 temp_network.html
-resources/graph_visualization/component_graphs/*
