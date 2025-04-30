@@ -18,7 +18,6 @@ Each notebook saves its output but must be run at least once in the order listed
 
 
 # Requirements
-## Requirements
 
 - **Python**: 3.11
 - **Dependencies**:  
